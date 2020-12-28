@@ -4,6 +4,8 @@ import com.spring.webapp.entity.Doctor;
 
 import java.util.List;
 
-public interface DoctorDAO {
-    public List<Doctor> getAllDoctors();
+public interface EntityDAO<T>{
+    List<T> getAll();
+
+    void save(T item);
 }

@@ -10,15 +10,20 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public class DoctorDAOImpl implements DoctorDAO{
+public class DoctorDAOImpl implements EntityDAO<Doctor> {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
-    public List<Doctor> getAllDoctors() {
+    public List<Doctor> getAll() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Doctor", Doctor.class).getResultList();
+    }
+
+    @Override
+    public void save(Doctor doctor) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(doctor);
     }
 }

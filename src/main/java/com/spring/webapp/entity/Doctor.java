@@ -41,6 +41,9 @@ public class Doctor {
         patient.setDoctor(this);
     }
 
+    public void setPosition(String position) {
+        this.position = position;
+    }
     public void setId(int id) {
         this.id = id;
     }

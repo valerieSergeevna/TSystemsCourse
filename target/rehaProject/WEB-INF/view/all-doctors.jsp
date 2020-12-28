@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <body>
@@ -18,6 +19,8 @@
             <td>${doc.position}</td>
         </tr>
     </c:forEach>
+    <br>
 </table>
+<input type="button" value="Добавить" onclick="window.location.href = '/addNewDoctor'"/>
 </body>
 </html>

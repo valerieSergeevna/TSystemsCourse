@@ -2,6 +2,8 @@ package com.spring.webapp.controller;
 
 
 import com.spring.webapp.dao.EntityDAO;
+import com.spring.webapp.dto.DoctorDTOImpl;
+import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.service.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +23,20 @@ public class MyController {
 
     @RequestMapping("/")
     public String showAllDoctors(Model model){
-        List<Doctor> allDoctors = doctorService.getAll();
+        List<DoctorDTOImpl> allDoctors = doctorService.getAll();
         model.addAttribute("allDocs", allDoctors);
         return "all-doctors";
     }
 
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model){
-        Doctor doctor = new Doctor();
+        DoctorDTOImpl doctor = new DoctorDTOImpl();
         model.addAttribute("doctor", doctor);
         return "doctor-info";
     }
 
     @RequestMapping("/saveDoctor")
-    public String saveDoctor(@ModelAttribute("doctor") Doctor doctor){
+    public String saveDoctor(@ModelAttribute("doctor") DoctorDTOImpl doctor){
         doctorService.save(doctor);
         return "redirect:/";
     }
@@ -48,8 +50,8 @@ public class MyController {
 
     @RequestMapping("/updateDoctorInfo")
     public String updateInfo(@RequestParam("docId") int id, Model model){
-        Doctor doctor = (Doctor) doctorService.get(id);
-        model.addAttribute("doctor", doctor);
+        EntityDTO doctorDTO = (DoctorDTOImpl) doctorService.get(id);
+        model.addAttribute("doctor", doctorDTO);
         return "doctor-info";
     }
 }

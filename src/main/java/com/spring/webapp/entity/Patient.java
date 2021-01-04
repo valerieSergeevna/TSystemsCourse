@@ -27,7 +27,7 @@ public class Patient {
 
     @Column(name = "status")
     private String status;
-
+//***TODO**** add birthdate//
    // @Column(name = "doctor_id")
   //  private int doctorId;
 

@@ -9,4 +9,6 @@ public interface EntityDAO<T>{
 
     void save(T item);
     T get(int id);
+
+    void delete(int id);
 }

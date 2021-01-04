@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>Список врачей</h2>
+<h2>Doctors list</h2>
 <br>
 <table>
     <tr>
@@ -15,14 +15,19 @@
     </tr>
     <c:forEach var="doc" items="${allDocs}">
         <tr>
-            <c:url var="updateButton" value="/updateInfo">
+            <c:url var="updateButton" value="/updateDoctorInfo">
+                <c:param name="docId" value="${doc.id}"></c:param>
+            </c:url>
+            <c:url var="deleteButton" value="/deleteDoctor">
                 <c:param name="docId" value="${doc.id}"></c:param>
             </c:url>
             <td>${doc.name}</td>
             <td>${doc.surname}</td>
             <td>${doc.position}</td>
             <td><input type="button" value="Update"
-            onclick="window.location.href = '${updateButton}"></td>
+                       onclick="window.location.href ='${updateButton}'"/>
+                <input type="button" value="Delete"
+                       onclick="window.location.href ='${deleteButton}'"/></td>
         </tr>
     </c:forEach>
     <br>

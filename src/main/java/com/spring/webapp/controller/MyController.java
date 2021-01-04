@@ -39,7 +39,14 @@ public class MyController {
         return "redirect:/";
     }
 
-    @RequestMapping("/updateInfo")
+    @RequestMapping("/deleteDoctor")
+    public String deleteDoctor(@RequestParam("docId") int id){
+        doctorService.delete(id);
+        return "redirect:/";
+    }
+
+
+    @RequestMapping("/updateDoctorInfo")
     public String updateInfo(@RequestParam("docId") int id, Model model){
         Doctor doctor = (Doctor) doctorService.get(id);
         model.addAttribute("doctor", doctor);

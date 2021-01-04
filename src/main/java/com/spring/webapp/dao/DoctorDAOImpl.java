@@ -1,8 +1,10 @@
 package com.spring.webapp.dao;
 
 import com.spring.webapp.entity.Doctor;
+import org.hibernate.QueryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +26,7 @@ public class DoctorDAOImpl implements EntityDAO<Doctor> {
     @Override
     public void save(Doctor doctor) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(doctor);
+        session.saveOrUpdate(doctor);
     }
 
     @Override
@@ -33,5 +35,13 @@ public class DoctorDAOImpl implements EntityDAO<Doctor> {
 
         Doctor doctor = session.get(Doctor.class, id);
         return doctor;
+    }
+
+    @Override
+    public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Doctor> query = session.createQuery("delete from Doctor " + "where id =:doctorID");
+        query.setParameter("doctorID", id);
+        query.executeUpdate();
     }
 }

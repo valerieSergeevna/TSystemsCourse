@@ -8,4 +8,5 @@ public interface EntityDAO<T>{
     List<T> getAll();
 
     void save(T item);
+    T get(int id);
 }

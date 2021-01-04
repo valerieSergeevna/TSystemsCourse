@@ -8,15 +8,21 @@
 <br>
 <table>
     <tr>
-        <th>Имя</th>
-        <th>Фамилия</th>
-        <th>Позиция</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Position</th>
+        <th>Operations</th>
     </tr>
     <c:forEach var="doc" items="${allDocs}">
         <tr>
+            <c:url var="updateButton" value="/updateInfo">
+                <c:param name="docId" value="${doc.id}"></c:param>
+            </c:url>
             <td>${doc.name}</td>
             <td>${doc.surname}</td>
             <td>${doc.position}</td>
+            <td><input type="button" value="Update"
+            onclick="window.location.href = '${updateButton}"></td>
         </tr>
     </c:forEach>
     <br>

@@ -8,6 +8,7 @@
 <br>
 
 <form:form action="saveDoctor" modelAttribute="doctor">
+    <form:hidden path="id" ></form:hidden>
     Имя <form:input path="name"/>
     <br><br>
     Фамилия <form:input path="surname"/>

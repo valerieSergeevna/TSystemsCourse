@@ -15,7 +15,7 @@ public class DoctorServiceImpl implements EntityService<Doctor> {
     private EntityDAO doctorDAO;
 
     @Override
-    @Transactional
+  //  @Transactional
     public List<Doctor> getAll() {
         return doctorDAO.getAll();
     }
@@ -25,4 +25,11 @@ public class DoctorServiceImpl implements EntityService<Doctor> {
     public void save(Doctor doctor) {
         doctorDAO.save(doctor);
     }
+
+    @Override
+    public Doctor get(int id) {
+        return (Doctor) doctorDAO.get(id);
+    }
+
+
 }

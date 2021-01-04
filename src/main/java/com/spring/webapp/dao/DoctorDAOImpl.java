@@ -26,4 +26,12 @@ public class DoctorDAOImpl implements EntityDAO<Doctor> {
         Session session = sessionFactory.getCurrentSession();
         session.save(doctor);
     }
+
+    @Override
+    public Doctor get(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Doctor doctor = session.get(Doctor.class, id);
+        return doctor;
+    }
 }

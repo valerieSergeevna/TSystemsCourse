@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,5 +37,12 @@ public class MyController {
     public String saveDoctor(@ModelAttribute("doctor") Doctor doctor){
         doctorService.save(doctor);
         return "redirect:/";
+    }
+
+    @RequestMapping("/updateInfo")
+    public String updateInfo(@RequestParam("docId") int id, Model model){
+        Doctor doctor = (Doctor) doctorService.get(id);
+        model.addAttribute("doctor", doctor);
+        return "doctor-info";
     }
 }

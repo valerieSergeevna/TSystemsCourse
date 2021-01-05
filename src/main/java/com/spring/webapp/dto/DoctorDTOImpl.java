@@ -11,7 +11,7 @@ public class DoctorDTOImpl implements EntityDTO {
     private String name;
     private String surname;
     private String position;
-    private List<Patient> patients;//?????
+    //private List<Patient> patients;//?????
 
     public DoctorDTOImpl() {
     }
@@ -42,9 +42,7 @@ public class DoctorDTOImpl implements EntityDTO {
         this.position = position;
     }
 
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
-    }
+
 
     public int getId() {
         return id;
@@ -62,8 +60,5 @@ public class DoctorDTOImpl implements EntityDTO {
         return position;
     }
 
-    public List<Patient> getPatients() {
-        return patients;
-    }
 }
 

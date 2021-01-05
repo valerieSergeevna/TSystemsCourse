@@ -1,10 +1,7 @@
 package com.spring.webapp.controller;
 
-
-import com.spring.webapp.dao.EntityDAO;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.EntityDTO;
-import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.service.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

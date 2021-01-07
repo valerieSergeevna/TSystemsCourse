@@ -4,16 +4,16 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>Информация о враче</h2>
+<h2>Doctor Info</h2>
 <br>
 
 <form:form action="saveDoctor" modelAttribute="doctor">
     <form:hidden path="id" ></form:hidden>
-    Имя <form:input path="name"/>
+    Name <form:input path="name"/>
     <br><br>
-    Фамилия <form:input path="surname"/>
+    Surname <form:input path="surname"/>
     <br><br>
-    Позиция <form:input path="position"/>
+    Position <form:input path="position"/>
     <br><br>
     <input type="submit" value="OK">
 </form:form>

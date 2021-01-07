@@ -1,12 +1,14 @@
 package com.spring.webapp.entity;
 
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "patients")
-public class Patient {
+public class Patient implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

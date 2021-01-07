@@ -3,6 +3,10 @@ package com.spring.configuration;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 
+import org.hibernate.boot.model.naming.ImplicitNamingStrategy;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -68,6 +72,15 @@ public class MyConfig {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
+    }
+    @Bean
+    public PhysicalNamingStrategy physical() {
+        return new PhysicalNamingStrategyStandardImpl();
+    }
+
+    @Bean
+    public ImplicitNamingStrategy implicit() {
+        return new ImplicitNamingStrategyLegacyJpaImpl();
     }
 
 }

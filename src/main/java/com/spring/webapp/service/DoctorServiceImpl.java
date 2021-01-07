@@ -6,6 +6,7 @@ import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.entity.Doctor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 public class DoctorServiceImpl implements EntityService<DoctorDTOImpl> {
 
     @Autowired
+    @Qualifier("doctorDAOImpl")
     private EntityDAO doctorDAO;
 
     @Override

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>Doctors list</h2>
+<h2>Patients list</h2>
 <br>
 <table>
     <tr>
@@ -15,10 +15,10 @@
     </tr>
     <c:forEach var="patient" items="${allPatient}">
         <tr>
-            <c:url var="updateButton" value="/updateDoctorInfo">
+            <c:url var="updateButton" value="/updateTreatmentInfo">
                 <c:param name="patientId" value="${patient.id}"></c:param>
             </c:url>
-            <c:url var="deleteButton" value="/deleteDoctor">
+            <c:url var="deleteButton" value="/deleteTreatment">
                 <c:param name="patientId" value="${patient.id}"></c:param>
             </c:url>
             <td>${patient.name}</td>

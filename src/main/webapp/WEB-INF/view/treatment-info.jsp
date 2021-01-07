@@ -7,17 +7,22 @@
 <h2>Treatment info</h2>
 <br>
 
-<form:form action="saveTreatment" modelAttribute="treatment">
+
+<form:form modelAttribute="patient">
     <form:hidden path="id" ></form:hidden>
-    <form:form modelAttribute="patient">
-        <form:hidden path="id" ></form:hidden>
-        Name <form:input path="name"/>
-        <br><br>
-        Surname <form:input path="surname"/>
-        <br><br>
-        Disease <form:input path="disease"/>
-        <br><br>
-    </form:form>
+    Name <form:input path="name"/>
+    <br><br>
+    Surname <form:input path="surname"/>
+    <br><br>
+    Birthdate <form:input path="birthDate"/>
+    <br><br>
+    Disease <form:input path="disease"/>
+    <br><br>
+</form:form>
+
+<c:forEach items="${treatments}" var="treatment">
+<form:form action="saveTreatment" modelAttribute="treatment">
+    <form:hidden path= "" ></form:hidden>
     Type <form:input path="type"/>
     <br><br>
     Time Pattern <form:input path="timePattern"/>
@@ -28,5 +33,6 @@
     <br><br>
     <input type="submit" value="OK">
 </form:form>
+</c:forEach>
 </body>
 </html>

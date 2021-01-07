@@ -12,24 +12,21 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public class DoctorDAOImpl implements EntityDAO<Doctor> {
+public class DoctorDAOImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     public List<Doctor> getAll() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Doctor", Doctor.class).getResultList();
     }
 
-    @Override
     public void save(Doctor doctor) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(doctor);
     }
 
-    @Override
     public Doctor get(int id) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -37,7 +34,6 @@ public class DoctorDAOImpl implements EntityDAO<Doctor> {
         return doctor;
     }
 
-    @Override
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Doctor> query = session.createQuery("delete from Doctor " + "where id =:doctorID");

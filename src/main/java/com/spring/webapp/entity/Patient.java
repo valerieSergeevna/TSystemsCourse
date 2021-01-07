@@ -1,14 +1,17 @@
 package com.spring.webapp.entity;
 
 
+import com.spring.utils.YearMonthDateAttributeConverter;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "patients")
-public class Patient implements Serializable{
+public class Patient{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +23,10 @@ public class Patient implements Serializable{
 
     @Column(name = "surname")
     private String surname;
+
+    @Column(name = "birth_date")
+    @Convert(converter = YearMonthDateAttributeConverter.class)
+    private YearMonth birthDate;
 
     @Column(name = "insurance_number")
     private int insuranceNumber;
@@ -44,12 +51,29 @@ public class Patient implements Serializable{
     public Patient() {
     }
 
-    public Patient(String name, String surname, int insuranceNumber, String disease, String status) {
+    public YearMonth getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(YearMonth birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public int getInsuranceNumber() {
+        return insuranceNumber;
+    }
+
+    public void setInsuranceNumber(int insuranceNumber) {
+        this.insuranceNumber = insuranceNumber;
+    }
+
+    public Patient(String name, String surname, YearMonth birthDate, int insuranceNumber, String disease, String status) {
         this.name = name;
         this.surname = surname;
         this.insuranceNumber = insuranceNumber;
         this.disease = disease;
         this.status = status;
+        this.birthDate = birthDate;
     }
 
     public void addTreatment(Treatment treatment) {

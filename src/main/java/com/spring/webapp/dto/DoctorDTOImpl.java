@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoctorDTOImpl implements EntityDTO {
+public class DoctorDTOImpl{
     private int id;//????
     private String name;
     private String surname;
@@ -16,7 +16,8 @@ public class DoctorDTOImpl implements EntityDTO {
     public DoctorDTOImpl() {
     }
 
-    public DoctorDTOImpl(String name, String surname, String position) {
+    public DoctorDTOImpl(int id,String name, String surname, String position) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.position = position;

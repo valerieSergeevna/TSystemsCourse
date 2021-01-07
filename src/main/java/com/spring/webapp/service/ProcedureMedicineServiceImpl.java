@@ -1,6 +1,7 @@
 package com.spring.webapp.service;
 
 import com.spring.webapp.dao.EntityDAO;
+import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.ProcedureMedicineDTOImpl;
@@ -17,13 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProcedureMedicineServiceImpl implements EntityService<ProcedureMedicineDTOImpl> {
+public class ProcedureMedicineServiceImpl  {
 
     @Autowired
-    @Qualifier("procedureMedicineDAOImpl")
-    private EntityDAO procedureMedicineDAO;
+    private ProcedureMedicineDAOImpl procedureMedicineDAO;
 
-    @Override
     @Transactional
     public List<ProcedureMedicineDTOImpl> getAll() {
 
@@ -34,7 +33,6 @@ public class ProcedureMedicineServiceImpl implements EntityService<ProcedureMedi
         return procedureMedicineDTOList;
     }
 
-    @Override
     @Transactional
     public void save(ProcedureMedicineDTOImpl procedureMedicineDTO) {
         ProcedureMedicine treatment = new ProcedureMedicine();
@@ -42,17 +40,15 @@ public class ProcedureMedicineServiceImpl implements EntityService<ProcedureMedi
         procedureMedicineDAO.save(treatment);
     }
 
-    @Override
     @Transactional
     public void delete(int id) {
         procedureMedicineDAO.delete(id);
     }
 
-    @Override
     @Transactional
     public ProcedureMedicineDTOImpl get(int id) {
-        EntityDTO procedureMedicineDTO = new TreatmentDTOImpl();
+        ProcedureMedicineDTOImpl procedureMedicineDTO = new ProcedureMedicineDTOImpl();
         BeanUtils.copyProperties(procedureMedicineDAO.get(id),procedureMedicineDTO);
-        return (ProcedureMedicineDTOImpl) procedureMedicineDTO;
+        return  procedureMedicineDTO;
     }
 }

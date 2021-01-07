@@ -12,18 +12,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ProcedureMedicineDAOImpl implements EntityDAO<ProcedureMedicine> {
+public class ProcedureMedicineDAOImpl {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     public List<ProcedureMedicine> getAll() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from ProcedureMedicine ", ProcedureMedicine.class).getResultList();
     }
 
-    @Override
     public void save(ProcedureMedicine procedureMedicine) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select name from ProcedureMedicine  where name =:prMedName");
@@ -33,7 +31,6 @@ public class ProcedureMedicineDAOImpl implements EntityDAO<ProcedureMedicine> {
         }
     }
 
-    @Override
     public ProcedureMedicine get(int id) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -41,7 +38,6 @@ public class ProcedureMedicineDAOImpl implements EntityDAO<ProcedureMedicine> {
         return procedureMedicine;
     }
 
-    @Override
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Doctor> query = session.createQuery("delete from ProcedureMedicine " + "where id =:prMedID");

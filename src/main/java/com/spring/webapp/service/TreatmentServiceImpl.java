@@ -17,13 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TreatmentServiceImpl implements EntityService<TreatmentDTOImpl> {
+public class TreatmentServiceImpl {
 
     @Autowired
-    @Qualifier("treatmentDAOImpl")
-    private EntityDAO treatmentDAO;
+    private TreatmentDAOImpl treatmentDAO;
 
-    @Override
+
     @Transactional
     public List<TreatmentDTOImpl> getAll() {
 
@@ -35,7 +34,7 @@ public class TreatmentServiceImpl implements EntityService<TreatmentDTOImpl> {
         return treatmentDTOList;
     }
 
-    @Override
+
     @Transactional
     public void save(TreatmentDTOImpl treatmentDTO) {
         Treatment treatment = new Treatment();
@@ -43,18 +42,18 @@ public class TreatmentServiceImpl implements EntityService<TreatmentDTOImpl> {
         treatmentDAO.save(treatment);
     }
 
-    @Override
+
     @Transactional
     public void delete(int id) {
         treatmentDAO.delete(id);
     }
 
-    @Override
+
     @Transactional
     public TreatmentDTOImpl get(int id) {
-        EntityDTO treatmentDTO = new TreatmentDTOImpl();
+        TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
         BeanUtils.copyProperties(treatmentDAO.get(id),treatmentDTO);
-        return (TreatmentDTOImpl) treatmentDTO;
+        return treatmentDTO;
     }
 
     @Transactional

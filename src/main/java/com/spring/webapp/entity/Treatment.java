@@ -9,7 +9,7 @@ public class Treatment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private int treatmentId;
 
     @Column(name = "type")
     private String type;
@@ -44,8 +44,7 @@ public class Treatment {
         this.procedureMedicine = procedureMedicine;
     }
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
-            CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "type_id")
     private ProcedureMedicine procedureMedicine;
 
@@ -59,12 +58,12 @@ public class Treatment {
         this.dose = dose;
     }
 
-    public int getId() {
-        return id;
+    public int getTreatmentId() {
+        return treatmentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTreatmentId(int id) {
+        this.treatmentId = id;
     }
 
     public String getType() {

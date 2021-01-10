@@ -18,7 +18,7 @@ public class SomeTests {
                 .buildSessionFactory();
         Session session = null;
         try{
-         /*   session = factory.getCurrentSession();
+         /* session = factory.getCurrentSession();
             Doctor doctor = new Doctor("Михаил","Жуковский","Терапевт");
             Patient patient = new Patient("Валерий","М", 12334, "ОРВИ","лечится");
             ProcedureMedicine procedureMedicine = new ProcedureMedicine( "advil", "лекарство");

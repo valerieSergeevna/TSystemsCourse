@@ -6,9 +6,16 @@
 <body>
 <h2>Treatment info</h2>
 <br>
-
-
-<form:form modelAttribute="patient">
+<%--
+<input type="hidden" name="patient" value="${patient.name}">
+<br><br>
+<input type="hidden" name="patient" value="${patient.surname}">
+<br><br>
+<input type="hidden" name="patient" value="${patient.disease}">
+<br><br>
+<input type="hidden" name="patient" value="${patient.status}">
+<br><br>
+<form:form action="saveTreatment" modelAttribute="patient">
     <form:hidden path="id" ></form:hidden>
     Name <form:input path="name"/>
     <br><br>
@@ -18,21 +25,53 @@
     <br><br>
     Disease <form:input path="disease"/>
     <br><br>
-</form:form>
+</form:form>--%>
 
-<c:forEach items="${treatments}" var="treatment">
-<form:form action="saveTreatment" modelAttribute="treatment">
-    <form:hidden path= "" ></form:hidden>
-    Type <form:input path="type"/>
+<form:form action="saveTreatment" method="post" modelAttribute="patient">
+<form:hidden path="id"></form:hidden>
+Name <form:input path="name"/>
+<br><br>
+Surname <form:input path="surname"/>
+<br><br>
+Birthdate <form:input path="birthDate"/>
+<br><br>
+Disease <form:input path="disease"/>
+<br><br>
+
+<c:forEach items="${patient.treatments}" var="treatment" varStatus="count">
+
+
+    <%--Type <form:input path= "treatment" value = "${item.type}"/>
+        <br><br>
+          <%--    Time Pattern <form:input path= "treatments[${count.index}].timePattern" value = "${treatment.timePattern}"/>
+        <br><br>
+        Dose <form:input path= "treatments[${count.index}].dose" value = "${treatment.dose}"/>
+        <br><br>
+        Period <form:input path= "treatments[${count.index}].period" value = "${treatment.period}"/>
+        <br><br>--%>
+<input type="hidden" name="treatment" value="${treatment.treatmentId}">
+    Time Pattern <input type="text" name="treatmentPattern" size="30"
+                        value="${treatment.treatmentId}">
     <br><br>
-    Time Pattern <form:input path="timePattern"/>
+    Treatment name <input type="text" name="treatmentName" size="30"
+                        value="${treatment.typeName}">
+Type
+<input type="text" name="treatmentType" size="30" value="${treatment.type}">
     <br><br>
-    Dose <form:input path="dose"/>
+    Time Pattern <input type="text" name="treatmentPattern" size="30"
+                        value="${treatment.timePattern}">
     <br><br>
-    Period <form:input path="period"/>
+    Dose <input type="text" name="treatmentDose" size="30" value="${treatment.dose}">
     <br><br>
-    <input type="submit" value="OK">
-</form:form>
-</c:forEach>
+    Period <input type="text" name="treatmentPeriod" size="30" value="${treatment.period}">
+    <br><br>
+        <%--</form:form>--%>
+    </c:forEach>
+    <input type="submit" value="OK"/>
+    </form:form>
+
+
+
+
 </body>
 </html>

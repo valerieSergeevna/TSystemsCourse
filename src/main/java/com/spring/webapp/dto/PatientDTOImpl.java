@@ -16,7 +16,21 @@ public class PatientDTOImpl implements EntityDTO {
     private String disease;
     private String status;
     YearMonth birthDate;
-//***TODO**** add birthdate//
+    private List<TreatmentDTOImpl> treatments = new ArrayList<>();
+
+    public PatientDTOImpl(List<TreatmentDTOImpl> treatments) {
+        this.treatments = treatments;
+    }
+
+    public List<TreatmentDTOImpl> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(List<TreatmentDTOImpl> treatments) {
+        this.treatments = treatments;
+    }
+
+    //***TODO**** add birthdate//
     // @Column(name = "doctor_id")
     //  private int doctorId;
     public PatientDTOImpl() {
@@ -30,14 +44,16 @@ public class PatientDTOImpl implements EntityDTO {
         this.birthDate = birthDate;
     }
 
-    public PatientDTOImpl(int id, String name, String surname, YearMonth birthDate, String disease, String status) {
+    public PatientDTOImpl(int id, String name, String surname, YearMonth birthDate, String disease, String status, List<TreatmentDTOImpl> treatments) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.disease = disease;
         this.status = status;
         this.birthDate = birthDate;
+        this.treatments = treatments;
     }
+
 
 
     public void setId(int id) {

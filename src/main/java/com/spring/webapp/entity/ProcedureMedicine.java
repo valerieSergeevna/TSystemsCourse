@@ -19,10 +19,10 @@ public class ProcedureMedicine {
     private String type;
 
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
+  /*  @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
             CascadeType.MERGE,CascadeType.REFRESH}, mappedBy = "procedureMedicine")
     private List<Treatment> treatments;
-
+*/
     public ProcedureMedicine() {
     }
 
@@ -31,25 +31,25 @@ public class ProcedureMedicine {
         this.type = type;
     }
 
-    public void addTreatment(Treatment treatment) {
+ /*   public void addTreatment(Treatment treatment) {
         if (treatments == null) {
             treatments = new ArrayList<>();
         }
         treatments.add(treatment);
         treatment.setProcedureMedicine(this);
-    }
+    }*/
 
     public int getId() {
         return id;
     }
 
-    public List<Treatment> getTreatment() {
+  /*  public List<Treatment> getTreatment() {
         return treatments;
     }
 
     public void setTreatment(List<Treatment> treatments) {
         this.treatments = treatments;
-    }
+    }*/
 
     public void setId(int id) {
         this.id = id;

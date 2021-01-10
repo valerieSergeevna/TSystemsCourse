@@ -1,11 +1,15 @@
 package com.spring.webapp.service;
 
 import com.spring.webapp.dao.EntityDAO;
+import com.spring.webapp.dao.PatientDAOImpl;
+import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
 import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.dto.PatientDTOImpl;
+import com.spring.webapp.dto.ProcedureMedicineDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Patient;
+import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,11 @@ public class TreatmentServiceImpl {
 
     @Autowired
     private TreatmentDAOImpl treatmentDAO;
+    @Autowired
+    private ProcedureMedicineDAOImpl procedureMedicineDAO;
+
+    @Autowired
+    private PatientDAOImpl patientDAO;
 
 
     @Transactional
@@ -28,8 +37,8 @@ public class TreatmentServiceImpl {
 
         List<Treatment> treatmentList = treatmentDAO.getAll();
         List<TreatmentDTOImpl> treatmentDTOList = treatmentList.stream()
-                .map(treatment -> new TreatmentDTOImpl(treatment.getId(), treatment.getType(),treatment.getTimePattern(),
-                        treatment.getPeriod(),treatment.getDose()))
+                .map(treatment -> new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(), treatment.getTimePattern(),
+                        treatment.getPeriod(), treatment.getDose()))
                 .collect(Collectors.toList());
         return treatmentDTOList;
     }
@@ -39,6 +48,13 @@ public class TreatmentServiceImpl {
     public void save(TreatmentDTOImpl treatmentDTO) {
         Treatment treatment = new Treatment();
         BeanUtils.copyProperties(treatmentDTO, treatment);
+        int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getProcedureMedicine().getName());
+        if (procedureMedicineID > 0) {
+            treatment.setProcedureMedicine(procedureMedicineDAO.get(procedureMedicineID));
+            procedureMedicineDAO.delete(procedureMedicineDAO.getIdByName(""));
+        } else {
+            procedureMedicineDAO.save(new ProcedureMedicine(treatmentDTO.getTypeName(), treatmentDTO.getType()));
+        }
         treatmentDAO.save(treatment);
     }
 
@@ -52,14 +68,32 @@ public class TreatmentServiceImpl {
     @Transactional
     public TreatmentDTOImpl get(int id) {
         TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
-        BeanUtils.copyProperties(treatmentDAO.get(id),treatmentDTO);
+        Treatment treatment = treatmentDAO.get(id);
+        BeanUtils.copyProperties(treatment, treatmentDTO);
+        treatmentDTO.setTypeName(treatment.getProcedureMedicine().getName());
         return treatmentDTO;
     }
 
     @Transactional
     public PatientDTOImpl getPatient(int id) {
         PatientDTOImpl patientDTO = new PatientDTOImpl();
-        BeanUtils.copyProperties(((TreatmentDAOImpl)treatmentDAO).getPatient(id),patientDTO);
+        BeanUtils.copyProperties(treatmentDAO.getPatient(id), patientDTO);
         return patientDTO;
+    }
+
+    @Transactional
+    public TreatmentDTOImpl createEmpty(PatientDTOImpl patientDTO) {
+        TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+        Patient patient = new Patient();
+        BeanUtils.copyProperties(patientDTO, patient);
+        Treatment treatment = new Treatment("treatment", 0, "", 0);
+        ProcedureMedicine procedureMedicine = new ProcedureMedicine("", "treatment");
+        procedureMedicineDAO.save(procedureMedicine);
+        treatment.setProcedureMedicine(procedureMedicine);
+        treatment.setPatient(patient);
+        treatmentDAO.save(treatment);
+        BeanUtils.copyProperties(treatment, treatmentDTO);
+        treatmentDTO.setTypeName("");
+        return treatmentDTO;
     }
 }

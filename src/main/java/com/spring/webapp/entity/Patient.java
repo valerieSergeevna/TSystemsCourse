@@ -2,6 +2,7 @@ package com.spring.webapp.entity;
 
 
 import com.spring.utils.YearMonthDateAttributeConverter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,6 +29,7 @@ public class Patient{
     @Convert(converter = YearMonthDateAttributeConverter.class)
     private YearMonth birthDate;
 
+
     @Column(name = "insurance_number")
     private int insuranceNumber;
 
@@ -46,14 +48,14 @@ public class Patient{
     private Doctor doctor;
 
     @OneToMany(cascade =  CascadeType.ALL, mappedBy = "patient")
-    private List<Treatment> treatments;
+    private List<Treatment> treatments = new ArrayList<>();
 
     public Patient() {
     }
 
     public YearMonth getBirthDate() {
         return birthDate;
-    }
+    } //TODO: CHANGE TYPE AND CONVERTER
 
     public void setBirthDate(YearMonth birthDate) {
         this.birthDate = birthDate;
@@ -75,6 +77,8 @@ public class Patient{
         this.status = status;
         this.birthDate = birthDate;
     }
+
+
 
     public void addTreatment(Treatment treatment) {
         if (treatments == null) {

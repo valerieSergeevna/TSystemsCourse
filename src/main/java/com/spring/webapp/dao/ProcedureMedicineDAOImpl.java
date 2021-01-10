@@ -38,10 +38,25 @@ public class ProcedureMedicineDAOImpl {
         return procedureMedicine;
     }
 
+    public int getIdByName(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select id from ProcedureMedicine  where name =:prMedName");
+        query.setParameter("prMedName", name);
+         return !query.list().isEmpty()?(int)query.list().get(0):-1;
+    }
+
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Doctor> query = session.createQuery("delete from ProcedureMedicine " + "where id =:prMedID");
+        Query<ProcedureMedicine> query = session.createQuery("delete from ProcedureMedicine " + "where id =:prMedID");
         query.setParameter("prMedID", id);
         query.executeUpdate();
     }
+
+    public Query clear(){
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select id from ProcedureMedicine  where name =:prMedName");
+        query.setParameter("prMedName", "");
+        return query;
+    }
+
 }

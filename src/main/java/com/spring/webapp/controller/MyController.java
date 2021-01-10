@@ -7,19 +7,20 @@ import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Patient;
-import com.spring.webapp.service.DoctorServiceImpl;
-import com.spring.webapp.service.EntityService;
-import com.spring.webapp.service.PatientServiceImpl;
-import com.spring.webapp.service.TreatmentServiceImpl;
+import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,6 +34,9 @@ public class MyController {
 
     @Autowired
     private TreatmentServiceImpl treatmentService;
+
+    @Autowired
+    private ProcedureMedicineServiceImpl procedureMedicineService;
 
     @RequestMapping("/")
     public String showAllDoctors(Model model) {
@@ -86,13 +90,6 @@ public class MyController {
         return "redirect:/";
     }
 
-    @RequestMapping("/deletePatient")
-    public String deletePatient(@RequestParam("patientId") int id){
-        patientService.delete(id);
-        return "redirect:/";
-    }
-
-
     @RequestMapping("/updatePatientInfo")
     public String updatePatientInfo(@RequestParam("patientId") int id, Model model){
         EntityDTO patientDTO = (PatientDTOImpl) patientService.get(id);
@@ -100,32 +97,62 @@ public class MyController {
         return "patient-info";
     }*/
 
+//TODO: MAKE CANCEL FUNCTIONAL
+
+    @RequestMapping("/deletePatient")
+    public String deletePatient(@RequestParam("patientId") int id){
+        patientService.delete(id);
+        return "redirect:/";
+    }
 
     @RequestMapping("/addNewTreatment")
     public String addNewTreatment(Model model) {
-        TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
-        model.addAttribute("treatment", treatmentDTO);
+       // TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+        PatientDTOImpl patientDTO = patientService.createEmpty();
+        List <TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
+        treatmentDTO.add(treatmentService.createEmpty(patientDTO));
+        patientDTO.setTreatments(treatmentDTO);
+     //   model.addAttribute("treatment", treatmentDTO);
+        model.addAttribute("patient", patientDTO);
         return "treatment-info";
     }
 
-    @RequestMapping("/saveTreatment")
-    public String saveTreatment(@ModelAttribute("treatments") TreatmentDTOImpl treatmentDTO) {
-        treatmentService.save(treatmentDTO);
+    @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
+    public String saveTreatment(@ModelAttribute("patient") PatientDTOImpl patientDTO,
+                               HttpServletRequest request) {
+        List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
+        String[] itemValues = request.getParameterValues("treatment");
+        String[] typeValues = request.getParameterValues("treatmentType");
+        String[] typeNameValues = request.getParameterValues("treatmentName");
+        String[] patternValues = request.getParameterValues("treatmentPattern");
+        String[] doseValues = request.getParameterValues("treatmentDose");
+        String[] periodValues = request.getParameterValues("treatmentPeriod");
+        for(int i = 0; i < itemValues.length; i++){
+            TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
+                    typeValues[i],Integer.parseInt(patternValues[i]),periodValues[i], Double.parseDouble(doseValues[i]));
+            treatmentDTO.setTypeName(typeNameValues[i]);
+            treatmentDTOList.add(treatmentDTO);
+        }
+
+        patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
+        patientService.save(patientDTO);
+        //horrible code:(
+        procedureMedicineService.clearNullProcedureMedicine();
         return "redirect:/";
     }
 
-    @RequestMapping("/deleteTreatment")
+    @RequestMapping("/deleteTreatment") // delete list's item
     public String deleteTreatment(@RequestParam("treatmentId") int id) {
-        treatmentService.delete(id);
-        return "redirect:/";
+      //  treatmentService.delete(id);
+         return "redirect:/";
     }
 
 
     @RequestMapping("/updateTreatmentInfo")
     public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) {
-        List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
+      List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
+
         PatientDTOImpl patientDTO = patientService.get(id);
-        model.addAttribute("treatments", allTreatments);
         model.addAttribute("patient", patientDTO);
         return "treatment-info";
     }

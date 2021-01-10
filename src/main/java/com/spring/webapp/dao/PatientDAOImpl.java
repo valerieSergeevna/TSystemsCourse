@@ -1,5 +1,6 @@
 package com.spring.webapp.dao;
 
+import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.Treatment;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PatientDAOImpl {
@@ -47,4 +49,6 @@ public class PatientDAOImpl {
         query.setParameter("patientID", id);
         return query.list();
     }
+
+
 }

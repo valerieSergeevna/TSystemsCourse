@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TreatmentDTOImpl implements EntityDTO {
 
-    private int id;
+    private int treatmentId;
 
     private String type;
 
@@ -20,23 +20,33 @@ public class TreatmentDTOImpl implements EntityDTO {
 
     private String period;
 
+    private String typeName;
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
     public TreatmentDTOImpl() {
     }
 
     public TreatmentDTOImpl(int id,String type, int timePattern, String period, double dose) {
-        this.id = id;
+        this.treatmentId = id;
         this.type = type;
         this.timePattern = timePattern;
         this.period = period;
         this.dose = dose;
     }
 
-    public int getId() {
-        return id;
+    public int getTreatmentId() {
+        return treatmentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTreatmentId(int id) {
+        this.treatmentId = id;
     }
 
     public String getType() {
@@ -70,4 +80,5 @@ public class TreatmentDTOImpl implements EntityDTO {
     public void setPeriod(String period) {
         this.period = period;
     }
+
 }

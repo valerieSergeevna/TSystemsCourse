@@ -64,7 +64,6 @@ public class MyConfig {
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         sessionFactory.setHibernateProperties(hibernateProperties);
         return sessionFactory;
-
     }
 
     @Bean

@@ -18,7 +18,7 @@
             <c:url var="updateButton" value="/updateTreatmentInfo">
                 <c:param name="patientId" value="${patient.id}"></c:param>
             </c:url>
-            <c:url var="deleteButton" value="/deleteTreatment">
+            <c:url var="deleteButton" value="/deletePatient">
                 <c:param name="patientId" value="${patient.id}"></c:param>
             </c:url>
             <td>${patient.name}</td>

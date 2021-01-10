@@ -50,8 +50,6 @@ Disease <form:input path="disease"/>
         Period <form:input path= "treatments[${count.index}].period" value = "${treatment.period}"/>
         <br><br>--%>
 <input type="hidden" name="treatment" value="${treatment.treatmentId}">
-    Time Pattern <input type="text" name="treatmentPattern" size="30"
-                        value="${treatment.treatmentId}">
     <br><br>
     Treatment name <input type="text" name="treatmentName" size="30"
                         value="${treatment.typeName}">

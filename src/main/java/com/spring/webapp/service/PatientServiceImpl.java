@@ -88,7 +88,7 @@ public class PatientServiceImpl {
                 {
                     Treatment newTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(), treatment.getPeriod(), treatment.getDose());
                     newTreatment.setTreatmentId(treatment.getTreatmentId());
-                    //in TreatmentService duplicayed code
+                    //in TreatmentService duplicated code
                     int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getTypeName());
 
                     ProcedureMedicine procedureMedicine;

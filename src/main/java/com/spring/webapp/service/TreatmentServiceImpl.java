@@ -86,7 +86,8 @@ public class TreatmentServiceImpl {
         TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
         Patient patient = new Patient();
         BeanUtils.copyProperties(patientDTO, patient);
-        Treatment treatment = new Treatment("treatment", 0, "", 0);
+        Treatment treatment = new Treatment();
+        treatment.setType("treatment");
         ProcedureMedicine procedureMedicine = new ProcedureMedicine("", "treatment");
         procedureMedicineDAO.save(procedureMedicine);
         treatment.setProcedureMedicine(procedureMedicine);

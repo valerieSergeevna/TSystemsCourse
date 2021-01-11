@@ -47,11 +47,15 @@ public class PatientServiceImpl {
 
     @Transactional
     public void delete(int id) {
+        patientDAO.delete(id);
+    }
+
+    @Transactional
+    public void deleteTreatments(int id){
         List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
         for (Treatment treatment : treatmentList) {
-            treatmentDAO.deleteWithPatient(treatment.getTreatmentId());
+            treatmentDAO.delete(treatment.getTreatmentId());
         }
-        patientDAO.delete(id);
     }
 
     @Transactional

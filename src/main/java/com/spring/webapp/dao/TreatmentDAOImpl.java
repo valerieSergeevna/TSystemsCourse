@@ -46,7 +46,7 @@ public class TreatmentDAOImpl {
         return !query.list().isEmpty()?(int)query.list().get(0):-1;
     }
 
-    public void deleteWithPatient(int id) {
+    public void deleteWithPatientId(int id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Treatment> query = session.createQuery("delete from Treatment " + "where patient.id =:patientID");
         query.setParameter("patientID", id);

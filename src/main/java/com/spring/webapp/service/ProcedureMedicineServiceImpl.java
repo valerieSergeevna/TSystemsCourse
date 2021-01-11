@@ -58,7 +58,7 @@ public class ProcedureMedicineServiceImpl {
             for (Object item : listOfEmptyProcedureMedicine.list()) {
                 int treatmentId = treatmentDAO.getIdByProcedureMedicineId((int)item);
                 if (treatmentId > 0) {
-                    treatmentDAO.deleteWithPatient(treatmentId);
+                    treatmentDAO.deleteWithPatientId(treatmentId);
                 }
                 procedureMedicineDAO.delete((int) item);
             }

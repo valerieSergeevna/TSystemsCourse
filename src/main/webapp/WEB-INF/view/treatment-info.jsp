@@ -8,10 +8,7 @@
 <head>
     <script type="text/javascript">
         function addForm() {
-
             let container = document.getElementById("container");
-
-
 
             let inputTypeName = document.createElement("input");
             let inputType = document.createElement("input");
@@ -19,7 +16,7 @@
             let inputDose = document.createElement("input");
             let inputPeriod = document.createElement("input");
 
-            container.append('Name ');
+            container.append('Medicine/Procedure name ');
             inputTypeName.type = "text";
             inputTypeName.name = "treatmentName";
             container.appendChild(inputTypeName);
@@ -63,19 +60,24 @@
 <form:form action="saveTreatment" method="post" modelAttribute="patient">
 <form:hidden path="id"></form:hidden>
 Name <form:input path="name"/>
+    <form:errors path="name"></form:errors>
 <br><br>
 Surname <form:input path="surname"/>
+    <form:errors path="surname"></form:errors>
 <br><br>
 Birthdate <form:input path="birthDate"/>
+    <form:errors path="birthDate"></form:errors>
 <br><br>
 Disease <form:input path="disease"/>
+    <form:errors path="disease"></form:errors>
 <br><br>
 
 <c:forEach items="${patient.treatments}" var="treatment" varStatus="count">
 <input type="hidden" name="treatment" value="${treatment.treatmentId}">
     <br><br>
-    Treatment name <input type="text" name="treatmentName" size="30"
+    Medicine/Procedure name <input type="text" name="treatmentName" size="30"
                         value="${treatment.typeName}">
+
 Type
 <input type="text" name="treatmentType" size="30" value="${treatment.type}">
     <br><br>
@@ -85,17 +87,19 @@ Type
     Dose <input type="text" name="treatmentDose" size="30" value="${treatment.dose}">
     <br><br>
     Period <input type="text" name="treatmentPeriod" size="30" value="${treatment.period}">
-    <br><br>
+    <br>
         <%--</form:form>--%>
+    <c:url var="deleteButton" value="/deleteTreatment">
+        <c:param name="treatmentId" value="${treatment.treatmentId}"></c:param>
+    </c:url>
+    <input type="button" value="Delete treatment"
+           onclick="window.location.href ='${deleteButton}'" />
     </c:forEach>
     <br>
 
     <div id="container"></div>
     <input type="button" value="Add treatment"
            onclick="addForm()"/>
-
-
-
     <%----%>
     <input type="submit" value="OK"/>
     </form:form>

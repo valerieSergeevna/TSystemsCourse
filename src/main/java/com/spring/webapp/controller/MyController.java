@@ -101,6 +101,7 @@ public class MyController {
 
     @RequestMapping("/deletePatient")
     public String deletePatient(@RequestParam("patientId") int id) {
+        patientService.deleteTreatments(id);
         patientService.delete(id);
         return "redirect:/";
     }
@@ -166,15 +167,23 @@ public class MyController {
     }
 
     @RequestMapping("/deleteTreatment") // delete list's item
-    public String deleteTreatment(@RequestParam("treatmentId") int id) {
-        //  treatmentService.delete(id);
-        return "redirect:/";
+    public String deleteTreatment(@RequestParam("treatmentId") int id,
+                                  Model model) {
+        PatientDTOImpl patientDTO = treatmentService.getPatient(id);
+        treatmentService.delete(id);
+        model.addAttribute("patientId",patientDTO.getId());
+
+        return "redirect:/updateTreatmentInfo";
     }
 
 
     @RequestMapping("/updateTreatmentInfo")
     public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) {
         List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
+        if(allTreatments.isEmpty()){
+            patientService.delete(id);
+            return "redirect:/";
+        }
 
         PatientDTOImpl patientDTO = patientService.get(id);
         model.addAttribute("patient", patientDTO);

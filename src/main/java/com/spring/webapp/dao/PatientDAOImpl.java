@@ -38,8 +38,8 @@ public class PatientDAOImpl {
 
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Doctor> query = session.createQuery("delete from Patient " + "where id =:patientID");
-        query.setParameter("patientID", id);
+        Query<Patient> query = session.createQuery("delete from Patient " + "where id = :patientId");
+        query.setParameter("patientId", id);
         query.executeUpdate();
     }
 

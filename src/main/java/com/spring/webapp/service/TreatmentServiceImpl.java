@@ -56,8 +56,13 @@ public class TreatmentServiceImpl {
 
 
     @Transactional
+    public void deleteWithPatientId(int id) {
+        treatmentDAO.deleteWithPatientId(id);
+    }
+
+    @Transactional
     public void delete(int id) {
-        treatmentDAO.deleteWithPatient(id);
+        treatmentDAO.delete(id);
     }
 
 

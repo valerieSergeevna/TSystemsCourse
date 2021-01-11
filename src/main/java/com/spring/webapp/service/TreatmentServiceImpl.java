@@ -1,19 +1,15 @@
 package com.spring.webapp.service;
 
-import com.spring.webapp.dao.EntityDAO;
 import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
-import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.dto.PatientDTOImpl;
-import com.spring.webapp.dto.ProcedureMedicineDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,7 +57,7 @@ public class TreatmentServiceImpl {
 
     @Transactional
     public void delete(int id) {
-        treatmentDAO.delete(id);
+        treatmentDAO.deleteWithPatient(id);
     }
 
 

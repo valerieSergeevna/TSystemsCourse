@@ -1,23 +1,16 @@
 package com.spring.webapp.service;
 
 import com.spring.webapp.dao.*;
-import com.spring.webapp.dto.DoctorDTOImpl;
-import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
-import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
-import org.hibernate.Session;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +49,7 @@ public class PatientServiceImpl {
     public void delete(int id) {
         List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
         for (Treatment treatment : treatmentList) {
-            treatmentDAO.delete(treatment.getTreatmentId());
+            treatmentDAO.deleteWithPatient(treatment.getTreatmentId());
         }
         patientDAO.delete(id);
     }

@@ -43,6 +43,8 @@ public class PatientDAOImpl {
         query.executeUpdate();
     }
 
+//TODO: treatments count check -> delete
+
     public List<Treatment> getTreatments(int id){
         Session session = sessionFactory.getCurrentSession();
         Query<Treatment> query = session.createQuery("from Treatment " + "where patient.id =:patientID");

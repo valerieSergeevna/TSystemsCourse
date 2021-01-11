@@ -39,10 +39,24 @@ public class TreatmentDAOImpl {
         return treatment;
     }
 
+    public int getIdByProcedureMedicineId(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select id from Treatment  where procedureMedicine.id=:prMedNameID");
+        query.setParameter("prMedNameID", id);
+        return !query.list().isEmpty()?(int)query.list().get(0):-1;
+    }
+
+    public void deleteWithPatient(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Treatment> query = session.createQuery("delete from Treatment " + "where patient.id =:patientID");
+        query.setParameter("patientID", id);
+        query.executeUpdate();
+    }
+
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Doctor> query = session.createQuery("delete from Treatment " + "where patient.id =:patientID");
-        query.setParameter("patientID", id);
+        Query<Treatment> query = session.createQuery("delete from Treatment " + "where id =:ID");
+        query.setParameter("ID", id);
         query.executeUpdate();
     }
 

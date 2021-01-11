@@ -32,6 +32,6 @@
     </c:forEach>
     <br>
 </table>
-<input type="button" value="Добавить" onclick="window.location.href = '/addNewTreatment'"/>
+<input type="button" value="Добавить" onclick="window.location.href = '/addNewPatient'"/>
 </body>
 </html>

@@ -100,26 +100,38 @@ public class MyController {
 //TODO: MAKE CANCEL FUNCTIONAL
 
     @RequestMapping("/deletePatient")
-    public String deletePatient(@RequestParam("patientId") int id){
+    public String deletePatient(@RequestParam("patientId") int id) {
         patientService.delete(id);
         return "redirect:/";
     }
 
-    @RequestMapping("/addNewTreatment")
-    public String addNewTreatment(Model model) {
-       // TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+    @RequestMapping("/addNewPatient")
+    public String addNewPatient(Model model) {
+        // TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
         PatientDTOImpl patientDTO = patientService.createEmpty();
-        List <TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
+        List<TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
         treatmentDTO.add(treatmentService.createEmpty(patientDTO));
         patientDTO.setTreatments(treatmentDTO);
-     //   model.addAttribute("treatment", treatmentDTO);
+        //   model.addAttribute("treatment", treatmentDTO);
+        model.addAttribute("patient", patientDTO);
+        return "treatment-info";
+    }
+
+    @RequestMapping("/addNewTreatment")
+    public String addNewTreatment(@RequestParam("patientId") int id, Model model) {
+        // TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+        PatientDTOImpl patientDTO = patientService.get(id);
+        List<TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
+        treatmentDTO.add(treatmentService.createEmpty(patientDTO));
+        patientDTO.setTreatments(treatmentDTO);
+        //   model.addAttribute("treatment", treatmentDTO);
         model.addAttribute("patient", patientDTO);
         return "treatment-info";
     }
 
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
     public String saveTreatment(@ModelAttribute("patient") PatientDTOImpl patientDTO,
-                               HttpServletRequest request) {
+                                HttpServletRequest request) {
         List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
         String[] itemValues = request.getParameterValues("treatment");
         String[] typeValues = request.getParameterValues("treatmentType");
@@ -127,11 +139,23 @@ public class MyController {
         String[] patternValues = request.getParameterValues("treatmentPattern");
         String[] doseValues = request.getParameterValues("treatmentDose");
         String[] periodValues = request.getParameterValues("treatmentPeriod");
-        for(int i = 0; i < itemValues.length; i++){
+
+        for (int i = 0; i < itemValues.length; i++) {
             TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
-                    typeValues[i],Integer.parseInt(patternValues[i]),periodValues[i], Double.parseDouble(doseValues[i]));
+                    typeValues[i], Integer.parseInt(patternValues[i]), periodValues[i], Double.parseDouble(doseValues[i]));
             treatmentDTO.setTypeName(typeNameValues[i]);
             treatmentDTOList.add(treatmentDTO);
+        }
+        if (typeValues.length > itemValues.length) {
+            for (int i = itemValues.length; i < typeValues.length; i++) {
+                TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+                treatmentDTO.setType(typeValues[i]);
+                treatmentDTO.setTypeName(typeNameValues[i]);
+                treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
+                treatmentDTO.setDose(Double.parseDouble(doseValues[i]));
+                treatmentDTO.setPeriod(periodValues[i]);
+                treatmentDTOList.add(treatmentDTO);
+            }
         }
 
         patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
@@ -143,14 +167,14 @@ public class MyController {
 
     @RequestMapping("/deleteTreatment") // delete list's item
     public String deleteTreatment(@RequestParam("treatmentId") int id) {
-      //  treatmentService.delete(id);
-         return "redirect:/";
+        //  treatmentService.delete(id);
+        return "redirect:/";
     }
 
 
     @RequestMapping("/updateTreatmentInfo")
     public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) {
-      List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
+        List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
 
         PatientDTOImpl patientDTO = patientService.get(id);
         model.addAttribute("patient", patientDTO);

@@ -109,9 +109,10 @@ public class MyController {
     @RequestMapping("/addNewPatient")
     public String addNewPatient(Model model) {
         // TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
-        PatientDTOImpl patientDTO = patientService.createEmpty();
+        //   PatientDTOImpl patientDTO = patientService.createEmpty();
+        PatientDTOImpl patientDTO = new PatientDTOImpl();
         List<TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
-        treatmentDTO.add(treatmentService.createEmpty(patientDTO));
+        //  treatmentDTO.add(treatmentService.createEmpty(patientDTO));
         patientDTO.setTreatments(treatmentDTO);
         //   model.addAttribute("treatment", treatmentDTO);
         model.addAttribute("patient", patientDTO);
@@ -120,12 +121,10 @@ public class MyController {
 
     @RequestMapping("/addNewTreatment")
     public String addNewTreatment(@RequestParam("patientId") int id, Model model) {
-        // TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
         PatientDTOImpl patientDTO = patientService.get(id);
         List<TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
         treatmentDTO.add(treatmentService.createEmpty(patientDTO));
         patientDTO.setTreatments(treatmentDTO);
-        //   model.addAttribute("treatment", treatmentDTO);
         model.addAttribute("patient", patientDTO);
         return "treatment-info";
     }
@@ -133,6 +132,7 @@ public class MyController {
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
     public String saveTreatment(@ModelAttribute("patient") PatientDTOImpl patientDTO,
                                 HttpServletRequest request) {
+
         List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
         String[] itemValues = request.getParameterValues("treatment");
         String[] typeValues = request.getParameterValues("treatmentType");
@@ -141,14 +141,19 @@ public class MyController {
         String[] doseValues = request.getParameterValues("treatmentDose");
         String[] periodValues = request.getParameterValues("treatmentPeriod");
 
-        for (int i = 0; i < itemValues.length; i++) {
-            TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
-                    typeValues[i], Integer.parseInt(patternValues[i]), periodValues[i], Double.parseDouble(doseValues[i]));
-            treatmentDTO.setTypeName(typeNameValues[i]);
-            treatmentDTOList.add(treatmentDTO);
+        int treatmentIdCount = 0;
+        if (itemValues != null) {
+            for (int i = 0; i < itemValues.length; i++) {
+                TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
+                        typeValues[i], Integer.parseInt(patternValues[i]), periodValues[i], Double.parseDouble(doseValues[i]));
+                treatmentDTO.setTypeName(typeNameValues[i]);
+                treatmentDTOList.add(treatmentDTO);
+            }
+            treatmentIdCount = itemValues.length;
         }
-        if (typeValues.length > itemValues.length) {
-            for (int i = itemValues.length; i < typeValues.length; i++) {
+
+        if (typeValues.length > treatmentIdCount) {
+            for (int i = treatmentIdCount; i < typeValues.length; i++) {
                 TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
                 treatmentDTO.setType(typeValues[i]);
                 treatmentDTO.setTypeName(typeNameValues[i]);
@@ -160,9 +165,6 @@ public class MyController {
         }
 
         patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
-        patientService.save(patientDTO);
-        //horrible code:(
-        procedureMedicineService.clearNullProcedureMedicine();
         return "redirect:/";
     }
 
@@ -171,7 +173,7 @@ public class MyController {
                                   Model model) {
         PatientDTOImpl patientDTO = treatmentService.getPatient(id);
         treatmentService.delete(id);
-        model.addAttribute("patientId",patientDTO.getId());
+        model.addAttribute("patientId", patientDTO.getId());
 
         return "redirect:/updateTreatmentInfo";
     }
@@ -180,10 +182,6 @@ public class MyController {
     @RequestMapping("/updateTreatmentInfo")
     public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) {
         List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
-        if(allTreatments.isEmpty()){
-            patientService.delete(id);
-            return "redirect:/";
-        }
 
         PatientDTOImpl patientDTO = patientService.get(id);
         model.addAttribute("patient", patientDTO);

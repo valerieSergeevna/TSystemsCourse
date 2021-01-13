@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +59,9 @@
 
 
 <form:form action="saveTreatment" method="post" modelAttribute="patient">
+    <c:if test="${patient.treatments != null}" >
 <form:hidden path="id"></form:hidden>
+    </c:if>
 Name <form:input path="name"/>
     <form:errors path="name"></form:errors>
 <br><br>
@@ -71,6 +74,9 @@ Birthdate <form:input path="birthDate"/>
 Disease <form:input path="disease"/>
     <form:errors path="disease"></form:errors>
 <br><br>
+
+<c:if test="${patient.treatments.size() != 0}" >
+
 
 <c:forEach items="${patient.treatments}" var="treatment" varStatus="count">
 <input type="hidden" name="treatment" value="${treatment.treatmentId}">
@@ -95,6 +101,7 @@ Type
     <input type="button" value="Delete treatment"
            onclick="window.location.href ='${deleteButton}'" />
     </c:forEach>
+</c:if>
     <br>
 
     <div id="container"></div>

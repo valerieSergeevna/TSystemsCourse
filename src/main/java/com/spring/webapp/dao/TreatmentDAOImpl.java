@@ -73,7 +73,5 @@ public class TreatmentDAOImpl {
                     return treatmentDTO;
                 })
                 .collect(Collectors.toList());
-
     }
-
 }

@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PatientServiceImpl {
+public class
+PatientServiceImpl {
 
     @Autowired
     private PatientDAOImpl patientDAO;
@@ -51,7 +52,7 @@ public class PatientServiceImpl {
     }
 
     @Transactional
-    public void deleteTreatments(int id){
+    public void deleteTreatments(int id) {
         List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
         for (Treatment treatment : treatmentList) {
             treatmentDAO.delete(treatment.getTreatmentId());
@@ -61,7 +62,7 @@ public class PatientServiceImpl {
     @Transactional
     public PatientDTOImpl get(int id) {
         PatientDTOImpl patientDTO = new PatientDTOImpl();
-        Patient patient =patientDAO.get(id);
+        Patient patient = patientDAO.get(id);
         BeanUtils.copyProperties(patient, patientDTO);
         patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
         return patientDTO;
@@ -77,9 +78,18 @@ public class PatientServiceImpl {
     }
 
     @Transactional
-    public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patient) {
-        patient.getTreatments().clear();
-        patientDAO.get(patient.getId()).getTreatments().clear();
+    public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patientDTO) {
+        //TODO: ADD STATUS AND INSURANCE
+        patientDTO.getTreatments().clear();
+        Patient patient = patientDAO.get(patientDTO.getId());
+
+        if (patient != null) {
+            patient.getTreatments().clear();
+        }else{
+            patient = new Patient();
+            BeanUtils.copyProperties(patientDTO, patient);
+        }
+
         List<Treatment> treatmentList = treatments.stream()
                 .map(treatment ->
                 {
@@ -87,12 +97,10 @@ public class PatientServiceImpl {
                     newTreatment.setTreatmentId(treatment.getTreatmentId());
                     //in TreatmentService duplicated code
                     int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getTypeName());
-
                     ProcedureMedicine procedureMedicine;
                     if (procedureMedicineID > 0) {
                         procedureMedicine = procedureMedicineDAO.get(procedureMedicineID);
                     } else {
-                        //  procedureMedicineDAO.save(new ProcedureMedicine(treatmentDTO.getTypeName(), treatmentDTO.getType()));
                         procedureMedicine = new ProcedureMedicine(treatment.getTypeName(), treatment.getType());
                         procedureMedicineDAO.save(procedureMedicine);
                     }
@@ -102,15 +110,17 @@ public class PatientServiceImpl {
                 })
                 .collect(Collectors.toList());
 
-        for (Treatment treatment : treatmentList) {
-            //treatmentDAO.delete(patient.getId());
-            treatment.setPatient(patientDAO.get(patient.getId()));
-            treatmentDAO.save(treatment);
-            //patientDAO.get(id).addTreatment(treatment1);
-        }
-        patientDAO.get(patient.getId()).setTreatments(treatmentList);
-        patient.setTreatments(treatmentDAO.toTreatmentDTOList(treatmentList));
+        patient.setDoctor(doctorDAO.get(1));
+        patientDAO.save(patient);
+        patientDTO.setId(patient.getId());
 
+        for (Treatment treatment : treatmentList) {
+            treatment.setPatient(patient);
+            treatmentDAO.save(treatment);
+        }
+        patient.setTreatments(treatmentList);
+
+        patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(treatmentList));
     }
 
     @Transactional

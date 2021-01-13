@@ -8,6 +8,7 @@ import com.spring.webapp.entity.Treatment;
 import javax.persistence.*;
 import java.util.List;
 
+
 public class TreatmentDTOImpl implements EntityDTO {
 
     private int treatmentId;

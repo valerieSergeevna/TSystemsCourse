@@ -7,6 +7,7 @@ import com.spring.webapp.dto.EntityDTO;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Patient;
+import com.spring.webapp.entity.TreatmentEvent;
 import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +37,7 @@ public class MyController {
     private TreatmentServiceImpl treatmentService;
 
     @Autowired
-    private ProcedureMedicineServiceImpl procedureMedicineService;
+    private TreatmentEventServiceImpl treatmentEventService;
 
     @RequestMapping("/")
     public String showAllDoctors(Model model) {
@@ -45,6 +46,11 @@ public class MyController {
         model.addAttribute("allDocs", allDoctors);
         return "all-doctors";*/
         List<PatientDTOImpl> allPatient = patientService.getAll();
+
+        ///
+        List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(allPatient.get(0).getId());
+        List<TreatmentEvent> treatmentEventList = treatmentEventService.createTimeTable(allTreatments.get(0));
+        /////
 
         model.addAttribute("allPatient", allPatient);
         return "all-patient";

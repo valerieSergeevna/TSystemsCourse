@@ -5,13 +5,14 @@ import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class TreatmentEventDTOImpl {
 
     private int id;
     private String type;
-    private Date treatmentTime;
+    private LocalDateTime treatmentTime;
     private double dose;
     private String status;
 
@@ -22,7 +23,7 @@ public class TreatmentEventDTOImpl {
     public TreatmentEventDTOImpl() {
     }
 
-    public TreatmentEventDTOImpl(int id, String type, Date treatmentTime, double dose, String status) {
+    public TreatmentEventDTOImpl(int id, String type, LocalDateTime treatmentTime, double dose, String status) {
         this.id = id;
         this.type = type;
         this.treatmentTime = treatmentTime;
@@ -46,11 +47,11 @@ public class TreatmentEventDTOImpl {
         this.type = type;
     }
 
-    public Date getTreatmentTime() {
+    public LocalDateTime getTreatmentTime() {
         return treatmentTime;
     }
 
-    public void setTreatmentTime(Date treatmentTime) {
+    public void setTreatmentTime(LocalDateTime treatmentTime) {
         this.treatmentTime = treatmentTime;
     }
 

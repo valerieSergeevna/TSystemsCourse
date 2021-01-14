@@ -3,11 +3,13 @@ package com.spring.webapp.service;
 import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
+import com.spring.webapp.dao.TreatmentEventDAOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
+import com.spring.webapp.entity.TreatmentEvent;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class TreatmentServiceImpl {
 
     @Autowired
     private PatientDAOImpl patientDAO;
+
+    @Autowired
+    private TreatmentEventDAOImpl treatmentEventDAO;
 
 
     @Transactional
@@ -62,6 +67,10 @@ public class TreatmentServiceImpl {
 
     @Transactional
     public void delete(int id) {
+       List <TreatmentEvent> treatmentEventList = treatmentEventDAO.getAllByTreatmentID(id);
+        for (TreatmentEvent treatmentEvent:treatmentEventList) {
+            treatmentEventDAO.delete(treatmentEvent.getId());
+        }
         treatmentDAO.delete(id);
     }
 

@@ -30,10 +30,7 @@ public class TreatmentEventServiceImpl {
     @Transactional
     public List<TreatmentEventDTOImpl> getAll() {
         List<TreatmentEvent> treatmentEventList = treatmentEventDAO.getAll();
-        return treatmentEventList.stream()
-                .map(treatmentEvent -> new TreatmentEventDTOImpl(treatmentEvent.getId(), treatmentEvent.getType(),
-                        treatmentEvent.getTreatmentTime(), treatmentEvent.getDose(), treatmentEvent.getStatus()))
-                .collect(Collectors.toList());
+        return toTreatmentEventDTOList(treatmentEventList);
     }
 
     @Transactional
@@ -56,7 +53,10 @@ public class TreatmentEventServiceImpl {
     }
 
     @Transactional
-    public List<TreatmentEvent> createTimeTable(TreatmentDTOImpl treatmentDTO) {
+    public List<TreatmentEventDTOImpl> createTimeTable(TreatmentDTOImpl treatmentDTO) {
+       /* TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl();
+
+
         List<TreatmentEvent> treatmentEventList = new ArrayList<>();
 
         String type = treatmentDTO.getType();
@@ -68,6 +68,8 @@ public class TreatmentEventServiceImpl {
         double dose = treatmentDTO.getDose();
 
         String[] period = treatmentDTO.getPeriod().split(" ");
+
+
 
 
         LocalDateTime startDate = LocalDateTime.now().plusDays(1);
@@ -96,20 +98,61 @@ public class TreatmentEventServiceImpl {
                     treatmentEvent.setDose(dose);
                     treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
                             startDate.getDayOfMonth(), 8+ 24 - (24/i), 0, 0));
-                    startDate.plusDays(1);
+                    startDate = startDate.plusDays(1);
                 }
             }else{
                 treatmentEvent.setDose(1);
-                startDate.plusDays((7 / timePattern));
+                startDate = startDate.plusDays((7 / timePattern));
             }
             treatmentEvent.setPatient(patient);
             treatmentEvent.setProcedureMedicine(procedureMedicine);
             // treatmentEvent.setStatus();
             treatmentEvent.setType(type);
             treatmentEvent.setTreatment(treatmentDAO.get(treatmentDTO.getTreatmentId()));
-      //      treatmentEventDAO.save(treatmentEvent);
+            treatmentEventDAO.save(treatmentEvent);
             treatmentEventList.add(treatmentEvent);
         }
-        return treatmentEventList;
+        return treatmentEventList;*/
+        return toTreatmentEventDTOList(treatmentEventDAO.createTimeTable(treatmentDAO.get(treatmentDTO.getTreatmentId())));
     }
+
+    @Transactional
+    public  List<TreatmentEventDTOImpl> getByPatient(int patientId){
+        return toTreatmentEventDTOList(treatmentEventDAO.getByPatient(patientId));
+    }
+
+    @Transactional
+    public  List<TreatmentEventDTOImpl> getNearestEvents(LocalDateTime time){
+        return toTreatmentEventDTOList(treatmentEventDAO.getNearestEvents(time));
+    }
+
+    @Transactional
+    public  List<TreatmentEventDTOImpl> getTodayEvents(LocalDateTime time){
+        return toTreatmentEventDTOList(treatmentEventDAO.getTodayEvents(time));
+    }
+
+    //convector's method from-to
+
+    public  List<TreatmentEventDTOImpl> toTreatmentEventDTOList(List<TreatmentEvent> treatmentsEventList) {
+        return treatmentsEventList.stream()
+                .map(this::toTreatmentEventDTO)
+                .collect(Collectors.toList());
+    }
+
+    public TreatmentEventDTOImpl toTreatmentEventDTO(TreatmentEvent treatmentEvent){
+        return new TreatmentEventDTOImpl(treatmentEvent.getId(), treatmentEvent.getType(),
+                treatmentEvent.getTreatmentTime(), treatmentEvent.getDose(), treatmentEvent.getStatus());
+    }
+
+    public  List<TreatmentEvent> toTreatmentEventList(List<TreatmentEventDTOImpl> treatmentsEventDTOList) {
+        return treatmentsEventDTOList.stream()
+                .map(this::toTreatmentEvent)
+                .collect(Collectors.toList());
+    }
+
+    public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEvent){
+        return new TreatmentEvent(treatmentEvent.getType(),treatmentEvent.getTreatmentTime(),treatmentEvent.getDose(),
+                treatmentEvent.getStatus());
+    }
+
 }

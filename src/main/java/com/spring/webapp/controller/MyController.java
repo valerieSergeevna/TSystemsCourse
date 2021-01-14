@@ -2,10 +2,7 @@ package com.spring.webapp.controller;
 
 import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
-import com.spring.webapp.dto.DoctorDTOImpl;
-import com.spring.webapp.dto.EntityDTO;
-import com.spring.webapp.dto.PatientDTOImpl;
-import com.spring.webapp.dto.TreatmentDTOImpl;
+import com.spring.webapp.dto.*;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.TreatmentEvent;
 import com.spring.webapp.service.*;
@@ -46,11 +43,6 @@ public class MyController {
         model.addAttribute("allDocs", allDoctors);
         return "all-doctors";*/
         List<PatientDTOImpl> allPatient = patientService.getAll();
-
-        ///
-        List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(allPatient.get(0).getId());
-        List<TreatmentEvent> treatmentEventList = treatmentEventService.createTimeTable(allTreatments.get(0));
-        /////
 
         model.addAttribute("allPatient", allPatient);
         return "all-patient";
@@ -193,5 +185,15 @@ public class MyController {
         model.addAttribute("patient", patientDTO);
         return "treatment-info";
     }
+
+    @RequestMapping("/nurse/")
+    public String showAllEvents(Model model) {
+        List<TreatmentEventDTOImpl> treatmentEventDTOList = treatmentEventService.getAll();
+
+        model.addAttribute("allEvents", treatmentEventDTOList);
+        return "all-patient";
+    }
+
+
 
 }

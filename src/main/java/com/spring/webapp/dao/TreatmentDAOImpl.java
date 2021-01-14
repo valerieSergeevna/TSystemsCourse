@@ -29,6 +29,8 @@ public class TreatmentDAOImpl {
     public void save(Treatment treatment) {
         Session session = sessionFactory.getCurrentSession();
       //  Query query = session.createQuery("select ")
+     //   session.evict(treatment);
+
         session.saveOrUpdate(treatment);
     }
 

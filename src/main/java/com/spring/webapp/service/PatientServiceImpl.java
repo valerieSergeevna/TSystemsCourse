@@ -3,14 +3,17 @@ package com.spring.webapp.service;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
+import com.spring.webapp.dto.TreatmentEventDTOImpl;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
+import com.spring.webapp.entity.TreatmentEvent;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,9 @@ PatientServiceImpl {
 
     @Autowired
     private DoctorDAOImpl doctorDAO;
+
+    @Autowired
+    private TreatmentEventDAOImpl treatmentEventDAO;
 
     @Transactional
     public List<PatientDTOImpl> getAll() {
@@ -85,7 +91,7 @@ PatientServiceImpl {
 
         if (patient != null) {
             patient.getTreatments().clear();
-        }else{
+        } else {
             patient = new Patient();
             BeanUtils.copyProperties(patientDTO, patient);
         }
@@ -117,7 +123,12 @@ PatientServiceImpl {
         for (Treatment treatment : treatmentList) {
             treatment.setPatient(patient);
             treatmentDAO.save(treatment);
+            List<TreatmentEvent> treatmentEvent = treatmentEventDAO.getAllByTreatmentID(treatment.getTreatmentId());
+            if (treatmentEvent == null) {
+                treatmentEventDAO.createTimeTable(treatment);
+            }
         }
+
         patient.setTreatments(treatmentList);
 
         patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(treatmentList));

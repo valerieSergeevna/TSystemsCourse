@@ -37,6 +37,11 @@ public class TreatmentEventDAOImpl {
         session.saveOrUpdate(treatmentEvent);
     }
 
+    public void update(TreatmentEvent treatmentEvent) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(treatmentEvent);
+    }
+
     public TreatmentEvent get(int id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(TreatmentEvent.class, id);
@@ -93,7 +98,6 @@ public class TreatmentEventDAOImpl {
         while (startDate.isBefore(endDate)) {
             TreatmentEvent treatmentEvent = new TreatmentEvent();
             if (type.equals("treatment")) {
-                // startDate.plusDays((timePattern / 7));
                 for (int i = 1; i <= timePattern; i++) {
                     treatmentEvent.setDose(dose);
                     treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
@@ -102,8 +106,9 @@ public class TreatmentEventDAOImpl {
                 }
             }else{
                 treatmentEvent.setDose(1);
-                startDate = startDate.plusDays((7 / timePattern));
-                treatmentEvent.setTreatmentTime(startDate);
+                startDate = startDate.plusDays(7- (7 / timePattern));
+                treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+                        startDate.getDayOfMonth(),14,0,0));
             }
             treatmentEvent.setPatient(patient);
             treatmentEvent.setProcedureMedicine(procedureMedicine);

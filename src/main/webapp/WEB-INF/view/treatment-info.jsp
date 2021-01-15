@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,6 +86,10 @@ Disease <form:input path="disease"/>
                         value="${treatment.typeName}">
 
 Type
+<%--<select name="treatmentType" >
+    <option>${"treatment"}</option>
+    <option>${"procedure"}</option>
+</select>--%>
 <input type="text" name="treatmentType" size="30" value="${treatment.type}">
     <br><br>
     Time Pattern <input type="text" name="treatmentPattern" size="30"

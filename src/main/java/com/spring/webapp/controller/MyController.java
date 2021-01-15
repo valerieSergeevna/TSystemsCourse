@@ -188,10 +188,31 @@ public class MyController {
 
     @RequestMapping("/nurse/")
     public String showAllEvents(Model model) {
-        List<TreatmentEventDTOImpl> treatmentEventDTOList = treatmentEventService.getAll();
+        List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getAll();
+        model.addAttribute("allEvents", allEvents);
+        return "all-treatmentEvents";
+    }
 
-        model.addAttribute("allEvents", treatmentEventDTOList);
-        return "all-patient";
+  /*  @RequestMapping("/nurse/updateEvent")
+    public String updateEvent(@ModelAttribute("event") TreatmentEventDTOImpl treatmentEventDTO,
+                              HttpServletRequest request,Model model) {
+        TreatmentEventDTOImpl treatmentEventDTO1 = model.getAttribute("event");
+        String status = request.getParameter("status"+treatmentEventDTO.getId());
+        treatmentEventDTO.setStatus(status);
+        treatmentEventService.update(treatmentEventDTO);
+        return "redirect:/nurse/";
+    }*/
+
+    @RequestMapping("nurse/updateStatus")
+    public String updateStatus(@RequestParam("eventId") int id,HttpServletRequest request, Model model) {
+      // String[] id = request.getParameterValues("eventId");
+        String[] status = request.getParameterValues("status");
+   //     String status = request.getParameter("status"+id);
+        TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
+     //   treatmentEventDTO.setStatus(status);
+     //   treatmentEventService.update(treatmentEventDTO);
+       model.addAttribute("event", treatmentEventDTO);
+        return "redirect:/nurse/";
     }
 
 

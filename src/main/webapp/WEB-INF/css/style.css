@@ -1,0 +1,40 @@
+.table thead tr th:first-child {
+    border-radius: 20px 0 0 0;
+    border-top: none;
+}
+.table thead tr th:last-child {
+    border-radius: 0 20px 0 0;
+}
+
+
+
+.table tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 20px;
+}
+.table tbody tr:last-child td:last-child {
+    border-radius: 0 0 20px 0;
+}
+
+
+
+
+.inner-addon {
+    position: relative;
+}
+
+.inner-addon .glyphicon {
+    position: absolute;
+    left: 0px;
+
+    color: #6F727A;
+    padding: 10px;
+    pointer-events: none;
+}
+
+.inner-addon .form-control {
+    padding-left: 35px;
+}
+
+.form-group-lg.inner-addon .glyphicon{
+    font-size: 20px;
+}

@@ -41,6 +41,11 @@ public class TreatmentEventServiceImpl {
     }
 
     @Transactional
+    public void update(TreatmentEventDTOImpl treatmentEventDTO) {
+        treatmentEventDAO.save(toTreatmentEvent(treatmentEventDTO));
+    }
+
+    @Transactional
     public void delete(int id) {
         treatmentEventDAO.delete(id);
     }
@@ -140,8 +145,12 @@ public class TreatmentEventServiceImpl {
     }
 
     public TreatmentEventDTOImpl toTreatmentEventDTO(TreatmentEvent treatmentEvent){
-        return new TreatmentEventDTOImpl(treatmentEvent.getId(), treatmentEvent.getType(),
+        TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(treatmentEvent.getId(), treatmentEvent.getType(),
                 treatmentEvent.getTreatmentTime(), treatmentEvent.getDose(), treatmentEvent.getStatus());
+        treatmentEventDTO.setPatient(treatmentEvent.getPatient());
+        treatmentEventDTO.setTreatment(treatmentEvent.getTreatment());
+        treatmentEventDTO.setProcedureMedicine(treatmentEvent.getProcedureMedicine());
+        return treatmentEventDTO;
     }
 
     public  List<TreatmentEvent> toTreatmentEventList(List<TreatmentEventDTOImpl> treatmentsEventDTOList) {
@@ -150,9 +159,13 @@ public class TreatmentEventServiceImpl {
                 .collect(Collectors.toList());
     }
 
-    public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEvent){
-        return new TreatmentEvent(treatmentEvent.getType(),treatmentEvent.getTreatmentTime(),treatmentEvent.getDose(),
-                treatmentEvent.getStatus());
+    public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO){
+        TreatmentEvent treatmentEvent= new TreatmentEvent(treatmentEventDTO.getType(),treatmentEventDTO.getTreatmentTime(),treatmentEventDTO.getDose(),
+                treatmentEventDTO.getStatus());
+        treatmentEvent.setTreatment(treatmentEventDTO.getTreatment());
+        treatmentEvent.setPatient(treatmentEventDTO.getPatient());
+        treatmentEvent.setProcedureMedicine(treatmentEventDTO.getProcedureMedicine());
+        return treatmentEvent;
     }
 
 }

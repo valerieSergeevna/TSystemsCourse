@@ -1,37 +1,49 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@include file="index.jsp" %>
+<style>
+    <%@include file="/WEB-INF/css/style.css" %>
+</style>
 <!DOCTYPE html>
 <html>
 <body>
-<h2>Patients list</h2>
-<br>
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Disease</th>
-        <th>Operations</th>
-    </tr>
-    <c:forEach var="patient" items="${allPatient}">
-        <tr>
-            <c:url var="updateButton" value="/updateTreatmentInfo">
-                <c:param name="patientId" value="${patient.id}"></c:param>
-            </c:url>
-            <c:url var="deleteButton" value="/deletePatient">
-                <c:param name="patientId" value="${patient.id}"></c:param>
-            </c:url>
-            <td>${patient.name}</td>
-            <td>${patient.surname}</td>
-            <td>${patient.disease}</td>
-            <td><input type="button" value="Update"
-                       onclick="window.location.href ='${updateButton}'"/>
-                <input type="button" value="Delete"
-                       onclick="window.location.href ='${deleteButton}'"/></td>
+
+<div class="container">
+    <h2 class = "text-info">Patients list</h2>
+    <table class="table table-light table-hover">
+        <thead style="background-color:skyblue">
+        <tr class = "text-white">
+            <th style="width: 10%">Name</th>
+            <th style="width: 20%">Surname</th>
+            <th style="width: 30%">Disease</th>
+            <th style="width: 40%">Operations</th>
         </tr>
-    </c:forEach>
-    <br>
-</table>
-<input type="button" value="Add" onclick="window.location.href = '/addNewPatient'"/>
+        </thead>
+        <c:forEach var="patient" items="${allPatient}">
+            <tbody>
+            <tr class = "text-info">
+                <c:url var="updateButton" value="/updateTreatmentInfo">
+                    <c:param name="patientId" value="${patient.id}"></c:param>
+                </c:url>
+                <c:url var="deleteButton" value="/deletePatient">
+                    <c:param name="patientId" value="${patient.id}"></c:param>
+                </c:url>
+                <td>${patient.name}</td>
+                <td>${patient.surname}</td>
+                <td>${patient.disease}</td>
+                <td><input type="button" value="Update" class="btn  btn-outline-info"
+                                                        onclick="window.location.href ='${updateButton}'"/>
+                 <input type="button" value="Delete" class="btn btn-outline-danger"
+                                                        onclick="window.location.href ='${deleteButton}'"/></td>
+            </tr>
+            </tbody>
+        </c:forEach>
+        <br>
+    </table>
+
+    <input type="button" value="Add" class="btn btn-outline-success" onclick="window.location.href = '/addNewPatient'"/>
+
+</div>
 </body>
 </html>

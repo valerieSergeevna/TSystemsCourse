@@ -204,14 +204,16 @@ public class MyController {
     }*/
 
     @RequestMapping("nurse/updateStatus")
-    public String updateStatus(@RequestParam("eventId") int id,HttpServletRequest request, Model model) {
+    public String updateStatus(@RequestParam("eventId") int id,
+                               @RequestParam("eventStatus") String status,
+                               HttpServletRequest request) {
       // String[] id = request.getParameterValues("eventId");
-        String[] status = request.getParameterValues("status");
+   //     String[] status = request.getParameterValues("status");
    //     String status = request.getParameter("status"+id);
         TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
-     //   treatmentEventDTO.setStatus(status);
-     //   treatmentEventService.update(treatmentEventDTO);
-       model.addAttribute("event", treatmentEventDTO);
+        treatmentEventDTO.setStatus(status);
+        treatmentEventService.update(treatmentEventDTO);
+   //    model.addAttribute("event", treatmentEventDTO);
         return "redirect:/nurse/";
     }
 

@@ -39,6 +39,7 @@ public class TreatmentEventDAOImpl {
 
     public void update(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
+
         session.update(treatmentEvent);
     }
 
@@ -106,13 +107,13 @@ public class TreatmentEventDAOImpl {
                 }
             }else{
                 treatmentEvent.setDose(1);
-                startDate = startDate.plusDays(7- (7 / timePattern));
+                startDate = startDate.plusDays(8- (7 / timePattern));
                 treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
                         startDate.getDayOfMonth(),14,0,0));
             }
             treatmentEvent.setPatient(patient);
             treatmentEvent.setProcedureMedicine(procedureMedicine);
-            // treatmentEvent.setStatus();
+            treatmentEvent.setStatus("in plan");
             treatmentEvent.setType(type);
             treatmentEvent.setTreatment(treatment);
 

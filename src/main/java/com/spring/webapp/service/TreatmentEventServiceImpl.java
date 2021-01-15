@@ -42,7 +42,7 @@ public class TreatmentEventServiceImpl {
 
     @Transactional
     public void update(TreatmentEventDTOImpl treatmentEventDTO) {
-        treatmentEventDAO.save(toTreatmentEvent(treatmentEventDTO));
+        treatmentEventDAO.update(toTreatmentEvent(treatmentEventDTO));
     }
 
     @Transactional
@@ -122,49 +122,54 @@ public class TreatmentEventServiceImpl {
     }
 
     @Transactional
-    public  List<TreatmentEventDTOImpl> getByPatient(int patientId){
+    public List<TreatmentEventDTOImpl> getByPatient(int patientId) {
         return toTreatmentEventDTOList(treatmentEventDAO.getByPatient(patientId));
     }
 
     @Transactional
-    public  List<TreatmentEventDTOImpl> getNearestEvents(LocalDateTime time){
+    public List<TreatmentEventDTOImpl> getNearestEvents(LocalDateTime time) {
         return toTreatmentEventDTOList(treatmentEventDAO.getNearestEvents(time));
     }
 
     @Transactional
-    public  List<TreatmentEventDTOImpl> getTodayEvents(LocalDateTime time){
+    public List<TreatmentEventDTOImpl> getTodayEvents(LocalDateTime time) {
         return toTreatmentEventDTOList(treatmentEventDAO.getTodayEvents(time));
     }
 
     //convector's method from-to
 
-    public  List<TreatmentEventDTOImpl> toTreatmentEventDTOList(List<TreatmentEvent> treatmentsEventList) {
+    public List<TreatmentEventDTOImpl> toTreatmentEventDTOList(List<TreatmentEvent> treatmentsEventList) {
         return treatmentsEventList.stream()
                 .map(this::toTreatmentEventDTO)
                 .collect(Collectors.toList());
     }
 
-    public TreatmentEventDTOImpl toTreatmentEventDTO(TreatmentEvent treatmentEvent){
+    public TreatmentEventDTOImpl toTreatmentEventDTO(TreatmentEvent treatmentEvent) {
         TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(treatmentEvent.getId(), treatmentEvent.getType(),
                 treatmentEvent.getTreatmentTime(), treatmentEvent.getDose(), treatmentEvent.getStatus());
         treatmentEventDTO.setPatient(treatmentEvent.getPatient());
         treatmentEventDTO.setTreatment(treatmentEvent.getTreatment());
         treatmentEventDTO.setProcedureMedicine(treatmentEvent.getProcedureMedicine());
+        treatmentEventDTO.setStatus(treatmentEvent.getStatus());
         return treatmentEventDTO;
     }
 
-    public  List<TreatmentEvent> toTreatmentEventList(List<TreatmentEventDTOImpl> treatmentsEventDTOList) {
+    public List<TreatmentEvent> toTreatmentEventList(List<TreatmentEventDTOImpl> treatmentsEventDTOList) {
         return treatmentsEventDTOList.stream()
                 .map(this::toTreatmentEvent)
                 .collect(Collectors.toList());
     }
 
-    public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO){
-        TreatmentEvent treatmentEvent= new TreatmentEvent(treatmentEventDTO.getType(),treatmentEventDTO.getTreatmentTime(),treatmentEventDTO.getDose(),
+    public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
+        TreatmentEvent treatmentEvent = new TreatmentEvent(treatmentEventDTO.getType(), treatmentEventDTO.getTreatmentTime(), treatmentEventDTO.getDose(),
                 treatmentEventDTO.getStatus());
+        if (treatmentEventDTO.getId() > 0) {
+            treatmentEvent.setId(treatmentEventDTO.getId());
+        }
         treatmentEvent.setTreatment(treatmentEventDTO.getTreatment());
         treatmentEvent.setPatient(treatmentEventDTO.getPatient());
         treatmentEvent.setProcedureMedicine(treatmentEventDTO.getProcedureMedicine());
+        treatmentEvent.setStatus(treatmentEventDTO.getStatus());
         return treatmentEvent;
     }
 

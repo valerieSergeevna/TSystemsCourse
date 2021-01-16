@@ -124,7 +124,9 @@ PatientServiceImpl {
             treatment.setPatient(patient);
             treatmentDAO.save(treatment);
             List<TreatmentEvent> treatmentEvent = treatmentEventDAO.getAllByTreatmentID(treatment.getTreatmentId());
-            treatmentEventDAO.deleteByTreatment(treatment.getTreatmentId());
+            TreatmentEvent gottenTreatmentEvent = treatmentEventDAO.get(treatment.getTreatmentId());
+
+          //  treatmentEventDAO.deleteByTreatment(treatment.getTreatmentId());
             treatmentEventDAO.createTimeTable(treatment);
         }
 

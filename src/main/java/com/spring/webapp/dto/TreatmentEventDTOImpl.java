@@ -15,6 +15,7 @@ public class TreatmentEventDTOImpl {
     private LocalDateTime treatmentTime;
     private double dose;
     private String status;
+    private String cancelReason;
 
     private Patient patient;
     private Treatment treatment;
@@ -93,5 +94,13 @@ public class TreatmentEventDTOImpl {
 
     public void setProcedureMedicine(ProcedureMedicine procedureMedicine) {
         this.procedureMedicine = procedureMedicine;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
     }
 }

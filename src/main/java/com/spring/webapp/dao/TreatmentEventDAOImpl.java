@@ -63,9 +63,9 @@ public class TreatmentEventDAOImpl {
     }
 
     public List<TreatmentEvent> createTimeTable(Treatment treatment) {
-        List<TreatmentEvent> treatmentEventList = new ArrayList<>();
+        List<TreatmentEvent> treatmentEventList;
         treatmentEventList = getAllByTreatmentID(treatment.getTreatmentId());
-        if (treatmentEventList != null) {
+        if (treatmentEventList.size() != 0) {
             if (treatmentEventList.get(0).getTreatment().getTimePattern() == treatment.getTimePattern()
                     && treatmentEventList.get(0).getTreatment().getPeriod().equals(treatment.getPeriod())) {
                 for (TreatmentEvent treatmentEvent : treatmentEventList) {

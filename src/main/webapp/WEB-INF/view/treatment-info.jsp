@@ -75,6 +75,12 @@ Birthdate <form:input path="birthDate"/>
 Disease <form:input path="disease"/>
     <form:errors path="disease"></form:errors>
 <br><br>
+    Status <form:input path="status"/>
+    <form:errors path="status"></form:errors>
+    <br><br>
+    Insurance number <form:input path="insuranceNumber"/>
+    <form:errors path="status"></form:errors>
+    <br><br>
 
 <c:if test="${patient.treatments.size() != 0}" >
 
@@ -115,7 +121,5 @@ Type
     <%----%>
     <input type="submit" value="OK"/>
     </form:form>
-
-
 </body>
 </html>

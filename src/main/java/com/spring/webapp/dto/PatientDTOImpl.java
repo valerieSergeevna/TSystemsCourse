@@ -16,6 +16,7 @@ public class PatientDTOImpl implements EntityDTO {
     private String disease;
     private String status;
     YearMonth birthDate;
+    private int insuranceNumber;
     private List<TreatmentDTOImpl> treatments = new ArrayList<>();
 
     public PatientDTOImpl(List<TreatmentDTOImpl> treatments) {
@@ -96,4 +97,11 @@ public class PatientDTOImpl implements EntityDTO {
         return status;
     }
 
+    public int getInsuranceNumber() {
+        return insuranceNumber;
+    }
+
+    public void setInsuranceNumber(int insuranceNumber) {
+        this.insuranceNumber = insuranceNumber;
+    }
 }

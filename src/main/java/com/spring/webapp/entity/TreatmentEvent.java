@@ -28,6 +28,9 @@ public class TreatmentEvent {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "cancel_reason")
+    private String cancelReason;
+
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
             CascadeType.MERGE,CascadeType.REFRESH})
@@ -46,11 +49,12 @@ public class TreatmentEvent {
     public TreatmentEvent() {
     }
 
-    public TreatmentEvent(String type, LocalDateTime treatmentTime, double dose, String status) {
+    public TreatmentEvent(String type, LocalDateTime treatmentTime, double dose, String status, String cancelReason) {
         this.type = type;
         this.treatmentTime = treatmentTime;
         this.dose = dose;
         this.status = status;
+        this.cancelReason = cancelReason;
     }
 
     public int getId() {
@@ -115,5 +119,13 @@ public class TreatmentEvent {
 
     public void setProcedureMedicine(ProcedureMedicine procedureMedicine) {
         this.procedureMedicine = procedureMedicine;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
     }
 }

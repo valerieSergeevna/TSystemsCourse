@@ -43,6 +43,14 @@ public class PatientDAOImpl {
         query.executeUpdate();
     }
 
+    public List<Patient> getBySurname(String surname) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Patient> query = session.createQuery("from Patient " + "where surname = :patientSurname");
+        query.setParameter("patientSurname", surname);
+        return query.list();
+    }
+
+
 //TODO: treatments count check -> delete
 
     public List<Treatment> getTreatments(int id){

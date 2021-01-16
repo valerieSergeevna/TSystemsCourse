@@ -38,11 +38,23 @@ PatientServiceImpl {
     public List<PatientDTOImpl> getAll() {
 
         List<Patient> patientsList = patientDAO.getAll();
-        List<PatientDTOImpl> patientDTOList = patientsList.stream()
+       /* List<PatientDTOImpl> patientDTOList = patientsList.stream()
                 .map(patient -> new PatientDTOImpl(patient.getId(), patient.getName(),
                         patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments())))
                 .collect(Collectors.toList());
-        return patientDTOList;
+        return patientDTOList;*/
+        return toPatientDTOList(patientsList);
+    }
+
+    @Transactional
+    public List<PatientDTOImpl> getBySurname(String surname) {
+        List<Patient> patientsList = patientDAO.getBySurname(surname);
+       /* List<PatientDTOImpl> patientDTOList = patientsList.stream()
+                .map(patient -> new PatientDTOImpl(patient.getId(), patient.getName(),
+                        patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments())))
+                .collect(Collectors.toList());
+        return patientDTOList;*/
+        return toPatientDTOList(patientsList);
     }
 
     @Transactional
@@ -144,5 +156,39 @@ PatientServiceImpl {
         BeanUtils.copyProperties(patient, patientDTO);
         return patientDTO;
     }
+
+    //convector's method from-to
+
+    public List<PatientDTOImpl> toPatientDTOList(List<Patient> patientList) {
+        return patientList.stream()
+                .map(this::toPatientDTO)
+                .collect(Collectors.toList());
+    }
+
+    public PatientDTOImpl toPatientDTO(Patient patient) {
+        PatientDTOImpl patientDTO = new PatientDTOImpl(patient.getId(), patient.getName(),
+                patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
+        patientDTO.setInsuranceNumber(patient.getInsuranceNumber());
+        return patientDTO;
+    }
+
+   /* public List<TreatmentEvent> toTreatmentEventList(List<TreatmentEventDTOImpl> treatmentsEventDTOList) {
+        return treatmentsEventDTOList.stream()
+                .map(this::toTreatmentEvent)
+                .collect(Collectors.toList());
+    }
+
+    public Patient toPatient(PatientDTOImpl patientDTO) {
+        TreatmentEvent treatmentEvent = new TreatmentEvent(patientDTO.getType(), patientDTO.getTreatmentTime(), patientDTO.getDose(),
+                patientDTO.getStatus(), patientDTO.getCancelReason());
+        if (patientDTO.getId() > 0) {
+            treatmentEvent.setId(patientDTO.getId());
+        }
+        treatmentEvent.setTreatment(patientDTO.getTreatment());
+        treatmentEvent.setPatient(patientDTO.getPatient());
+        treatmentEvent.setProcedureMedicine(patientDTO.getProcedureMedicine());
+        treatmentEvent.setStatus(patientDTO.getStatus());
+        return treatmentEvent;
+    }*/
 
 }

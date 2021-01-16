@@ -151,6 +151,7 @@ public class TreatmentEventServiceImpl {
         treatmentEventDTO.setTreatment(treatmentEvent.getTreatment());
         treatmentEventDTO.setProcedureMedicine(treatmentEvent.getProcedureMedicine());
         treatmentEventDTO.setStatus(treatmentEvent.getStatus());
+        treatmentEventDTO.setCancelReason(treatmentEvent.getCancelReason());
         return treatmentEventDTO;
     }
 
@@ -162,7 +163,7 @@ public class TreatmentEventServiceImpl {
 
     public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
         TreatmentEvent treatmentEvent = new TreatmentEvent(treatmentEventDTO.getType(), treatmentEventDTO.getTreatmentTime(), treatmentEventDTO.getDose(),
-                treatmentEventDTO.getStatus());
+                treatmentEventDTO.getStatus(), treatmentEventDTO.getCancelReason());
         if (treatmentEventDTO.getId() > 0) {
             treatmentEvent.setId(treatmentEventDTO.getId());
         }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +100,11 @@ public class MyController {
 
     @RequestMapping("/deletePatient")
     public String deletePatient(@RequestParam("patientId") int id) {
+
+        List <TreatmentEventDTOImpl> treatmentEventDTOList = treatmentEventService.getByPatient(id);
+        for (TreatmentEventDTOImpl treatmentEventDTO:treatmentEventDTOList) {
+            treatmentEventService.delete(treatmentEventDTO.getId());
+        }
         patientService.deleteTreatments(id);
         patientService.delete(id);
         return "redirect:/";
@@ -117,7 +123,7 @@ public class MyController {
         return "treatment-info";
     }
 
-    @RequestMapping("/addNewTreatment")
+   /* @RequestMapping("/addNewTreatment")
     public String addNewTreatment(@RequestParam("patientId") int id, Model model) {
         PatientDTOImpl patientDTO = patientService.get(id);
         List<TreatmentDTOImpl> treatmentDTO = new ArrayList<>();
@@ -125,7 +131,7 @@ public class MyController {
         patientDTO.setTreatments(treatmentDTO);
         model.addAttribute("patient", patientDTO);
         return "treatment-info";
-    }
+    }*/
 
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
     public String saveTreatment(@ModelAttribute("patient") PatientDTOImpl patientDTO,
@@ -186,7 +192,7 @@ public class MyController {
         return "treatment-info";
     }
 
-    @RequestMapping("/nurse/")
+    @RequestMapping("/nurse/showAllTreatments")
     public String showAllEvents(Model model) {
         List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getAll();
         model.addAttribute("allEvents", allEvents);
@@ -217,6 +223,66 @@ public class MyController {
         return "redirect:/nurse/";
     }
 
+    @RequestMapping("nurse/cancelStatus")
+    public String cancelStatus(@RequestParam("eventId") int id,
+                               @RequestParam("eventStatus") String status,
+                               Model model) {
+        // String[] id = request.getParameterValues("eventId");
+        //     String[] status = request.getParameterValues("status");
+        //     String status = request.getParameter("status"+id);
+        TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
+     //   treatmentEventDTO.setStatus(status);
+      //  treatmentEventService.update(treatmentEventDTO);
+        model.addAttribute("cancelEvent", treatmentEventDTO);
+        return "cancel-info";
+    }
 
+    @RequestMapping(value = "nurse/setCancelInfo", method = RequestMethod.POST)
+    public String setCancelReason(@ModelAttribute("cancelEvent") TreatmentEventDTOImpl treatmentEventDTO) {
+        //bad code
+        TreatmentEventDTOImpl newTreatmentEventDTO = treatmentEventService.get(treatmentEventDTO.getId());
+        newTreatmentEventDTO.setStatus("canceled");
+        newTreatmentEventDTO.setCancelReason(treatmentEventDTO.getCancelReason());
+        treatmentEventService.update(newTreatmentEventDTO);
+        return "redirect:/nurse/";
+    }
 
+    @RequestMapping("/nurse/")
+    public String showTodayTreatments(Model model) {
+        LocalDateTime nowDay = LocalDateTime.now();
+        List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getTodayEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
+                nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
+        model.addAttribute("allEvents", allEvents);
+        return "all-treatmentEvents";
+    }
+
+    @RequestMapping("/nurse/showNearestHourTreatments")
+    public String showNearestHourTreatments(Model model) {
+        LocalDateTime nowDay = LocalDateTime.now();
+        List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
+                nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
+        model.addAttribute("allEvents", allEvents);
+        return "all-treatmentEvents";
+    }
+
+    @RequestMapping("/nurse/findBySurname")
+    public String findBySurname(@RequestParam("patientSurname") String surname,Model model, HttpServletRequest request) {
+       // String surname = request.getParameter("patientSurname");
+        List <PatientDTOImpl> patientDTOList = patientService.getBySurname(surname);
+        List<TreatmentEventDTOImpl> allEvents = new ArrayList<>();
+        for (PatientDTOImpl patientDTO:patientDTOList) {
+            //O(n^2)???????????
+            allEvents.addAll(treatmentEventService.getByPatient(patientDTO.getId()));
+        }
+        model.addAttribute("allEvents", allEvents);
+        return "all-treatmentEvents";
+    }
+
+   /* @RequestMapping("nurse/setCancelInfo")
+    public String cancelInfo(@ModelAttribute("cancel") TreatmentEventDTOImpl treatmentEventDTO,
+                                HttpServletRequest request) {
+        String reason = request.getParameter("cancelReason");
+        treatmentEventDTO.setCancelReason(reason);
+        return "redirect:/nurse/";
+    }*/
 }

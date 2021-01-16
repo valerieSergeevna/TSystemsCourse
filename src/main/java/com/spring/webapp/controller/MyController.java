@@ -101,8 +101,8 @@ public class MyController {
     @RequestMapping("/deletePatient")
     public String deletePatient(@RequestParam("patientId") int id) {
 
-        List <TreatmentEventDTOImpl> treatmentEventDTOList = treatmentEventService.getByPatient(id);
-        for (TreatmentEventDTOImpl treatmentEventDTO:treatmentEventDTOList) {
+        List<TreatmentEventDTOImpl> treatmentEventDTOList = treatmentEventService.getByPatient(id);
+        for (TreatmentEventDTOImpl treatmentEventDTO : treatmentEventDTOList) {
             treatmentEventService.delete(treatmentEventDTO.getId());
         }
         patientService.deleteTreatments(id);
@@ -155,16 +155,17 @@ public class MyController {
             }
             treatmentIdCount = itemValues.length;
         }
-
-        if (typeValues.length > treatmentIdCount) {
-            for (int i = treatmentIdCount; i < typeValues.length; i++) {
-                TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
-                treatmentDTO.setType(typeValues[i]);
-                treatmentDTO.setTypeName(typeNameValues[i]);
-                treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
-                treatmentDTO.setDose(Double.parseDouble(doseValues[i]));
-                treatmentDTO.setPeriod(periodValues[i]);
-                treatmentDTOList.add(treatmentDTO);
+        if (itemValues != null) {
+            if (typeValues.length > treatmentIdCount) {
+                for (int i = treatmentIdCount; i < typeValues.length; i++) {
+                    TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+                    treatmentDTO.setType(typeValues[i]);
+                    treatmentDTO.setTypeName(typeNameValues[i]);
+                    treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
+                    treatmentDTO.setDose(Double.parseDouble(doseValues[i]));
+                    treatmentDTO.setPeriod(periodValues[i]);
+                    treatmentDTOList.add(treatmentDTO);
+                }
             }
         }
 
@@ -213,13 +214,13 @@ public class MyController {
     public String updateStatus(@RequestParam("eventId") int id,
                                @RequestParam("eventStatus") String status,
                                HttpServletRequest request) {
-      // String[] id = request.getParameterValues("eventId");
-   //     String[] status = request.getParameterValues("status");
-   //     String status = request.getParameter("status"+id);
+        // String[] id = request.getParameterValues("eventId");
+        //     String[] status = request.getParameterValues("status");
+        //     String status = request.getParameter("status"+id);
         TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
         treatmentEventDTO.setStatus(status);
         treatmentEventService.update(treatmentEventDTO);
-   //    model.addAttribute("event", treatmentEventDTO);
+        //    model.addAttribute("event", treatmentEventDTO);
         return "redirect:/nurse/";
     }
 
@@ -231,8 +232,8 @@ public class MyController {
         //     String[] status = request.getParameterValues("status");
         //     String status = request.getParameter("status"+id);
         TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
-     //   treatmentEventDTO.setStatus(status);
-      //  treatmentEventService.update(treatmentEventDTO);
+        //   treatmentEventDTO.setStatus(status);
+        //  treatmentEventService.update(treatmentEventDTO);
         model.addAttribute("cancelEvent", treatmentEventDTO);
         return "cancel-info";
     }
@@ -266,11 +267,11 @@ public class MyController {
     }
 
     @RequestMapping("/nurse/findBySurname")
-    public String findBySurname(@RequestParam("patientSurname") String surname,Model model, HttpServletRequest request) {
-       // String surname = request.getParameter("patientSurname");
-        List <PatientDTOImpl> patientDTOList = patientService.getBySurname(surname);
+    public String findBySurname(@RequestParam("patientSurname") String surname, Model model, HttpServletRequest request) {
+        // String surname = request.getParameter("patientSurname");
+        List<PatientDTOImpl> patientDTOList = patientService.getBySurname(surname);
         List<TreatmentEventDTOImpl> allEvents = new ArrayList<>();
-        for (PatientDTOImpl patientDTO:patientDTOList) {
+        for (PatientDTOImpl patientDTO : patientDTOList) {
             //O(n^2)???????????
             allEvents.addAll(treatmentEventService.getByPatient(patientDTO.getId()));
         }

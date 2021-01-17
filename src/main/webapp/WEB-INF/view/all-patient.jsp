@@ -1,14 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@include file="index.jsp" %>
-<style>
-    <%@include file="/WEB-INF/css/style.css" %>
-</style>
+<%@include file="navbar.jsp" %>
 <!DOCTYPE html>
 <html>
 <body>
-
 <div class="container">
     <h2 class = "text-info">Patients list</h2>
     <table class="table table-light table-hover">

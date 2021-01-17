@@ -30,6 +30,16 @@ public class PatientDAOImpl {
         session.clear();
     }
 
+    public void update(Patient patient) {
+        Session session = sessionFactory.getCurrentSession();
+     // session.evict(patient);
+    //    session.flush();
+        session.merge(patient);
+     //   Patient patient1 = get(patient.getId());
+//        session.clear();
+    }
+
+
     public Patient get(int id) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -54,7 +64,7 @@ public class PatientDAOImpl {
 
 //TODO: treatments count check -> delete
 
-    public List<Treatment> getTreatments(int id){
+    public List<Treatment> getTreatments(int id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Treatment> query = session.createQuery("from Treatment " + "where patient.id =:patientID");
         query.setParameter("patientID", id);

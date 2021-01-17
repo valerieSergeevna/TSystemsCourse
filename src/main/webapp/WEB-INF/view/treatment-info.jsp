@@ -112,9 +112,16 @@
     </div>
 
     <div class="form-outline mb-4">
-        <label class="form-label" for="form3Example5">Status</label>
+        <%--
         <form:input class="form-control" id="form3Example5" path="status"/>
-        <form:errors path="status"></form:errors>
+        <form:errors path="status"></form:errors>--%>
+            <label class="form-label" for="form3Example5">Status</label>
+            <select class="form-control"
+                    id="form3Example5" name="status">
+            <option selected value="${patient.status}">${patient.status}</option>
+            <option value="in process">in process</option>
+            <option  value="discharged">discharged</option>
+            </select>
     </div>
 
     <div class="form-outline mb-4">
@@ -133,7 +140,7 @@
             <div class="form-outline mb-4">
                 <label class="form-label" for="form3Example7${count.index}">Medicine/Procedure name</label>
                 <input type="text" class="form-control"
-                       for="form3Example7${count.index}" name="treatmentName"
+                       id="form3Example7${count.index}" name="treatmentName"
                        value="${treatment.typeName}" readonly>
             </div>
         </div>
@@ -148,7 +155,7 @@
                             <option  value="procedure">procedure</option>
                         </select>--%>
                     <input type="text" class="form-control"
-                           for="form3Example8${count.index}"
+                           id="form3Example8${count.index}"
                            name="treatmentType"  value="${treatment.type}" readonly>
                 </div>
             </div>
@@ -157,18 +164,18 @@
         <div class="form-outline mb-4">
             <label class="form-label" for="form3Example9${count.index}">Time Pattern </label>
             <input type="text" class="form-control"
-                   for="form3Example9${count.index}" name="treatmentPattern"
+                   id="form3Example9${count.index}" name="treatmentPattern"
                    value="${treatment.timePattern}">
         </div>
         <div class="form-outline mb-4">
             <label class="form-label" for="form3Example10${count.index}">Dose</label>
             <input type="text" class="form-control"
-                   for="form3Example10${count.index}" name="treatmentDose"  value="${treatment.dose}">
+                   id="form3Example10${count.index}" name="treatmentDose"  value="${treatment.dose}">
         </div>
         <div class="form-outline mb-4">
             <label class="form-label" for="form3Example11${count.index}">Period</label>
             <input type="text" class="form-control"
-                   for="form3Example11${count.index}" name="treatmentPeriod"
+                   id="form3Example11${count.index}" name="treatmentPeriod"
                    value="${treatment.period}">
         </div>
             <%--</form:form>--%>

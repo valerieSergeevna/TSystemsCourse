@@ -137,6 +137,7 @@ public class MyController {
     public String saveTreatment(@ModelAttribute("patient") PatientDTOImpl patientDTO,
                                 HttpServletRequest request) {
 
+
         List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
         String[] itemValues = request.getParameterValues("treatment");
         String[] typeValues = request.getParameterValues("treatmentType");
@@ -168,8 +169,14 @@ public class MyController {
                 }
             }
         }
-
-        patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
+        if (patientDTO.getStatus().equals("discharged")) {
+            patientService.update(patientDTO);
+            for (TreatmentDTOImpl treatmentDTO : treatmentDTOList) {
+                treatmentService.delete(treatmentDTO.getTreatmentId());
+            }
+        } else {
+            patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
+        }
         return "redirect:/";
     }
 

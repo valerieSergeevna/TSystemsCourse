@@ -43,7 +43,7 @@ public class TreatmentDAOImpl {
      //  session.evict(treatment);
 
         session.merge(treatment);
-        session.clear();
+  //      session.clear();
        // session.flush();
      //   session.merge(treatment);
     }

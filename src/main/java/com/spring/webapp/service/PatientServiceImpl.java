@@ -65,6 +65,13 @@ PatientServiceImpl {
     }
 
     @Transactional
+    public void update(PatientDTOImpl patientDTO) {
+        Patient patient = toPatient(patientDTO);
+        patientDAO.update(patient);
+    }
+
+
+    @Transactional
     public void delete(int id) {
         patientDAO.delete(id);
     }
@@ -104,9 +111,11 @@ PatientServiceImpl {
         if (patient != null) {
             patient.getTreatments().clear();
         } else {
-            patient = new Patient();
-            BeanUtils.copyProperties(patientDTO, patient);
+            // patient = new Patient();
+            // BeanUtils.copyProperties(patientDTO, patient);
+
         }
+        patient = toPatient(patientDTO);
 
         List<Treatment> treatmentList = treatments.stream()
                 .map(treatment ->
@@ -130,12 +139,16 @@ PatientServiceImpl {
 //SET DOCTOR
         patient.setDoctor(doctorDAO.get(1));
         ////
-        patientDAO.save(patient);
+        if (patientDAO.get(patientDTO.getId()) == null) {
+            patientDAO.save(patient);
+        } else {
+            patientDAO.update(patient);
+        }
         patientDTO.setId(patient.getId());
 
         for (Treatment treatment : treatmentList) {
             treatment.setPatient(patient);
-           if (treatmentDAO.get(treatment.getTreatmentId()) != null) {
+            if (treatmentDAO.get(treatment.getTreatmentId()) != null) {
                 treatmentDAO.update(treatment);
             } else {
                 treatmentDAO.save(treatment);
@@ -181,19 +194,15 @@ PatientServiceImpl {
         return treatmentsEventDTOList.stream()
                 .map(this::toTreatmentEvent)
                 .collect(Collectors.toList());
-    }
+    }*/
 
     public Patient toPatient(PatientDTOImpl patientDTO) {
-        TreatmentEvent treatmentEvent = new TreatmentEvent(patientDTO.getType(), patientDTO.getTreatmentTime(), patientDTO.getDose(),
-                patientDTO.getStatus(), patientDTO.getCancelReason());
+        Patient patient = new Patient(patientDTO.getName(), patientDTO.getSurname(), patientDTO.getBirthDate(), patientDTO.getInsuranceNumber(),
+                patientDTO.getDisease(), patientDTO.getStatus());
         if (patientDTO.getId() > 0) {
-            treatmentEvent.setId(patientDTO.getId());
+            patient.setId(patientDTO.getId());
         }
-        treatmentEvent.setTreatment(patientDTO.getTreatment());
-        treatmentEvent.setPatient(patientDTO.getPatient());
-        treatmentEvent.setProcedureMedicine(patientDTO.getProcedureMedicine());
-        treatmentEvent.setStatus(patientDTO.getStatus());
-        return treatmentEvent;
-    }*/
+        return patient;
+    }
 
 }

@@ -29,6 +29,7 @@ public class ProcedureMedicineDAOImpl {
         if(query.list().isEmpty()){
             session.save(procedureMedicine);
         }
+        session.clear();
     }
 
     public ProcedureMedicine get(int id) {

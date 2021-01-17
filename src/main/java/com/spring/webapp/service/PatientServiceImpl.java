@@ -127,18 +127,23 @@ PatientServiceImpl {
                     return newTreatment;
                 })
                 .collect(Collectors.toList());
-
+//SET DOCTOR
         patient.setDoctor(doctorDAO.get(1));
+        ////
         patientDAO.save(patient);
         patientDTO.setId(patient.getId());
 
         for (Treatment treatment : treatmentList) {
             treatment.setPatient(patient);
-            treatmentDAO.save(treatment);
+           if (treatmentDAO.get(treatment.getTreatmentId()) != null) {
+                treatmentDAO.update(treatment);
+            } else {
+                treatmentDAO.save(treatment);
+            }
             List<TreatmentEvent> treatmentEvent = treatmentEventDAO.getAllByTreatmentID(treatment.getTreatmentId());
             TreatmentEvent gottenTreatmentEvent = treatmentEventDAO.get(treatment.getTreatmentId());
 
-          //  treatmentEventDAO.deleteByTreatment(treatment.getTreatmentId());
+            //  treatmentEventDAO.deleteByTreatment(treatment.getTreatmentId());
             treatmentEventDAO.createTimeTable(treatment);
         }
 

@@ -155,7 +155,7 @@ public class MyController {
             }
             treatmentIdCount = itemValues.length;
         }
-        if (itemValues != null) {
+        if (typeValues != null) {
             if (typeValues.length > treatmentIdCount) {
                 for (int i = treatmentIdCount; i < typeValues.length; i++) {
                     TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();

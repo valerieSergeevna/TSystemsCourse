@@ -27,6 +27,7 @@ public class PatientDAOImpl {
     public void save(Patient patient) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(patient);
+        session.clear();
     }
 
     public Patient get(int id) {

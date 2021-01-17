@@ -33,8 +33,10 @@ public class TreatmentEventDAOImpl {
 
     public void save(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
-        session.evict(treatmentEvent);
+     //   session.evict(treatmentEvent);
+        //treatmentEvent = session.merge(treatmentEvent);
         session.saveOrUpdate(treatmentEvent);
+        session.clear();
     }
 
     public void update(TreatmentEvent treatmentEvent) {

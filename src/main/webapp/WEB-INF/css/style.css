@@ -145,7 +145,11 @@ form .btn-success{
     animation: AnimationName 3s ease infinite;
     border: medium none;
 }
-
+.danger {
+    padding: 7px 7px;
+    border-radius: 50px;
+    font-size: 7px;
+}
 form .btn-danger{
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e81216+0,f45355+50,f6290c+51,ed0e11+71,fc1b21+100 */
     background: #e81216;

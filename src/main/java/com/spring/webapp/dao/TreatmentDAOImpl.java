@@ -5,6 +5,7 @@ import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.Treatment;
+import com.spring.webapp.entity.TreatmentEvent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -29,9 +30,22 @@ public class TreatmentDAOImpl {
     public void save(Treatment treatment) {
         Session session = sessionFactory.getCurrentSession();
       //  Query query = session.createQuery("select ")
-     //   session.evict(treatment);
+
 
         session.saveOrUpdate(treatment);
+       // session.evict(treatment);
+        session.clear();
+
+    }
+
+    public void update(Treatment treatment) {
+        Session session = sessionFactory.getCurrentSession();
+     //  session.evict(treatment);
+
+        session.merge(treatment);
+        session.clear();
+       // session.flush();
+     //   session.merge(treatment);
     }
 
     public Treatment get(int id) {

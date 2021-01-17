@@ -93,7 +93,7 @@ a::before{
     border-bottom: 3px solid skyblue;
 }
 
-form .btn {
+.treatment-form .btn {
     border-radius: 100px;
     font-size: 13px;
     font-weight: bold;
@@ -103,7 +103,7 @@ form .btn {
     text-transform: uppercase;
     box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.2);
 }
-form .btn-primary {
+.treatment-form .btn-primary {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#5a7ce2+0,8283e8+50,5c5de8+51,565bd8+71,575cdb+100 */
     background: #5a7ce2;
     /* Old browsers */
@@ -124,7 +124,7 @@ form .btn-primary {
     animation: AnimationName 3s ease infinite;
     border: medium none;
 }
-form .btn-success{
+.treatment-form .btn-success{
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#05ac50+0,21dd72+50,05c44e+51,05ac50+71,05ac50+100 */
     background: #05ac50;
     /* Old browsers */
@@ -150,7 +150,7 @@ form .btn-success{
     border-radius: 50px;
     font-size: 7px;
 }
-form .btn-danger{
+.treatment-form .btn-danger{
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e81216+0,f45355+50,f6290c+51,ed0e11+71,fc1b21+100 */
     background: #e81216;
     /* Old browsers */
@@ -171,13 +171,13 @@ form .btn-danger{
     animation: AnimationName 3s ease infinite;
     border: medium none;
 }
-form .btn-outline-primary:hover {
+.treatment-form .btn-outline-primary:hover {
     background-color: #5a7ce2;
     border-color: #5a7ce2;
     color: #fff;
 }
 
-form @-webkit-keyframes AnimationName {
+.treatment-form @-webkit-keyframes AnimationName {
     0%{
         background-position:0% 31%
     }
@@ -188,7 +188,7 @@ form @-webkit-keyframes AnimationName {
         background-position:0% 31%
     }
 }
-form @-moz-keyframes AnimationName {
+.treatment-form @-moz-keyframes AnimationName {
     0%{
         background-position:0% 31%
     }
@@ -199,7 +199,7 @@ form @-moz-keyframes AnimationName {
         background-position:0% 31%
     }
 }
-form @keyframes AnimationName {
+.treatment-form @keyframes AnimationName {
     0%{
         background-position:0% 31%
     }
@@ -213,13 +213,13 @@ form @keyframes AnimationName {
 form .btn-outline-light:hover{
     color: #3f345f;
 }
-form .btn-outline-warning:hover{
+.treatment-form .btn-outline-warning:hover{
     color: #ffffff;
 }
-form .btn-sm {
+.treatment-form .btn-sm {
     font-size: 12px;
     padding: 11px 25px;
 }
-form .elements-page-btn .btn {
+.treatment-form .elements-page-btn .btn {
     margin: 6px 3px;
 }

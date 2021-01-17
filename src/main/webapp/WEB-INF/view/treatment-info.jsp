@@ -75,7 +75,7 @@
 </head>
 <body>
 <div class="container">
-    <form:form class="main-form text-info" action="saveTreatment" method="post" modelAttribute="patient">
+    <form:form class="main-form text-info treatment-form" action="saveTreatment" method="post" modelAttribute="patient">
     <h2 class="text-info">Treatment info</h2>
     <br>
     <c:if test="${patient.treatments != null}">

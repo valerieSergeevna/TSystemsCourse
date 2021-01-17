@@ -148,16 +148,14 @@ PatientServiceImpl {
 
         for (Treatment treatment : treatmentList) {
             treatment.setPatient(patient);
-            if (treatmentDAO.get(treatment.getTreatmentId()) != null) {
-                treatmentDAO.update(treatment);
-            } else {
+            int oldPattern = treatmentDAO.get(treatment.getTreatmentId()).getTimePattern();
+            if (treatmentDAO.get(treatment.getTreatmentId()) == null) {
                 treatmentDAO.save(treatment);
+                treatmentEventDAO.createTimeTable(treatment);
+            } else {
+                treatmentEventDAO.createTimeTable(treatment);
+                treatmentDAO.update(treatment);
             }
-            List<TreatmentEvent> treatmentEvent = treatmentEventDAO.getAllByTreatmentID(treatment.getTreatmentId());
-            TreatmentEvent gottenTreatmentEvent = treatmentEventDAO.get(treatment.getTreatmentId());
-
-            //  treatmentEventDAO.deleteByTreatment(treatment.getTreatmentId());
-            treatmentEventDAO.createTimeTable(treatment);
         }
 
         patient.setTreatments(treatmentList);

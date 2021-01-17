@@ -33,10 +33,10 @@ public class TreatmentEventDAOImpl {
 
     public void save(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
-     //   session.evict(treatmentEvent);
+        //   session.evict(treatmentEvent);
         //treatmentEvent = session.merge(treatmentEvent);
         session.saveOrUpdate(treatmentEvent);
-        session.clear();
+      //  session.clear();
     }
 
     public void update(TreatmentEvent treatmentEvent) {
@@ -67,6 +67,7 @@ public class TreatmentEventDAOImpl {
     public List<TreatmentEvent> createTimeTable(Treatment treatment) {
         List<TreatmentEvent> treatmentEventList;
         treatmentEventList = getAllByTreatmentID(treatment.getTreatmentId());
+
         if (treatmentEventList.size() != 0) {
             if (treatmentEventList.get(0).getTreatment().getTimePattern() == treatment.getTimePattern()
                     && treatmentEventList.get(0).getTreatment().getPeriod().equals(treatment.getPeriod())) {
@@ -82,73 +83,79 @@ public class TreatmentEventDAOImpl {
                     update(currentTreatmentEvent);
                 }
                 return getAllByTreatmentID(treatment.getTreatmentId());
-            }
-            else{
+            } else {
                 deleteByTreatment(treatment.getTreatmentId());
             }
         }
 
-    String type = treatment.getType();
-    Patient patient = treatment.getPatient();
+        String type = treatment.getType();
+        Patient patient = treatment.getPatient();
 
-    ProcedureMedicine procedureMedicine = treatment.getProcedureMedicine();
+        ProcedureMedicine procedureMedicine = treatment.getProcedureMedicine();
 
-    int timePattern = treatment.getTimePattern();
-    double dose = treatment.getDose();
+        int timePattern = treatment.getTimePattern();
+        double dose = treatment.getDose();
 
-    String[] period = treatment.getPeriod().split(" ");
+        String[] period = treatment.getPeriod().split(" ");
 
 
-    LocalDateTime startDate = LocalDateTime.now().plusDays(1);
-    LocalDateTime endDate = null;
+        LocalDateTime startDate = LocalDateTime.now().plusDays(1);
+        LocalDateTime endDate = null;
 
-    String duration = "months";
+        String duration = "months";
 
-    //  switch (period[1]) {
-        switch(duration)
-
-    {
-        case "days":
-            endDate = LocalDateTime.now().plusDays(Long.parseLong(period[0]));
-            break;
-        case "weeks":
-            endDate = LocalDateTime.now().plusWeeks(Long.parseLong(period[0]));
-            break;
-        case "months":
-            endDate = LocalDateTime.now().plusMonths(Long.parseLong(period[0]));
-            break;
-    }
-
-    deleteByTreatment(treatment.getTreatmentId());
-
-        while(startDate.isBefore(endDate))
-
-    {
-        TreatmentEvent treatmentEvent = new TreatmentEvent();
-        if (type.equals("treatment")) {
-            for (int i = 1; i <= timePattern; i++) {
-                treatmentEvent.setDose(dose);
-                treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
-                        startDate.getDayOfMonth(), 8 + 24 - (24 / i), 0, 0));
-                startDate = startDate.plusDays(1);
-            }
-        } else {
-            treatmentEvent.setDose(1);
-            startDate = startDate.plusDays(8 - (7 / timePattern));
-            treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
-                    startDate.getDayOfMonth(), 14, 0, 0));
+        //  switch (period[1]) {
+        switch (duration) {
+            case "days":
+                endDate = LocalDateTime.now().plusDays(Long.parseLong(period[0]));
+                break;
+            case "weeks":
+                endDate = LocalDateTime.now().plusWeeks(Long.parseLong(period[0]));
+                break;
+            case "months":
+                endDate = LocalDateTime.now().plusMonths(Long.parseLong(period[0]));
+                break;
         }
-        treatmentEvent.setPatient(patient);
-        treatmentEvent.setProcedureMedicine(procedureMedicine);
-        treatmentEvent.setStatus("in plan");
-        treatmentEvent.setType(type);
-        treatmentEvent.setTreatment(treatment);
 
-        save(treatmentEvent);
-        treatmentEventList.add(treatmentEvent);
-    }
+        deleteByTreatment(treatment.getTreatmentId());
+
+        while (startDate.isBefore(endDate)) {
+            TreatmentEvent treatmentEvent;
+            if (type.equals("medicine")) {
+                for (int i = 0; i < timePattern; i++) {
+                    treatmentEvent = new TreatmentEvent();
+                    treatmentEvent.setDose(dose);
+                    treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+                            startDate.getDayOfMonth(), 8 + ((12 / timePattern)*i), 0, 0));
+                    treatmentEvent.setPatient(patient);
+                    treatmentEvent.setProcedureMedicine(procedureMedicine);
+                    treatmentEvent.setStatus("in plan");
+                    treatmentEvent.setType(type);
+                    treatmentEvent.setTreatment(treatment);
+
+                    save(treatmentEvent);
+                    treatmentEventList.add(treatmentEvent);
+                }
+                startDate = startDate.plusDays(1);
+            } else {
+                treatmentEvent = new TreatmentEvent();
+                treatmentEvent.setDose(1);
+                startDate = startDate.plusDays(8 - (7 / timePattern));
+                treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+                        startDate.getDayOfMonth(), 14, 0, 0));
+                treatmentEvent.setPatient(patient);
+                treatmentEvent.setProcedureMedicine(procedureMedicine);
+                treatmentEvent.setStatus("in plan");
+                treatmentEvent.setType(type);
+                treatmentEvent.setTreatment(treatment);
+
+                save(treatmentEvent);
+                treatmentEventList.add(treatmentEvent);
+            }
+
+        }
         return treatmentEventList;
-}
+    }
 
     public List<TreatmentEvent> getByPatient(int id) {
         Session session = sessionFactory.getCurrentSession();

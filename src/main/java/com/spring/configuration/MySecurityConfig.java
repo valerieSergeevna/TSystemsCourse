@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.DataSources;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-
+@ComponentScan(basePackages = "com.spring")
 @EnableWebSecurity
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -29,7 +30,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").hasAnyRole("DOCTOR","NURSE")
-                .and().formLogin().loginPage("/login")
+                .and().formLogin()
                 .permitAll();
     }
+
 }

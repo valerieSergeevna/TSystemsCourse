@@ -48,6 +48,12 @@ public class MyController {
         model.addAttribute("allPatient", allPatient);
         return "all-patient";
     }
+/*
+    @RequestMapping("/login")
+    public String login() {
+        return "redirect:/";
+    }*/
+
 
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model) {

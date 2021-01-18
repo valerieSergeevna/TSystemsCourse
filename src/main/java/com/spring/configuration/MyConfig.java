@@ -24,7 +24,7 @@ import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "com.spring")
+@ComponentScan(basePackages = "com.spring.webapp")
 @EnableWebMvc
 @EnableTransactionManagement
 public class MyConfig {

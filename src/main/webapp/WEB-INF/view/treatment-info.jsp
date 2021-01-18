@@ -196,7 +196,7 @@
             <%----%>
         <br>
         <br>
-        <input type="submit" class="btn btn-outline-success btn-sm " value="Save"/>
+        <input type="submit" class="btn btn-outline-success btn-sm" value="Save"/>
 
         </form:form>
     </div>

@@ -43,15 +43,6 @@ public class MyController {
 
     @RequestMapping("/")
     public String greet(Model model, Authentication authentication) {
-       /* List<DoctorDTOImpl> allDoctors = doctorService.getAll();
-
-        model.addAttribute("allDocs", allDoctors);
-        return "all-doctors";*/
-       /* List<PatientDTOImpl> allPatient = patientService.getAll();
-        */
-     //  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-     //   model.addAttribute("role", authentication.getAuthorities());
         Collection<?extends GrantedAuthority> roles = authentication.getAuthorities();
         String role;
         for(int i=0;i<roles.size();i++){

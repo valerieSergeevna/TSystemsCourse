@@ -31,11 +31,12 @@
                 <td>${patient.name}</td>
                 <td>${patient.surname}</td>
                 <td>${patient.disease}</td>
-                <security:authorize access="hasRole('DOCTOR')">
-                <td><input type="button" value="Update" class="btn  btn-outline-info"
+                <td>
+                    <security:authorize access="hasRole('DOCTOR')">
+                    <input type="button" value="Update" class="btn  btn-outline-info"
                                                         onclick="window.location.href ='${updateButton}'"/>
                  <input type="button" value="Delete" class="btn btn-outline-danger"
-                                                        onclick="window.location.href ='${deleteButton}'"/></td>
+                                                        onclick="window.location.href ='${deleteButton}'"/>
                 </security:authorize>
                 <input type="button" value="View" class="btn btn-outline-dark"
                        onclick="window.location.href ='${viewButton}'"/></td>
@@ -47,9 +48,9 @@
 
     <security:authorize access="hasRole('DOCTOR')">
     <input type="button" value="Add" class="btn btn-outline-success" onclick="window.location.href = '/addNewPatient'"/>
-    </security:authorize>>
+    </security:authorize>
 
 </div>
-<a href="logout">logout</a>
+
 </body>
 </html>

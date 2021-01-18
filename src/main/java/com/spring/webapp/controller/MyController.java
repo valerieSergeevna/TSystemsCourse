@@ -9,6 +9,9 @@ import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -38,6 +42,37 @@ public class MyController {
     private TreatmentEventServiceImpl treatmentEventService;
 
     @RequestMapping("/")
+    public String greet(Model model, Authentication authentication) {
+       /* List<DoctorDTOImpl> allDoctors = doctorService.getAll();
+
+        model.addAttribute("allDocs", allDoctors);
+        return "all-doctors";*/
+       /* List<PatientDTOImpl> allPatient = patientService.getAll();
+        */
+     //  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+     //   model.addAttribute("role", authentication.getAuthorities());
+        Collection<?extends GrantedAuthority> roles = authentication.getAuthorities();
+        String role;
+        for(int i=0;i<roles.size();i++){
+            role = roles.toArray()[i] + "";
+          //  logger.info("role verified" + i + " is -> " + role);
+            //verify if user contain role to view dashboard page default
+            if(role.equals("ROLE_DOCTOR")){
+            //    logger.warn("IDENTIFIED: ROLE_DASHBOARD = " + role );
+             //   mav.setViewName("dasboard");
+                model.addAttribute("role", "Doctor");
+            }
+            else  if(role.equals("ROLE_NURSE")){
+                model.addAttribute("role", "Nurse");
+            }
+        }
+     //   model.addAttribute("role", authentication.getPrincipal());
+
+        return "greeting";
+    }
+
+    @RequestMapping("/doctor/patients")
     public String showAllDoctors(Model model) {
        /* List<DoctorDTOImpl> allDoctors = doctorService.getAll();
 
@@ -48,12 +83,14 @@ public class MyController {
         model.addAttribute("allPatient", allPatient);
         return "all-patient";
     }
-/*
-    @RequestMapping("/login")
-    public String login() {
-        return "redirect:/";
-    }*/
 
+
+
+    @RequestMapping(value="/login", method=RequestMethod.GET)
+    public String login() {
+
+        return "login";
+    }
 
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model) {
@@ -65,13 +102,13 @@ public class MyController {
     @RequestMapping("/saveDoctor")
     public String saveDoctor(@ModelAttribute("doctor") DoctorDTOImpl doctor) {
         doctorService.save(doctor);
-        return "redirect:/";
+        return "redirect:/";////!!!
     }
 
     @RequestMapping("/deleteDoctor")
     public String deleteDoctor(@RequestParam("docId") int id) {
         doctorService.delete(id);
-        return "redirect:/";
+        return "redirect:/";//////!!!
     }
 
 
@@ -113,7 +150,7 @@ public class MyController {
         }
         patientService.deleteTreatments(id);
         patientService.delete(id);
-        return "redirect:/";
+        return "redirect:/doctor/patients";
     }
 
     @RequestMapping("/addNewPatient")
@@ -183,7 +220,14 @@ public class MyController {
         } else {
             patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
         }
-        return "redirect:/";
+        return "redirect:/doctor/patients";
+    }
+
+    @RequestMapping("/viewPatient")
+    public String viewPatient(@RequestParam("patientId") int id, Model model) {
+        PatientDTOImpl patientDTO = patientService.get(id);
+        model.addAttribute("patient", patientDTO);
+        return "patient-view";
     }
 
     @RequestMapping("/deleteTreatment") // delete list's item

@@ -2,7 +2,7 @@ package com.spring.configuration;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-
+import com.mchange.v2.c3p0.DataSources;
 import org.hibernate.boot.model.naming.ImplicitNamingStrategy;
 import org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
@@ -24,7 +24,7 @@ import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "com.spring.webapp")
+@ComponentScan(basePackages = "com.spring")
 @EnableWebMvc
 @EnableTransactionManagement
 public class MyConfig {

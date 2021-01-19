@@ -4,6 +4,7 @@ package com.spring.webapp.entity;
 import com.spring.utils.YearMonthDateAttributeConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,14 @@ public class Patient{
     private int id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name field must to be filled")
     private String name;
 
     @Column(name = "surname")
     private String surname;
 
     @Column(name = "ages")
-    @Convert(converter = YearMonthDateAttributeConverter.class)
+   // @Convert(converter = YearMonthDateAttributeConverter.class)
     private int ages;
 
 

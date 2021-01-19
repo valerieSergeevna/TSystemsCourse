@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
-<%@include file="navbar.jsp" %>
+<%@include file="../general/navbar.jsp" %>
 
 <!DOCTYPE html>
 <html>
@@ -99,9 +99,9 @@
         </div>
     </div>
     <div class="form-outline mb-4">
-        <label class="form-label" for="form3Example3">Birthdate</label>
+        <label class="form-label" for="form3Example3">Ages</label>
         <form:input class="form-control" id="form3Example3" path="ages"/>
-        <form:errors path="ages"></form:errors>
+        <form:errors  path="ages"></form:errors>
     </div>
 
     <div class="form-outline mb-4">
@@ -127,7 +127,7 @@
     <div class="form-outline mb-4">
         <label class="form-label" for="form3Example6">Insurance number</label>
         <form:input class="form-control" id="form3Example6" path="insuranceNumber"/>
-        <form:errors path="status"></form:errors>
+        <form:errors path="insuranceNumber"></form:errors>
 
     </div>
 
@@ -184,6 +184,7 @@
         </c:url>
         <input type="button" class="btn danger btn-outline-danger btn-sm " value="Delete treatment"
                onclick="window.location.href ='${deleteButton}'"/>
+
         </c:forEach>
         </c:if>
         <br>

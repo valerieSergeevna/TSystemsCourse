@@ -6,6 +6,7 @@ import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 
@@ -13,14 +14,19 @@ public class TreatmentDTOImpl implements EntityDTO {
 
     private int treatmentId;
 
+    @NotBlank(message = "Type field must to be filled")
     private String type;
 
+    @NotBlank(message = "This field must to be filled")
     private int timePattern;
 
+    @NotBlank(message = "Dose field must to be filled")
     private double dose;
 
+    @NotBlank(message = "Period field must to be filled")
     private String period;
 
+    @NotBlank(message = "This field must to be filled")
     private String typeName;
 
     public String getTypeName() {

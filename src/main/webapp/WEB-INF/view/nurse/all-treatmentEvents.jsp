@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@include file="navbar.jsp" %>
+<%@include file="../general/navbar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +16,7 @@
     <input type="button" class="btn btn-outline-secondary btn-sm" id="hour" value="Show nearest hour treatments"
            onclick="window.location.href = '/nurse/showNearestHourTreatments'"/>
     <input type="button" class="btn btn-outline-secondary btn-sm" id="today" value="Show today's treatments"
-           onclick="window.location.href = '/nurse/'"/>
+           onclick="window.location.href = '../../..'"/>
     <br><br>
     <%--Find patient's treatment <input type="text" name="patientSurname" size="30"
                         value="" onsubmit="window.location.href = '/nurse/findBySurname'">--%>

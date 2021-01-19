@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
-<%@include file="navbar.jsp" %>
+<%@include file="general/navbar.jsp" %>
 
 <!DOCTYPE html>
 <html>

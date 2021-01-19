@@ -1,19 +1,13 @@
 package com.spring.webapp.controller;
 
-import com.spring.webapp.dao.PatientDAOImpl;
-import com.spring.webapp.dao.TreatmentDAOImpl;
 import com.spring.webapp.dto.*;
-import com.spring.webapp.entity.Patient;
-import com.spring.webapp.entity.TreatmentEvent;
 import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,24 +37,23 @@ public class MyController {
 
     @RequestMapping("/")
     public String greet(Model model, Authentication authentication) {
-        Collection<?extends GrantedAuthority> roles = authentication.getAuthorities();
+        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
         String role;
-        for(int i=0;i<roles.size();i++){
+        for (int i = 0; i < roles.size(); i++) {
             role = roles.toArray()[i] + "";
-          //  logger.info("role verified" + i + " is -> " + role);
+            //  logger.info("role verified" + i + " is -> " + role);
             //verify if user contain role to view dashboard page default
-            if(role.equals("ROLE_DOCTOR")){
-            //    logger.warn("IDENTIFIED: ROLE_DASHBOARD = " + role );
-             //   mav.setViewName("dasboard");
+            if (role.equals("ROLE_DOCTOR")) {
+                //    logger.warn("IDENTIFIED: ROLE_DASHBOARD = " + role );
+                //   mav.setViewName("dasboard");
                 model.addAttribute("role", "Doctor");
                 return "redirect:/patients";
-            }
-            else  if(role.equals("ROLE_NURSE")){
+            } else if (role.equals("ROLE_NURSE")) {
                 model.addAttribute("role", "Nurse");
                 return "redirect:/nurse/";
             }
         }
-     //   model.addAttribute("role", authentication.getPrincipal());
+        //   model.addAttribute("role", authentication.getPrincipal());
 
         return "greeting";
     }
@@ -78,18 +71,17 @@ public class MyController {
     }
 
 
-
-    @RequestMapping(value="/login", method=RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
 
-        return "login";
+        return "general/login";
     }
 
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model) {
         DoctorDTOImpl doctor = new DoctorDTOImpl();
         model.addAttribute("doctor", doctor);
-        return "doctor-info";
+        return "doctor/doctor-info";
     }
 
     @RequestMapping("/saveDoctor")
@@ -109,7 +101,7 @@ public class MyController {
     public String updateDoctorInfo(@RequestParam("docId") int id, Model model) {
         DoctorDTOImpl doctorDTO = doctorService.get(id);
         model.addAttribute("doctor", doctorDTO);
-        return "doctor-info";
+        return "doctor/doctor-info";
     }
 
   /*  @RequestMapping("/addNewPatient")
@@ -156,7 +148,7 @@ public class MyController {
         patientDTO.setTreatments(treatmentDTO);
         //   model.addAttribute("treatment", treatmentDTO);
         model.addAttribute("patient", patientDTO);
-        return "treatment-info";
+        return "doctor/treatment-info";
     }
 
    /* @RequestMapping("/addNewTreatment")
@@ -170,10 +162,18 @@ public class MyController {
     }*/
 
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
-    public String saveTreatment(@ModelAttribute("patient") PatientDTOImpl patientDTO,
-                                HttpServletRequest request) {
+    public String saveTreatment(@Validated @ModelAttribute("patient") PatientDTOImpl patientDTO,
+                                BindingResult bindingResult,
+                                HttpServletRequest request, Model model) {
+        //костыль
 
+        patientDTO.setAges(request.getParameter("ages").length()==0?0:patientDTO.getAges());
+        patientDTO.setInsuranceNumber(request.getParameter("insuranceNumber").length()==0?0:patientDTO.getInsuranceNumber());
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("patient", patientDTO);
+            return "doctor/treatment-info";
+        }
         List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
         String[] itemValues = request.getParameterValues("treatment");
         String[] typeValues = request.getParameterValues("treatmentType");
@@ -240,14 +240,14 @@ public class MyController {
 
         PatientDTOImpl patientDTO = patientService.get(id);
         model.addAttribute("patient", patientDTO);
-        return "treatment-info";
+        return "doctor/treatment-info";
     }
 
     @RequestMapping("/nurse/showAllTreatments")
     public String showAllEvents(Model model) {
         List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getAll();
         model.addAttribute("allEvents", allEvents);
-        return "all-treatmentEvents";
+        return "nurse/all-treatmentEvents";
     }
 
   /*  @RequestMapping("/nurse/updateEvent")
@@ -285,7 +285,7 @@ public class MyController {
         //   treatmentEventDTO.setStatus(status);
         //  treatmentEventService.update(treatmentEventDTO);
         model.addAttribute("cancelEvent", treatmentEventDTO);
-        return "cancel-info";
+        return "nurse/cancel-info";
     }
 
     @RequestMapping(value = "nurse/setCancelInfo", method = RequestMethod.POST)
@@ -304,7 +304,7 @@ public class MyController {
         List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getTodayEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
                 nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
         model.addAttribute("allEvents", allEvents);
-        return "all-treatmentEvents";
+        return "nurse/all-treatmentEvents";
     }
 
     @RequestMapping("/nurse/showNearestHourTreatments")
@@ -313,7 +313,7 @@ public class MyController {
         List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
                 nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
         model.addAttribute("allEvents", allEvents);
-        return "all-treatmentEvents";
+        return "nurse/all-treatmentEvents";
     }
 
     @RequestMapping("/nurse/findBySurname")
@@ -326,7 +326,7 @@ public class MyController {
             allEvents.addAll(treatmentEventService.getByPatient(patientDTO.getId()));
         }
         model.addAttribute("allEvents", allEvents);
-        return "all-treatmentEvents";
+        return "nurse/all-treatmentEvents";
     }
 
    /* @RequestMapping("nurse/setCancelInfo")

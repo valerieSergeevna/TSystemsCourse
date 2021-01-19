@@ -1,3 +1,5 @@
+
+
 .table thead tr th:first-child {
     border-radius: 20px 0 0 0;
     border-top: none;
@@ -14,7 +16,6 @@
 .table tbody tr:last-child td:last-child {
     border-radius: 0 0 20px 0;
 }
-
 
 
 
@@ -222,4 +223,19 @@ form .btn-outline-light:hover{
 }
 .treatment-form .elements-page-btn .btn {
     margin: 6px 3px;
+}
+
+.small-middle-container{
+    margin: auto;
+    width: 40%;
+}
+.login{
+    margin-top: 100px;
+    width: 30%;
+}
+
+.login .btn{
+    width: 30%;
+    margin-right: 40%;
+    margin-left: 35%;
 }

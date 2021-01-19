@@ -53,9 +53,11 @@ public class MyController {
             //    logger.warn("IDENTIFIED: ROLE_DASHBOARD = " + role );
              //   mav.setViewName("dasboard");
                 model.addAttribute("role", "Doctor");
+                return "redirect:/patients";
             }
             else  if(role.equals("ROLE_NURSE")){
                 model.addAttribute("role", "Nurse");
+                return "redirect:/nurse/";
             }
         }
      //   model.addAttribute("role", authentication.getPrincipal());
@@ -63,7 +65,7 @@ public class MyController {
         return "greeting";
     }
 
-    @RequestMapping("/doctor/patients")
+    @RequestMapping("/patients")
     public String showAllDoctors(Model model) {
        /* List<DoctorDTOImpl> allDoctors = doctorService.getAll();
 
@@ -141,7 +143,7 @@ public class MyController {
         }
         patientService.deleteTreatments(id);
         patientService.delete(id);
-        return "redirect:/doctor/patients";
+        return "redirect:/patients";
     }
 
     @RequestMapping("/addNewPatient")
@@ -211,7 +213,7 @@ public class MyController {
         } else {
             patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
         }
-        return "redirect:/doctor/patients";
+        return "redirect:/patients";
     }
 
     @RequestMapping("/viewPatient")

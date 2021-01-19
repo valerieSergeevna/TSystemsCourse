@@ -21,6 +21,9 @@ public class Doctor {
     @Column(name = "position")
     private String position;
 
+    @Column(name = "user_name")
+    private String userName;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     private List<Patient> patients;
 
@@ -44,6 +47,7 @@ public class Doctor {
     public void setPosition(String position) {
         this.position = position;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -82,5 +86,13 @@ public class Doctor {
 
     public List<Patient> getPatients() {
         return patients;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

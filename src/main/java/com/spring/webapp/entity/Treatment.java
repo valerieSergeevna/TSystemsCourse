@@ -1,6 +1,7 @@
 package com.spring.webapp.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "treatments")
@@ -27,9 +28,14 @@ public class Treatment {
     private double dose;
 
 
-    @Column(name = "period")
-    private String period;
+   /* @Column(name = "period")
+    private String period;*/
 
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
             CascadeType.MERGE,CascadeType.REFRESH})
@@ -51,11 +57,12 @@ public class Treatment {
     public Treatment() {
     }
 
-    public Treatment(String type, int timePattern, String period, double dose) {
+    public Treatment(String type, int timePattern,double dose, LocalDateTime startDate, LocalDateTime endDate) {
         this.type = type;
         this.timePattern = timePattern;
-        this.period = period;
         this.dose = dose;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public int getTreatmentId() {
@@ -98,11 +105,27 @@ public class Treatment {
         this.patient = patient;
     }
 
-    public String getPeriod() {
+  /*  public String getPeriod() {
         return period;
     }
 
     public void setPeriod(String period) {
         this.period = period;
+    }*/
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 }

@@ -3,6 +3,7 @@ package com.spring.webapp.service;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
+import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
@@ -40,6 +41,13 @@ PatientServiceImpl {
                         patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments())))
                 .collect(Collectors.toList());
         return patientDTOList;*/
+        return toPatientDTOList(patientsList);
+    }
+
+    @Transactional
+    public List<PatientDTOImpl> getAllByDoctorUserName(String name) {
+        Doctor doctor = doctorDAO.getByUserName(name);
+        List<Patient> patientsList = patientDAO.getAllByDoctorUserName(doctor.getId());
         return toPatientDTOList(patientsList);
     }
 
@@ -94,8 +102,11 @@ PatientServiceImpl {
     public List<TreatmentDTOImpl> getTreatments(int id) {//it's already exist, need to FIX
         List<Treatment> treatmentList = patientDAO.getTreatments(id);
         return treatmentList.stream()
-                .map(treatment -> new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(),
-                        treatment.getTimePattern(), treatment.getPeriod(), treatment.getDose()))
+                .map(treatment -> {TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(),
+                        treatment.getTimePattern(), treatment.getDose());
+                treatmentDTO.setStartDate(treatment.getStartDate());
+                treatmentDTO.setEndDate(treatment.getEndDate());
+                return treatmentDTO;})
                 .collect(Collectors.toList());
     }
 
@@ -117,7 +128,7 @@ PatientServiceImpl {
         List<Treatment> treatmentList = treatments.stream()
                 .map(treatment ->
                 {
-                    Treatment newTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(), treatment.getPeriod(), treatment.getDose());
+                    Treatment newTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(), treatment.getDose(), treatment.getStartDate(),treatment.getEndDate());
                     newTreatment.setTreatmentId(treatment.getTreatmentId());
                     //in TreatmentService duplicated code
                     int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getTypeName());
@@ -133,7 +144,7 @@ PatientServiceImpl {
                     return newTreatment;
                 })
                 .collect(Collectors.toList());
-//SET DOCTOR
+//TODO: SET DOCTOR
         patient.setDoctor(doctorDAO.get(1));
         ////
         if (patientDAO.get(patientDTO.getId()) == null) {
@@ -145,7 +156,7 @@ PatientServiceImpl {
 
         for (Treatment treatment : treatmentList) {
             treatment.setPatient(patient);
-            int oldPattern = treatmentDAO.get(treatment.getTreatmentId()).getTimePattern();
+     //       int oldPattern = treatmentDAO.get(treatment.getTreatmentId()).getTimePattern();
             if (treatmentDAO.get(treatment.getTreatmentId()) == null) {
                 treatmentDAO.save(treatment);
                 treatmentEventDAO.createTimeTable(treatment);
@@ -160,15 +171,6 @@ PatientServiceImpl {
         patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(treatmentList));
     }
 
-    @Transactional
-    public PatientDTOImpl createEmpty() {
-        Patient patient = new Patient();
-        patient.setDoctor(doctorDAO.get(1));
-        patientDAO.save(patient);
-        PatientDTOImpl patientDTO = new PatientDTOImpl();
-        BeanUtils.copyProperties(patient, patientDTO);
-        return patientDTO;
-    }
 
     //convector's method from-to
 

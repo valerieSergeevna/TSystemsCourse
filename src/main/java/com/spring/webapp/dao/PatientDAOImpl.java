@@ -4,6 +4,7 @@ import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.Treatment;
+import com.spring.webapp.entity.TreatmentEvent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -58,6 +59,13 @@ public class PatientDAOImpl {
         Session session = sessionFactory.getCurrentSession();
         Query<Patient> query = session.createQuery("from Patient " + "where surname = :patientSurname");
         query.setParameter("patientSurname", surname);
+        return query.list();
+    }
+
+    public List<Patient> getAllByDoctorUserName(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<Patient> query = session.createQuery("from Patient " + "where doctor.id =:id");
+        query.setParameter("id", id);
         return query.list();
     }
 

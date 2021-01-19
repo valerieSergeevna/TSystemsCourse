@@ -7,6 +7,7 @@ import com.spring.webapp.entity.Treatment;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -23,8 +24,13 @@ public class TreatmentDTOImpl implements EntityDTO {
     @NotBlank(message = "Dose field must to be filled")
     private double dose;
 
-    @NotBlank(message = "Period field must to be filled")
-    private String period;
+    /*  @NotBlank(message = "Period field must to be filled")
+      private String period;*/
+    private LocalDateTime startDate;
+
+
+
+    private LocalDateTime endDate;
 
     @NotBlank(message = "This field must to be filled")
     private String typeName;
@@ -40,11 +46,11 @@ public class TreatmentDTOImpl implements EntityDTO {
     public TreatmentDTOImpl() {
     }
 
-    public TreatmentDTOImpl(int id,String type, int timePattern, String period, double dose) {
+    public TreatmentDTOImpl(int id, String type, int timePattern, double dose) {
         this.treatmentId = id;
         this.type = type;
         this.timePattern = timePattern;
-        this.period = period;
+     //   this.period = period;
         this.dose = dose;
     }
 
@@ -80,12 +86,26 @@ public class TreatmentDTOImpl implements EntityDTO {
         this.dose = dose;
     }
 
-    public String getPeriod() {
+  /*  public String getPeriod() {
         return period;
     }
 
     public void setPeriod(String period) {
         this.period = period;
+    }*/
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
 }

@@ -59,12 +59,22 @@ public class MyController {
     }
 
     @RequestMapping("/patients")
-    public String showAllDoctors(Model model) {
-       /* List<DoctorDTOImpl> allDoctors = doctorService.getAll();
-
-        model.addAttribute("allDocs", allDoctors);
-        return "all-doctors";*/
-        List<PatientDTOImpl> allPatient = patientService.getAll();
+    public String showAllDoctors(Model model, Authentication authentication) {
+       // Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
+      //  String role;
+        List<PatientDTOImpl> allPatient;
+      /*  String name = authentication.getName();
+        for (int i = 0; i < roles.size(); i++) {
+            role = roles.toArray()[i] + "";
+            if (role.equals("ROLE_DOCTOR")) {
+                allPatient = patientService.getAllByDoctorUserName(name);
+                return "redirect:/patients";
+            } else if (role.equals("ROLE_NURSE")) {
+                model.addAttribute("role", "Nurse");
+                return "redirect:/nurse/";
+            }
+        }*/
+        allPatient = patientService.getAll();
 
         model.addAttribute("allPatient", allPatient);
         return "all-patient";

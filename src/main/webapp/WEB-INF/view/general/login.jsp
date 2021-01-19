@@ -6,8 +6,10 @@
     <style>
         <%@include file="/WEB-INF/css/style.css" %>
     </style>
+
 </head>
 <body>
+
 
         <c:url  value="/login" var="loginUrl"/>
         <div class="login container">

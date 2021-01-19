@@ -100,8 +100,8 @@
     </div>
     <div class="form-outline mb-4">
         <label class="form-label" for="form3Example3">Birthdate</label>
-        <form:input class="form-control" id="form3Example3" path="birthDate"/>
-        <form:errors path="birthDate"></form:errors>
+        <form:input class="form-control" id="form3Example3" path="ages"/>
+        <form:errors path="ages"></form:errors>
     </div>
 
     <div class="form-outline mb-4">

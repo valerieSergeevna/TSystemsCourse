@@ -1,9 +1,5 @@
 package com.spring.webapp.dto;
 
-import com.spring.webapp.entity.Doctor;
-import com.spring.webapp.entity.Treatment;
-
-import javax.persistence.*;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +11,7 @@ public class PatientDTOImpl implements EntityDTO {
     private String surname;
     private String disease;
     private String status;
-    YearMonth birthDate;
+    private int ages;
     private int insuranceNumber;
     private List<TreatmentDTOImpl> treatments = new ArrayList<>();
 
@@ -37,21 +33,21 @@ public class PatientDTOImpl implements EntityDTO {
     public PatientDTOImpl() {
     }
 
-    public YearMonth getBirthDate() {
-        return birthDate;
+    public int getAges() {
+        return ages;
     }
 
-    public void setBirthDate(YearMonth birthDate) {
-        this.birthDate = birthDate;
+    public void setAges(int ages) {
+        this.ages = ages;
     }
 
-    public PatientDTOImpl(int id, String name, String surname, YearMonth birthDate, String disease, String status, List<TreatmentDTOImpl> treatments) {
+    public PatientDTOImpl(int id, String name, String surname, int ages, String disease, String status, List<TreatmentDTOImpl> treatments) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.disease = disease;
         this.status = status;
-        this.birthDate = birthDate;
+        this.ages = ages;
         this.treatments = treatments;
     }
 

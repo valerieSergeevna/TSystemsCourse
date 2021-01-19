@@ -2,10 +2,8 @@ package com.spring.webapp.entity;
 
 
 import com.spring.utils.YearMonthDateAttributeConverter;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +23,9 @@ public class Patient{
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "birth_date")
+    @Column(name = "ages")
     @Convert(converter = YearMonthDateAttributeConverter.class)
-    private YearMonth birthDate;
+    private int ages;
 
 
     @Column(name = "insurance_number")
@@ -53,12 +51,12 @@ public class Patient{
     public Patient() {
     }
 
-    public YearMonth getBirthDate() {
-        return birthDate;
+    public int getAges() {
+        return ages;
     } //TODO: CHANGE TYPE AND CONVERTER
 
-    public void setBirthDate(YearMonth birthDate) {
-        this.birthDate = birthDate;
+    public void setAges(int ages) {
+        this.ages = ages;
     }
 
     public int getInsuranceNumber() {
@@ -69,13 +67,13 @@ public class Patient{
         this.insuranceNumber = insuranceNumber;
     }
 
-    public Patient(String name, String surname, YearMonth birthDate, int insuranceNumber, String disease, String status) {
+    public Patient(String name, String surname, int ages, int insuranceNumber, String disease, String status) {
         this.name = name;
         this.surname = surname;
         this.insuranceNumber = insuranceNumber;
         this.disease = disease;
         this.status = status;
-        this.birthDate = birthDate;
+        this.ages = ages;
     }
 
 

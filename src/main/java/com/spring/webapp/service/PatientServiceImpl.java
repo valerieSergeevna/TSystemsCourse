@@ -3,17 +3,14 @@ package com.spring.webapp.service;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
-import com.spring.webapp.dto.TreatmentEventDTOImpl;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
-import com.spring.webapp.entity.TreatmentEvent;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -183,7 +180,7 @@ PatientServiceImpl {
 
     public PatientDTOImpl toPatientDTO(Patient patient) {
         PatientDTOImpl patientDTO = new PatientDTOImpl(patient.getId(), patient.getName(),
-                patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
+                patient.getSurname(), patient.getAges(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
         patientDTO.setInsuranceNumber(patient.getInsuranceNumber());
         return patientDTO;
     }
@@ -195,7 +192,7 @@ PatientServiceImpl {
     }*/
 
     public Patient toPatient(PatientDTOImpl patientDTO) {
-        Patient patient = new Patient(patientDTO.getName(), patientDTO.getSurname(), patientDTO.getBirthDate(), patientDTO.getInsuranceNumber(),
+        Patient patient = new Patient(patientDTO.getName(), patientDTO.getSurname(), patientDTO.getAges(), patientDTO.getInsuranceNumber(),
                 patientDTO.getDisease(), patientDTO.getStatus());
         if (patientDTO.getId() > 0) {
             patient.setId(patientDTO.getId());

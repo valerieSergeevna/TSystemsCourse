@@ -7,7 +7,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatientDTOImpl implements EntityDTO {
+public class PatientDTOImpl{
 
     private int id;
     @NotBlank(message = "Name field must to be filled")

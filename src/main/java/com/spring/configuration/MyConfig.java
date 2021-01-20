@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
@@ -27,7 +29,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.spring.webapp")
 @EnableWebMvc
 @EnableTransactionManagement
-public class MyConfig {
+public class MyConfig implements WebMvcConfigurer {
 
     @Bean
     public ViewResolver viewResolver(){
@@ -82,4 +84,9 @@ public class MyConfig {
         return new ImplicitNamingStrategyLegacyJpaImpl();
     }
 
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
 }

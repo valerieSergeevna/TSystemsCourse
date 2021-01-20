@@ -345,6 +345,11 @@ public class MyController {
         return "nurse/all-treatmentEvents";
     }
 
+    @RequestMapping("/403")
+    public String _403() {
+        return "403";
+    }
+
    /* @RequestMapping("nurse/setCancelInfo")
     public String cancelInfo(@ModelAttribute("cancel") TreatmentEventDTOImpl treatmentEventDTO,
                                 HttpServletRequest request) {

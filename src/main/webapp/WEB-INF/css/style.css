@@ -17,6 +17,16 @@
     border-radius: 0 0 20px 0;
 }
 
+.permission-denied{
+    align-items: center;
+    text-align: center;
+}
+
+img.permission-denied{
+    width: 100px;
+    height: 100px;
+    margin-left: 45%;
+}
 
 
 .inner-addon {

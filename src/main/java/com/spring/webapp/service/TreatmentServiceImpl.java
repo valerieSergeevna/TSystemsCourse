@@ -38,8 +38,13 @@ public class TreatmentServiceImpl {
 
         List<Treatment> treatmentList = treatmentDAO.getAll();
         List<TreatmentDTOImpl> treatmentDTOList = treatmentList.stream()
-                .map(treatment -> new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(), treatment.getTimePattern(),
-                        treatment.getPeriod(), treatment.getDose()))
+                .map(treatment -> {
+                    TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(), treatment.getTimePattern(),
+                            treatment.getDose());
+                    treatmentDTO.setStartDate(treatment.getStartDate());
+                    treatmentDTO.setEndDate(treatment.getEndDate());
+                    return treatmentDTO;
+                })
                 .collect(Collectors.toList());
         return treatmentDTOList;
     }
@@ -67,8 +72,8 @@ public class TreatmentServiceImpl {
 
     @Transactional
     public void delete(int id) {
-       List <TreatmentEvent> treatmentEventList = treatmentEventDAO.getAllByTreatmentID(id);
-        for (TreatmentEvent treatmentEvent:treatmentEventList) {
+        List<TreatmentEvent> treatmentEventList = treatmentEventDAO.getAllByTreatmentID(id);
+        for (TreatmentEvent treatmentEvent : treatmentEventList) {
             treatmentEventDAO.delete(treatmentEvent.getId());
         }
         treatmentDAO.delete(id);

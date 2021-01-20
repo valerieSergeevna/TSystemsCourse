@@ -1,5 +1,6 @@
 package com.spring.webapp.controller;
 
+import com.spring.utils.LocalDateTimeParser;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class MyController {
     }
 
     @RequestMapping("/patients")
-    public String showAllDoctors(Model model, Authentication authentication) {
+    public String showAllPatients(Model model, Authentication authentication) {
        // Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
       //  String role;
         List<PatientDTOImpl> allPatient;
@@ -175,10 +176,6 @@ public class MyController {
     public String saveTreatment(@Validated @ModelAttribute("patient") PatientDTOImpl patientDTO,
                                 BindingResult bindingResult,
                                 HttpServletRequest request, Model model) {
-        //костыль
-
-        patientDTO.setAges(request.getParameter("ages").length()==0?0:patientDTO.getAges());
-        patientDTO.setInsuranceNumber(request.getParameter("insuranceNumber").length()==0?0:patientDTO.getInsuranceNumber());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("patient", patientDTO);
@@ -190,27 +187,36 @@ public class MyController {
         String[] typeNameValues = request.getParameterValues("treatmentName");
         String[] patternValues = request.getParameterValues("treatmentPattern");
         String[] doseValues = request.getParameterValues("treatmentDose");
-        String[] periodValues = request.getParameterValues("treatmentPeriod");
+       // String[] periodValues = request.getParameterValues("treatmentPeriod");
+        String[] startDate = request.getParameterValues("startDate");
+        String[] endDate = request.getParameterValues("endDate");
 
         int treatmentIdCount = 0;
         if (itemValues != null) {
             for (int i = 0; i < itemValues.length; i++) {
                 TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
-                        typeValues[i], Integer.parseInt(patternValues[i]), periodValues[i], Double.parseDouble(doseValues[i]));
+                        typeValues[i], Integer.parseInt(patternValues[i]), Double.parseDouble(doseValues[i]));
                 treatmentDTO.setTypeName(typeNameValues[i]);
+                treatmentDTO.setStartDate(LocalDateTime.parse(startDate[i]));
+                treatmentDTO.setEndDate(LocalDateTime.parse(endDate[i]));
                 treatmentDTOList.add(treatmentDTO);
             }
             treatmentIdCount = itemValues.length;
         }
+
         if (typeValues != null) {
             if (typeValues.length > treatmentIdCount) {
                 for (int i = treatmentIdCount; i < typeValues.length; i++) {
                     TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+                    //DUPLICATE CODE^
                     treatmentDTO.setType(typeValues[i]);
                     treatmentDTO.setTypeName(typeNameValues[i]);
                     treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
                     treatmentDTO.setDose(Double.parseDouble(doseValues[i]));
-                    treatmentDTO.setPeriod(periodValues[i]);
+                    //treatmentDTO.setPeriod(periodValues[i]);treatmentDTO.setStartDate(LocalDateTime.parse(startDate[i]));
+                    //                treatmentDTO.setEndDate(LocalDateTime.parse(endDate[i]));
+                    treatmentDTO.setStartDate(LocalDateTimeParser.parse(startDate[i]));
+                    treatmentDTO.setEndDate(LocalDateTimeParser.parse(endDate[i]));
                     treatmentDTOList.add(treatmentDTO);
                 }
             }
@@ -240,11 +246,11 @@ public class MyController {
         treatmentService.delete(id);
         model.addAttribute("patientId", patientDTO.getId());
 
-        return "redirect:/updateTreatmentInfo";
+        return "redirect:doctor/updateTreatmentInfo";
     }
 
 
-    @RequestMapping("/updateTreatmentInfo")
+    @RequestMapping("doctor/updateTreatmentInfo")
     public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) {
         List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
 

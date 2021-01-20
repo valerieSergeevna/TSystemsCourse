@@ -33,7 +33,8 @@
                         <h4 class="card-title">${treatment.typeName}</h4>
                         <p class="card-text">Type: ${treatment.type}</p>
                         <p class="card-text">Dose: ${treatment.dose}</p>
-                        <p class="card-text">Period: ${treatment.period}</p>
+                        <p class="card-text">Start treatment date: ${treatment.startDate}</p>
+                        <p class="card-text">End treatment date: ${treatment.endDate}</p>
                         <p class="card-text">Time pattern: ${treatment.timePattern}</p>
                         <br>
                     </c:forEach>

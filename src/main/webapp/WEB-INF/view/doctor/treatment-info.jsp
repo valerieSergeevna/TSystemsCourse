@@ -8,7 +8,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <script type="text/javascript">
         function addForm() {
             let container = document.getElementById("container");
@@ -18,13 +17,16 @@
             let inputType = document.createElement("select");
             let inputPattern = document.createElement("input");
             let inputDose = document.createElement("input");
-            let inputPeriod = document.createElement("input");
+            //  let inputPeriod = document.createElement("input");
+            let inputStartDate = document.createElement("input");
+            let inputEndDate = document.createElement("input");
 
             container.append('Medicine/Procedure name ');
             inputTypeName.type = "text";
             inputTypeName.name = "treatmentName";
             inputTypeName.className = "form-control";
             container.appendChild(inputTypeName);
+            container.appendChild(document.createElement("br"));
             container.appendChild(document.createElement("br"));
 
             container.append('Type ');
@@ -64,35 +66,55 @@
             container.appendChild(document.createElement("br"));
             container.appendChild(document.createElement("br"));
 
-            container.append('Period ');
-            inputPeriod.type = "text";
-            inputPeriod.name = "treatmentPeriod";
-            inputPeriod.className = "form-control";
-            container.appendChild(inputPeriod);
+            /*  container.append('Period ');
+              inputPeriod.type = "text";
+              inputPeriod.name = "treatmentPeriod";
+              inputPeriod.className = "form-control";
+              container.appendChild(inputPeriod);
+              container.appendChild(document.createElement("br"));
+              container.appendChild(document.createElement("br"));*/
+
+            container.append('Start date ');
+            inputStartDate.type = "text";
+            inputStartDate.name = "startDate";
+            inputStartDate.className = "form-control datepicker";
+            //  inputStartDate.id="datepicker1";
+            container.appendChild(inputStartDate);
+            container.appendChild(document.createElement("br"));
+            container.appendChild(document.createElement("br"));
+
+            container.append('End date ');
+            inputEndDate.type = "text";
+            inputEndDate.name = "endDate";
+            inputEndDate.className = "form-control datepicker";
+            //    inputEndDate.id="datepicker2";
+            container.appendChild(inputEndDate);
             container.appendChild(document.createElement("br"));
             container.appendChild(document.createElement("br"));
         }
 
-    </script>
-
-
-
-    <script>
-        $(function () {
-            $("#datepicker1").datepicker();
-            $("#datepicker2").datepicker();
+       $('body').on('focus', ".datepicker", function () {
+            $(this).datepicker();
         });
     </script>
+
+
+    <%-->  <script>
+
+      $(function () {
+             $("#datepicker1").datepicker();
+             $("#datepicker2").datepicker();
+         })
+    </script>;--%>
 </head>
-</head>
+
 <body>
-
-
 <div class="container">
-    <form:form class="main-form text-info treatment-form" action="saveTreatment" method="post" modelAttribute="patient">
+    <form:form class="main-form text-info" action="saveTreatment" method="post" modelAttribute="patient">
         <h2 class="text-info">Treatment info</h2>
         <br>
-        <c:if test="${patient.treatments != null}">
+
+        <c:if test="${patient.id != null}">
             <form:hidden path="id"></form:hidden>
         </c:if>
         <div class="row mb-4">
@@ -108,7 +130,6 @@
                     <label class="form-label" for="form3Example2">Last name</label>
                     <form:input class="form-control" id="form3Example2" path="surname"/>
                     <form:errors path="surname"></form:errors>
-
                 </div>
             </div>
         </div>
@@ -122,9 +143,7 @@
             <label class="form-label" for="form3Example4">Disease</label>
             <form:input id="form3Example4" class="form-control" path="disease"/>
             <form:errors path="disease"></form:errors>
-
         </div>
-
         <div class="form-outline mb-4">
                 <%--
                 <form:input class="form-control" id="form3Example5" path="status"/>
@@ -193,12 +212,14 @@
                            value="${treatment.period}">
                 </div>
                 <div class="form-outline mb-4">
-                    <label class="form-label" for="datepicker1">Start date</label>
-                    <input type="text" class="form-control" name="startDate" id="datepicker1" value="">
+                    <label class="form-label" for="datepicker1${count.index}">Start date</label>
+                    <input type="text" class="form-control datepicker" name="startDate"
+                           id="datepicker1${count.index}" value="${treatment.startDate}">
                 </div>
                 <div class="form-outline mb-4">
-                    <label class="form-label" for="datepicker2">End date</label>
-                    <input type="text" class="form-control" name="startDate" id="datepicker2" value="">
+                    <label class="form-label" for="datepicker2${count.index}">End date</label>
+                    <input type="text" class="form-control datepicker" name="endDate"
+                           id="datepicker2${count.index}" value="${treatment.endDate}">
                 </div>
                 <%--</form:form>--%>
                 <c:url var="deleteButton" value="/deleteTreatment">
@@ -210,8 +231,6 @@
             </c:forEach>
         </c:if>
         <br>
-
-
         <div id="container"></div>
         <br>
         <input class="btn btn-outline-primary btn-sm" type="button" value="Add treatment"
@@ -220,9 +239,7 @@
         <br>
         <br>
         <input type="submit" class="btn btn-outline-success btn-sm" value="Save"/>
-
     </form:form>
 </div>
-
 </body>
 </html>

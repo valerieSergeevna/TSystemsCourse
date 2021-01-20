@@ -84,8 +84,10 @@ public class TreatmentDAOImpl {
     public List<TreatmentDTOImpl> toTreatmentDTOList(List<Treatment> treatments){
         return treatments.stream()
                 .map(treatment -> {
-                    TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(),treatment.getType(),treatment.getTimePattern(),treatment.getPeriod(),treatment.getDose());
+                    TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(),treatment.getType(),treatment.getTimePattern(),treatment.getDose());
                     treatmentDTO.setTypeName(treatment.getProcedureMedicine().getName());
+                    treatmentDTO.setStartDate(treatment.getStartDate());
+                    treatmentDTO.setEndDate(treatment.getEndDate());
                     return treatmentDTO;
                 })
                 .collect(Collectors.toList());

@@ -9,8 +9,6 @@
 
 </head>
 <body>
-
-
         <c:url  value="/login" var="loginUrl"/>
         <div class="login container">
         <form action="${loginUrl}" method="post">

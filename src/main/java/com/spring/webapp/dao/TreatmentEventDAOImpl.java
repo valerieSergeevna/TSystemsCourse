@@ -70,7 +70,8 @@ public class TreatmentEventDAOImpl {
 
         if (treatmentEventList.size() != 0) {
             if (treatmentEventList.get(0).getTreatment().getTimePattern() == treatment.getTimePattern()
-                    && treatmentEventList.get(0).getTreatment().getPeriod().equals(treatment.getPeriod())) {
+                    && treatmentEventList.get(0).getTreatment().getStartDate().equals(treatment.getStartDate())
+                    && treatmentEventList.get(0).getTreatment().getEndDate().equals(treatment.getEndDate())) {
                 for (TreatmentEvent treatmentEvent : treatmentEventList) {
                     TreatmentEvent currentTreatmentEvent = get(treatmentEvent.getId());
                     if (currentTreatmentEvent.getTreatmentTime().isBefore(LocalDateTime.now()))
@@ -96,26 +97,12 @@ public class TreatmentEventDAOImpl {
         int timePattern = treatment.getTimePattern();
         double dose = treatment.getDose();
 
-        String[] period = treatment.getPeriod().split(" ");
+     //   String[] period = treatment.getPeriod().split(" ");
 
 
-        LocalDateTime startDate = LocalDateTime.now().plusDays(1);
-        LocalDateTime endDate = null;
+        LocalDateTime startDate = treatment.getStartDate();
+        LocalDateTime endDate = treatment.getEndDate();
 
-        String duration = "months";
-
-        //  switch (period[1]) {
-        switch (duration) {
-            case "days":
-                endDate = LocalDateTime.now().plusDays(Long.parseLong(period[0]));
-                break;
-            case "weeks":
-                endDate = LocalDateTime.now().plusWeeks(Long.parseLong(period[0]));
-                break;
-            case "months":
-                endDate = LocalDateTime.now().plusMonths(Long.parseLong(period[0]));
-                break;
-        }
 
         deleteByTreatment(treatment.getTreatmentId());
 

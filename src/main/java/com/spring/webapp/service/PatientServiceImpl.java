@@ -130,6 +130,8 @@ PatientServiceImpl {
                 {
                     Treatment newTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(), treatment.getDose(), treatment.getStartDate(),treatment.getEndDate());
                     newTreatment.setTreatmentId(treatment.getTreatmentId());
+                    newTreatment.setStartDate(treatment.getStartDate());
+                    newTreatment.setEndDate(treatment.getEndDate());
                     //in TreatmentService duplicated code
                     int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getTypeName());
                     ProcedureMedicine procedureMedicine;

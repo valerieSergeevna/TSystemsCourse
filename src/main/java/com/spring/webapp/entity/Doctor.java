@@ -30,10 +30,11 @@ public class Doctor {
     public Doctor() {
     }
 
-    public Doctor(String name, String surname, String position) {
+    public Doctor(String name, String surname, String position, String userName) {
         this.name = name;
         this.surname = surname;
         this.position = position;
+        this.userName = userName;
     }
 
     public void addPatient(Patient patient) {

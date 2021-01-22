@@ -1,5 +1,8 @@
 package com.spring.webapp.dto;
 
+import com.spring.webapp.entity.Doctor;
+
+import javax.print.Doc;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -7,7 +10,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatientDTOImpl{
+public class PatientDTOImpl {
 
     private int id;
     @NotBlank(message = "Name field must to be filled")
@@ -26,9 +29,12 @@ public class PatientDTOImpl{
     @NotNull
     private Integer ages;
 
-    @Min(value = 0 , message = "Must be inserted correct insurance number")
+    @Min(value = 0, message = "Must be inserted correct insurance number")
     @NotNull
     private Integer insuranceNumber;
+
+    private Doctor doctor;
+
 
     private List<TreatmentDTOImpl> treatments = new ArrayList<>();
 
@@ -36,17 +42,7 @@ public class PatientDTOImpl{
         this.treatments = treatments;
     }
 
-    public List<TreatmentDTOImpl> getTreatments() {
-        return treatments;
-    }
 
-    public void setTreatments(List<TreatmentDTOImpl> treatments) {
-        this.treatments = treatments;
-    }
-
-    //***TODO**** add birthdate//
-    // @Column(name = "doctor_id")
-    //  private int doctorId;
     public PatientDTOImpl() {
     }
 
@@ -58,7 +54,7 @@ public class PatientDTOImpl{
         this.ages = ages;
     }
 
-    public PatientDTOImpl(int id, String name, String surname, Integer ages, String disease, String status, List<TreatmentDTOImpl> treatments) {
+    public PatientDTOImpl(int id, String name, String surname, Integer ages, String disease, String status, List<TreatmentDTOImpl> treatments, Doctor doctor) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -66,8 +62,8 @@ public class PatientDTOImpl{
         this.status = status;
         this.ages = ages;
         this.treatments = treatments;
+        this.doctor = doctor;
     }
-
 
 
     public void setId(int id) {
@@ -116,5 +112,21 @@ public class PatientDTOImpl{
 
     public void setInsuranceNumber(Integer insuranceNumber) {
         this.insuranceNumber = insuranceNumber;
+    }
+
+    public List<TreatmentDTOImpl> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(List<TreatmentDTOImpl> treatments) {
+        this.treatments = treatments;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }

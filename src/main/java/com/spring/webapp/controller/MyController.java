@@ -177,7 +177,7 @@ public class MyController {
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
     public String saveTreatment(@Validated @ModelAttribute("patient") PatientDTOImpl patientDTO,
                                 BindingResult bindingResult,
-                                HttpServletRequest request, Model model) {
+                                HttpServletRequest request,Authentication authentication, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("patient", patientDTO);
@@ -199,8 +199,8 @@ public class MyController {
                 TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
                         typeValues[i], Integer.parseInt(patternValues[i]), Double.parseDouble(doseValues[i]));
                 treatmentDTO.setTypeName(typeNameValues[i]);
-                treatmentDTO.setStartDate(LocalDateTime.parse(startDate[i]));
-                treatmentDTO.setEndDate(LocalDateTime.parse(endDate[i]));
+                treatmentDTO.setStartDate(LocalDateTimeParser.parse(startDate[i]));
+                treatmentDTO.setEndDate(LocalDateTimeParser.parse(endDate[i]));
                 treatmentDTOList.add(treatmentDTO);
             }
             treatmentIdCount = itemValues.length;
@@ -229,7 +229,8 @@ public class MyController {
                 treatmentService.delete(treatmentDTO.getTreatmentId());
             }
         } else {
-            patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO);
+            String doctorName = authentication.getName();
+            patientService.saveOrUpdateTreatments(treatmentDTOList, patientDTO, doctorService.getByUserName(doctorName));
         }
         return "redirect:/patients";
     }
@@ -263,9 +264,14 @@ public class MyController {
 
     @RequestMapping("/nurse/showAllTreatments")
     public String showAllEvents(Model model) {
+        try {
         List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getAll();
         model.addAttribute("allEvents", allEvents);
         return "nurse/all-treatmentEvents";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
+        }
     }
 
   /*  @RequestMapping("/nurse/updateEvent")

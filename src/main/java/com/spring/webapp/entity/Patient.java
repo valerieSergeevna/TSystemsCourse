@@ -38,9 +38,6 @@ public class Patient{
 
     @Column(name = "status")
     private String status;
-//***TODO**** add birthdate//
-   // @Column(name = "doctor_id")
-  //  private int doctorId;
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
             CascadeType.MERGE,CascadeType.REFRESH})

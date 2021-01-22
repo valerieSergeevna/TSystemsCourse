@@ -150,9 +150,12 @@
 
         <h2 class="text-info">Treatment info</h2>
         <br>
+        <h3 class="text-info">Patient info</h3>
+        <br>
         <c:if test="${patient.id != null}">
           <form:hidden path="id"></form:hidden>
         </c:if>
+        <form:hidden path="doctor.id"></form:hidden>
         <div class="row mb-4">
             <div class="col">
                 <div class="form-outline">
@@ -199,11 +202,14 @@
             <form:errors path="insuranceNumber"></form:errors>
 
         </div>
+        <hr/>
+
+        <h3 class="text-info">Treatment info</h3>
 
         <c:if test="${patient.treatments.size() != 0}">
             <c:forEach items="${patient.treatments}" var="treatment" varStatus="count">
                 <input type="hidden" name="treatment" value="${treatment.treatmentId}">
-                <br><br>
+                <br>
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline mb-4">
@@ -242,7 +248,8 @@
                            id="form3Example10${count.index}" name="treatmentDose" value="${treatment.dose}">
                 </div>
                 <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example11${count.index}">Period</label>
+<%--                    <label class="form-label" for="form3Example11${count.index}">Period</label>--%>
+                    <h4>Period</h4>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="datepicker1${count.index}">Start date</label>
@@ -260,6 +267,7 @@
                 </c:url>
                 <input type="button" class="btn danger btn-outline-danger btn-sm " value="Delete treatment"
                        onclick="window.location.href ='${deleteButton}'"/>
+                <br>
 
             </c:forEach>
         </c:if>

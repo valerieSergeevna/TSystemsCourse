@@ -104,6 +104,14 @@ a::before{
     border-bottom: 3px solid skyblue;
 }
 
+hr {
+
+    border-color: #00BFFF;
+    border-style: solid none;
+    border-width: 1px 0;
+    margin: 18px 0;
+}
+
 .treatment-form .btn {
     border-radius: 100px;
     font-size: 13px;

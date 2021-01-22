@@ -11,16 +11,18 @@ public class DoctorDTOImpl{
     private String name;
     private String surname;
     private String position;
+    private String username;
     //private List<Patient> patients;//?????
 
     public DoctorDTOImpl() {
     }
 
-    public DoctorDTOImpl(int id,String name, String surname, String position) {
+    public DoctorDTOImpl(int id,String name, String surname, String position, String username) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.position = position;
+        this.username = username;
     }
 
     public void setPosition(String position) {
@@ -61,5 +63,12 @@ public class DoctorDTOImpl{
         return position;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
 

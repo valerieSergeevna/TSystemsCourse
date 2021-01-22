@@ -1,6 +1,7 @@
 package com.spring.webapp.service;
 
 import com.spring.webapp.dao.*;
+import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Doctor;
@@ -71,6 +72,7 @@ PatientServiceImpl {
 
     @Transactional
     public void update(PatientDTOImpl patientDTO) {
+        patientDTO.setDoctor(doctorDAO.get(patientDTO.getDoctor().getId()));
         Patient patient = toPatient(patientDTO);
         patientDAO.update(patient);
     }
@@ -111,8 +113,8 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patientDTO) {
-        //TODO: ADD STATUS AND INSURANCE
+    public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patientDTO, DoctorDTOImpl doctor) {
+
         patientDTO.getTreatments().clear();
         Patient patient = patientDAO.get(patientDTO.getId());
 
@@ -147,8 +149,9 @@ PatientServiceImpl {
                 })
                 .collect(Collectors.toList());
 //TODO: SET DOCTOR
-        patient.setDoctor(doctorDAO.get(1));
+      //  patient.setDoctor(doctorDAO.get(1));
         ////
+        patient.setDoctor(doctorDAO.get(doctor.getId()));
         if (patientDAO.get(patientDTO.getId()) == null) {
             patientDAO.save(patient);
         } else {
@@ -184,7 +187,8 @@ PatientServiceImpl {
 
     public PatientDTOImpl toPatientDTO(Patient patient) {
         PatientDTOImpl patientDTO = new PatientDTOImpl(patient.getId(), patient.getName(),
-                patient.getSurname(), patient.getAges(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
+                patient.getSurname(), patient.getAges(), patient.getDisease(), patient.getStatus(),
+                treatmentDAO.toTreatmentDTOList(patient.getTreatments()), patient.getDoctor());
         patientDTO.setInsuranceNumber(patient.getInsuranceNumber());
         return patientDTO;
     }
@@ -201,6 +205,7 @@ PatientServiceImpl {
         if (patientDTO.getId() > 0) {
             patient.setId(patientDTO.getId());
         }
+        patient.setDoctor(patientDTO.getDoctor());
         return patient;
     }
 

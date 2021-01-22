@@ -19,7 +19,7 @@
         <c:forEach var="patient" items="${allPatient}">
             <tbody>
             <tr class = "text-info">
-                <c:url var="updateButton" value="doctor/updateTreatmentInfo">
+                <c:url var="updateButton" value="/doctor/updateTreatmentInfo">
                     <c:param name="patientId" value="${patient.id}"></c:param>
                 </c:url>
                 <c:url var="deleteButton" value="/deletePatient">

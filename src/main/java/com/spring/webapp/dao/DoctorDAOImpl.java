@@ -36,8 +36,8 @@ public class DoctorDAOImpl {
 
     public Doctor getByUserName(String name) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Doctor> query= session.createQuery("delete from Doctor " + "where userName =:userName");
-        query.setParameter("userName", name);
+        Query<Doctor> query= session.createQuery("from Doctor " + "where userName =:name");
+        query.setParameter("name", name);
         return query.list().get(0);
     }
 

@@ -1,8 +1,13 @@
 package com.spring.webapp.controller;
 
+import com.spring.exception.DataBaseException;
+import com.spring.exception.MyException;
+import com.spring.exception.ServerException;
 import com.spring.utils.LocalDateTimeParser;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.service.*;
+import org.hibernate.HibernateError;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -61,22 +66,19 @@ public class MyController {
 
     @RequestMapping("/patients")
     public String showAllPatients(Model model, Authentication authentication) {
-       // Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
-      //  String role;
-        List<PatientDTOImpl> allPatient;
-      /*  String name = authentication.getName();
+        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
+        String role;
+        List<PatientDTOImpl> allPatient = new ArrayList<>();
+        String name = authentication.getName();
         for (int i = 0; i < roles.size(); i++) {
             role = roles.toArray()[i] + "";
             if (role.equals("ROLE_DOCTOR")) {
                 allPatient = patientService.getAllByDoctorUserName(name);
-                return "redirect:/patients";
             } else if (role.equals("ROLE_NURSE")) {
                 model.addAttribute("role", "Nurse");
-                return "redirect:/nurse/";
+                allPatient = patientService.getAll();
             }
-        }*/
-        allPatient = patientService.getAll();
-
+        }
         model.addAttribute("allPatient", allPatient);
         return "all-patient";
     }
@@ -187,7 +189,7 @@ public class MyController {
         String[] typeNameValues = request.getParameterValues("treatmentName");
         String[] patternValues = request.getParameterValues("treatmentPattern");
         String[] doseValues = request.getParameterValues("treatmentDose");
-       // String[] periodValues = request.getParameterValues("treatmentPeriod");
+        // String[] periodValues = request.getParameterValues("treatmentPeriod");
         String[] startDate = request.getParameterValues("startDate");
         String[] endDate = request.getParameterValues("endDate");
 
@@ -250,9 +252,9 @@ public class MyController {
     }
 
 
-    @RequestMapping("doctor/updateTreatmentInfo")
+    @RequestMapping("/doctor/updateTreatmentInfo")
     public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) {
-        List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
+        //  List<TreatmentDTOImpl> allTreatments = patientService.getTreatments(id);
 
         PatientDTOImpl patientDTO = patientService.get(id);
         model.addAttribute("patient", patientDTO);
@@ -280,74 +282,96 @@ public class MyController {
     public String updateStatus(@RequestParam("eventId") int id,
                                @RequestParam("eventStatus") String status,
                                HttpServletRequest request) {
-        // String[] id = request.getParameterValues("eventId");
-        //     String[] status = request.getParameterValues("status");
-        //     String status = request.getParameter("status"+id);
-        TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
-        treatmentEventDTO.setStatus(status);
-        treatmentEventService.update(treatmentEventDTO);
-        //    model.addAttribute("event", treatmentEventDTO);
-        return "redirect:/nurse/";
+        try {
+            TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
+            treatmentEventDTO.setStatus(status);
+            treatmentEventService.update(treatmentEventDTO);
+            return "redirect:/nurse/";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
+        }
     }
 
     @RequestMapping("nurse/cancelStatus")
     public String cancelStatus(@RequestParam("eventId") int id,
                                @RequestParam("eventStatus") String status,
                                Model model) {
-        // String[] id = request.getParameterValues("eventId");
-        //     String[] status = request.getParameterValues("status");
-        //     String status = request.getParameter("status"+id);
-        TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
-        //   treatmentEventDTO.setStatus(status);
-        //  treatmentEventService.update(treatmentEventDTO);
-        model.addAttribute("cancelEvent", treatmentEventDTO);
-        return "nurse/cancel-info";
+        try {
+            TreatmentEventDTOImpl treatmentEventDTO = treatmentEventService.get(id);
+            model.addAttribute("cancelEvent", treatmentEventDTO);
+            return "nurse/cancel-info";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
+        }
     }
 
     @RequestMapping(value = "nurse/setCancelInfo", method = RequestMethod.POST)
     public String setCancelReason(@ModelAttribute("cancelEvent") TreatmentEventDTOImpl treatmentEventDTO) {
         //bad code
-        TreatmentEventDTOImpl newTreatmentEventDTO = treatmentEventService.get(treatmentEventDTO.getId());
-        newTreatmentEventDTO.setStatus("canceled");
-        newTreatmentEventDTO.setCancelReason(treatmentEventDTO.getCancelReason());
-        treatmentEventService.update(newTreatmentEventDTO);
-        return "redirect:/nurse/";
+        try {
+            TreatmentEventDTOImpl newTreatmentEventDTO = treatmentEventService.get(treatmentEventDTO.getId());
+            newTreatmentEventDTO.setStatus("canceled");
+            newTreatmentEventDTO.setCancelReason(treatmentEventDTO.getCancelReason());
+            treatmentEventService.update(newTreatmentEventDTO);
+            return "redirect:/nurse/";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
+        }
     }
 
     @RequestMapping("/nurse/")
     public String showTodayTreatments(Model model) {
-        LocalDateTime nowDay = LocalDateTime.now();
-        List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getTodayEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
-                nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
-        model.addAttribute("allEvents", allEvents);
-        return "nurse/all-treatmentEvents";
+        try {
+            LocalDateTime nowDay = LocalDateTime.now();
+            List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getTodayEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
+                    nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
+            model.addAttribute("allEvents", allEvents);
+            return "nurse/all-treatmentEvents";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
+        }
     }
 
     @RequestMapping("/nurse/showNearestHourTreatments")
     public String showNearestHourTreatments(Model model) {
-        LocalDateTime nowDay = LocalDateTime.now();
-        List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
-                nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
-        model.addAttribute("allEvents", allEvents);
-        return "nurse/all-treatmentEvents";
+        try {
+            LocalDateTime nowDay = LocalDateTime.now();
+            List<TreatmentEventDTOImpl> allEvents = treatmentEventService.getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
+                    nowDay.plusDays(2).getDayOfMonth(), 8, 0, 0));
+            model.addAttribute("allEvents", allEvents);
+            return "nurse/all-treatmentEvents";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
+        }
     }
 
     @RequestMapping("/nurse/findBySurname")
     public String findBySurname(@RequestParam("patientSurname") String surname, Model model, HttpServletRequest request) {
         // String surname = request.getParameter("patientSurname");
-        List<PatientDTOImpl> patientDTOList = patientService.getBySurname(surname);
-        List<TreatmentEventDTOImpl> allEvents = new ArrayList<>();
-        for (PatientDTOImpl patientDTO : patientDTOList) {
-            //O(n^2)???????????
-            allEvents.addAll(treatmentEventService.getByPatient(patientDTO.getId()));
+        try {
+            List<PatientDTOImpl> patientDTOList = patientService.getBySurname(surname);
+            List<TreatmentEventDTOImpl> allEvents = new ArrayList<>();
+            for (PatientDTOImpl patientDTO : patientDTOList) {
+                //O(n^2)???????????
+                allEvents.addAll(treatmentEventService.getByPatient(patientDTO.getId()));
+            }
+            model.addAttribute("allEvents", allEvents);
+            return "nurse/all-treatmentEvents";
+        } catch (HibernateException ex) {
+            //log
+            throw new ServerException();
         }
-        model.addAttribute("allEvents", allEvents);
-        return "nurse/all-treatmentEvents";
+
     }
 
     @RequestMapping("/403")
     public String _403() {
-        return "403";
+        return "errors/403";
     }
 
    /* @RequestMapping("nurse/setCancelInfo")

@@ -47,7 +47,7 @@ PatientServiceImpl {
     @Transactional
     public List<PatientDTOImpl> getAllByDoctorUserName(String name) {
         Doctor doctor = doctorDAO.getByUserName(name);
-        List<Patient> patientsList = patientDAO.getAllByDoctorUserName(doctor.getId());
+        List<Patient> patientsList = patientDAO.getAllByDoctorId(doctor.getId());
         return toPatientDTOList(patientsList);
     }
 

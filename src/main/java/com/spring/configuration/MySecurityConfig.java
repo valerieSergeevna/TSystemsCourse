@@ -31,7 +31,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/","/viewPatient","/patients").hasAnyRole("DOCTOR", "NURSE")
-                .antMatchers("/updateTreatmentInfo").hasRole("DOCTOR")
+                .antMatchers("/doctor/updateTreatmentInfo").hasRole("DOCTOR")
                 .antMatchers("/nurse/showAllTreatments","nurse/cancelStatus",
                         "/nurse/showNearestHourTreatments","/nurse/").hasRole("NURSE")
                 .and()

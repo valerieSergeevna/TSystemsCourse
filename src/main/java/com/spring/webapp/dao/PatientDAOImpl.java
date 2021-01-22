@@ -62,7 +62,7 @@ public class PatientDAOImpl {
         return query.list();
     }
 
-    public List<Patient> getAllByDoctorUserName(int id) {
+    public List<Patient> getAllByDoctorId(int id) {
         Session session = sessionFactory.getCurrentSession();
         Query<Patient> query = session.createQuery("from Patient " + "where doctor.id =:id");
         query.setParameter("id", id);

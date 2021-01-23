@@ -14,6 +14,7 @@ function addForm() {
     inputTypeName.type = "text";
     inputTypeName.name = "treatmentName";
     inputTypeName.className = "form-control";
+    inputTypeName.required = true;
     container.appendChild(inputTypeName);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
@@ -35,22 +36,27 @@ function addForm() {
 // inputType.type = "text";
 
     inputType.className = "form-control";
+    inputType.required = true;
     container.appendChild(inputType);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
 
-    container.append('Time Pattern ');
+    container.append('Time Pattern (times/day) ');
     inputPattern.type = "text";
     inputPattern.name = "treatmentPattern";
     inputPattern.className = "form-control";
+    inputPattern.required = true;
+    inputPattern.min = "1";
     container.appendChild(inputPattern);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
 
-    container.append('Dose ');
+    container.append('Dose (gr/time)');
     inputDose.type = "text";
     inputDose.name = "treatmentDose";
     inputDose.className = "form-control";
+    inputDose.required = true;
+    inputDose.min = "0";
     container.appendChild(inputDose);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
@@ -64,27 +70,38 @@ function addForm() {
       container.appendChild(document.createElement("br"));*/
 
     container.append('Start date ');
-    inputStartDate.type = "text";
+    inputStartDate.type = "date";
     inputStartDate.name = "startDate";
     inputStartDate.className = "form-control datepicker";
+    inputStartDate.required = true;
+   // inputStartDate.pattern ="\d{4}-\d{2}-\d{2}";
     //  inputStartDate.id="datepicker1";
     container.appendChild(inputStartDate);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
 
     container.append('End date ');
-    inputEndDate.type = "text";
+    inputEndDate.type = "date";
     inputEndDate.name = "endDate";
     inputEndDate.className = "form-control datepicker";
     //    inputEndDate.id="datepicker2";
+    inputEndDate.required = true;
+   // inputEndDate.pattern = "\d{4}-\d{2}-\d{2}";
     container.appendChild(inputEndDate);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
 }
 
 $('body').on('focus', ".datepicker", function () {
-    $(this).datepicker();
+    $(this).datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
 });
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
 
 /*
 $(function () {

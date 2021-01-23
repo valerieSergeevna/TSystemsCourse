@@ -7,7 +7,7 @@
     <style>
         <%@include file="/WEB-INF/css/style.css" %>
     </style>
-    <nav class="navbar topnav navbar-expand-md navbar-light bg-light">
+    <nav class="navbar topnav navbar-expand-md ">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">

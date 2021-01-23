@@ -1,5 +1,6 @@
 package com.spring.webapp.dao;
 
+import com.spring.utils.TimeParser;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.entity.Doctor;
@@ -86,8 +87,8 @@ public class TreatmentDAOImpl {
                 .map(treatment -> {
                     TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(),treatment.getType(),treatment.getTimePattern(),treatment.getDose());
                     treatmentDTO.setTypeName(treatment.getProcedureMedicine().getName());
-                    treatmentDTO.setStartDate(treatment.getStartDate());
-                    treatmentDTO.setEndDate(treatment.getEndDate());
+                    treatmentDTO.setStartDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getStartDate()));
+                    treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
                     return treatmentDTO;
                 })
                 .collect(Collectors.toList());

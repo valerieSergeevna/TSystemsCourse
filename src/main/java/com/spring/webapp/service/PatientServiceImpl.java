@@ -1,5 +1,9 @@
 package com.spring.webapp.service;
 
+import com.spring.exception.DataBaseException;
+import com.spring.exception.ServerException;
+import com.spring.utils.TimeParser;
+import com.spring.webapp.controller.MyController;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
@@ -8,6 +12,8 @@ import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +25,8 @@ import java.util.stream.Collectors;
 @Service
 public class
 PatientServiceImpl {
+
+    private static final Logger logger = Logger.getLogger(PatientServiceImpl.class);
 
     @Autowired
     private PatientDAOImpl patientDAO;
@@ -34,40 +42,50 @@ PatientServiceImpl {
     private TreatmentEventDAOImpl treatmentEventDAO;
 
     @Transactional
-    public List<PatientDTOImpl> getAll() {
-
-        List<Patient> patientsList = patientDAO.getAll();
-       /* List<PatientDTOImpl> patientDTOList = patientsList.stream()
-                .map(patient -> new PatientDTOImpl(patient.getId(), patient.getName(),
-                        patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments())))
-                .collect(Collectors.toList());
-        return patientDTOList;*/
-        return toPatientDTOList(patientsList);
+    public List<PatientDTOImpl> getAll() throws DataBaseException {
+        try {
+            List<Patient> patientsList = patientDAO.getAll();
+            return toPatientDTOList(patientsList);
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
     @Transactional
-    public List<PatientDTOImpl> getAllByDoctorUserName(String name) {
-        Doctor doctor = doctorDAO.getByUserName(name);
-        List<Patient> patientsList = patientDAO.getAllByDoctorId(doctor.getId());
-        return toPatientDTOList(patientsList);
+    public List<PatientDTOImpl> getAllByDoctorUserName(String name) throws DataBaseException {
+        try {
+            Doctor doctor = doctorDAO.getByUserName(name);
+            List<Patient> patientsList = patientDAO.getAllByDoctorId(doctor.getId());
+            return toPatientDTOList(patientsList);
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'getAllByDoctorUserName' method:" + ex.getMessage() + "!]");
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
     @Transactional
-    public List<PatientDTOImpl> getBySurname(String surname) {
-        List<Patient> patientsList = patientDAO.getBySurname(surname);
-       /* List<PatientDTOImpl> patientDTOList = patientsList.stream()
-                .map(patient -> new PatientDTOImpl(patient.getId(), patient.getName(),
-                        patient.getSurname(), patient.getBirthDate(), patient.getDisease(), patient.getStatus(), treatmentDAO.toTreatmentDTOList(patient.getTreatments())))
-                .collect(Collectors.toList());
-        return patientDTOList;*/
-        return toPatientDTOList(patientsList);
+    public List<PatientDTOImpl> getBySurname(String surname) throws DataBaseException {
+        try {
+            List<Patient> patientsList = patientDAO.getBySurname(surname);
+            return toPatientDTOList(patientsList);
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'getBySurname' method:" + ex.getMessage() + "!]");
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
     @Transactional
-    public void save(PatientDTOImpl patientDTO) {
+    public void save(PatientDTOImpl patientDTO) throws DataBaseException {
         Patient patient = new Patient();
         BeanUtils.copyProperties(patientDTO, patient);
-        patientDAO.save(patient);
+        try {
+            patientDAO.save(patient);
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'save' method:" + ex.getMessage() + "!]");
+            throw new DataBaseException(ex.getMessage());
+        }
+
     }
 
     @Transactional
@@ -84,33 +102,43 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public void deleteTreatments(int id) {
-        List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
-        for (Treatment treatment : treatmentList) {
-            treatmentDAO.delete(treatment.getTreatmentId());
+    public void deleteTreatments(int id) throws DataBaseException {
+        try {
+            List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
+            for (Treatment treatment : treatmentList) {
+                treatmentDAO.delete(treatment.getTreatmentId());
+            }
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'deleteTreatments' method:" + ex.getMessage() + "!]");
+            throw new DataBaseException(ex.getMessage());
         }
     }
 
     @Transactional
-    public PatientDTOImpl get(int id) {
+    public PatientDTOImpl get(int id) throws DataBaseException {
         PatientDTOImpl patientDTO = new PatientDTOImpl();
-        Patient patient = patientDAO.get(id);
-        BeanUtils.copyProperties(patient, patientDTO);
-        patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
-        return patientDTO;
+        try {
+            Patient patient = patientDAO.get(id);
+            BeanUtils.copyProperties(patient, patientDTO);
+            patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
+            return patientDTO;
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'get' method:" + ex.getMessage() + "!]");
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
-    @Transactional
+  /*  @Transactional
     public List<TreatmentDTOImpl> getTreatments(int id) {//it's already exist, need to FIX
         List<Treatment> treatmentList = patientDAO.getTreatments(id);
         return treatmentList.stream()
                 .map(treatment -> {TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(),
                         treatment.getTimePattern(), treatment.getDose());
-                treatmentDTO.setStartDate(treatment.getStartDate());
-                treatmentDTO.setEndDate(treatment.getEndDate());
+                treatmentDTO.setStartDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getStartDate()));
+                treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
                 return treatmentDTO;})
                 .collect(Collectors.toList());
-    }
+    }*/
 
     @Transactional
     public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patientDTO, DoctorDTOImpl doctor) {
@@ -120,20 +148,18 @@ PatientServiceImpl {
 
         if (patient != null) {
             patient.getTreatments().clear();
-        } else {
-            // patient = new Patient();
-            // BeanUtils.copyProperties(patientDTO, patient);
-
         }
         patient = toPatient(patientDTO);
 
         List<Treatment> treatmentList = treatments.stream()
                 .map(treatment ->
                 {
-                    Treatment newTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(), treatment.getDose(), treatment.getStartDate(),treatment.getEndDate());
+                    Treatment newTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(), treatment.getDose(),
+                            TimeParser.fromLocalDateToLocalDateTime(treatment.getStartDate()),
+                            TimeParser.fromLocalDateToLocalDateTime(treatment.getEndDate()));
                     newTreatment.setTreatmentId(treatment.getTreatmentId());
-                    newTreatment.setStartDate(treatment.getStartDate());
-                    newTreatment.setEndDate(treatment.getEndDate());
+                    newTreatment.setStartDate(TimeParser.fromLocalDateToLocalDateTime(treatment.getStartDate()));
+                    newTreatment.setEndDate(TimeParser.fromLocalDateToLocalDateTime(treatment.getEndDate()));
                     //in TreatmentService duplicated code
                     int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getTypeName());
                     ProcedureMedicine procedureMedicine;
@@ -148,9 +174,7 @@ PatientServiceImpl {
                     return newTreatment;
                 })
                 .collect(Collectors.toList());
-//TODO: SET DOCTOR
-      //  patient.setDoctor(doctorDAO.get(1));
-        ////
+
         patient.setDoctor(doctorDAO.get(doctor.getId()));
         if (patientDAO.get(patientDTO.getId()) == null) {
             patientDAO.save(patient);
@@ -161,7 +185,7 @@ PatientServiceImpl {
 
         for (Treatment treatment : treatmentList) {
             treatment.setPatient(patient);
-     //       int oldPattern = treatmentDAO.get(treatment.getTreatmentId()).getTimePattern();
+            //       int oldPattern = treatmentDAO.get(treatment.getTreatmentId()).getTimePattern();
             if (treatmentDAO.get(treatment.getTreatmentId()) == null) {
                 treatmentDAO.save(treatment);
                 treatmentEventDAO.createTimeTable(treatment);
@@ -192,12 +216,6 @@ PatientServiceImpl {
         patientDTO.setInsuranceNumber(patient.getInsuranceNumber());
         return patientDTO;
     }
-
-   /* public List<TreatmentEvent> toTreatmentEventList(List<TreatmentEventDTOImpl> treatmentsEventDTOList) {
-        return treatmentsEventDTOList.stream()
-                .map(this::toTreatmentEvent)
-                .collect(Collectors.toList());
-    }*/
 
     public Patient toPatient(PatientDTOImpl patientDTO) {
         Patient patient = new Patient(patientDTO.getName(), patientDTO.getSurname(), patientDTO.getAges(), patientDTO.getInsuranceNumber(),

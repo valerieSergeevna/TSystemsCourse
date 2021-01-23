@@ -1,5 +1,6 @@
 package com.spring.webapp.service;
 
+import com.spring.utils.TimeParser;
 import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
@@ -41,8 +42,8 @@ public class TreatmentServiceImpl {
                 .map(treatment -> {
                     TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(), treatment.getTimePattern(),
                             treatment.getDose());
-                    treatmentDTO.setStartDate(treatment.getStartDate());
-                    treatmentDTO.setEndDate(treatment.getEndDate());
+                    treatmentDTO.setStartDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getStartDate()));
+                    treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
                     return treatmentDTO;
                 })
                 .collect(Collectors.toList());
@@ -94,22 +95,5 @@ public class TreatmentServiceImpl {
         PatientDTOImpl patientDTO = new PatientDTOImpl();
         BeanUtils.copyProperties(treatmentDAO.getPatient(id), patientDTO);
         return patientDTO;
-    }
-
-    @Transactional
-    public TreatmentDTOImpl createEmpty(PatientDTOImpl patientDTO) {
-        TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
-        Patient patient = new Patient();
-        BeanUtils.copyProperties(patientDTO, patient);
-        Treatment treatment = new Treatment();
-        treatment.setType("treatment");
-        ProcedureMedicine procedureMedicine = new ProcedureMedicine("", "treatment");
-        procedureMedicineDAO.save(procedureMedicine);
-        treatment.setProcedureMedicine(procedureMedicine);
-        treatment.setPatient(patient);
-        treatmentDAO.save(treatment);
-        BeanUtils.copyProperties(treatment, treatmentDTO);
-        treatmentDTO.setTypeName("");
-        return treatmentDTO;
     }
 }

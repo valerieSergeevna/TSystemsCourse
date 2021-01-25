@@ -119,7 +119,7 @@
                     <label class="form-label" for="form3Example9${count.index}">Time Pattern </label>
                     <input type="text" class="form-control"
                            id="form3Example9${count.index}" name="treatmentPattern"
-                           value="${treatment.timePattern}" required min = "1">
+                           value="${treatment.timePattern}" required min = "1" max="5">
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example10${count.index}">Dose</label>

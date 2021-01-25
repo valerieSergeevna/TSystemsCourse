@@ -1,15 +1,19 @@
 package com.spring.webapp.service;
 
+import com.spring.exception.DataBaseException;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.dto.TreatmentEventDTOImpl;
 import com.spring.webapp.entity.*;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,123 +22,136 @@ import java.util.stream.Collectors;
 
 @Service
 public class TreatmentEventServiceImpl {
+
+    private static final Logger logger = Logger.getLogger(TreatmentEventServiceImpl.class);
+
     @Autowired
     private TreatmentEventDAOImpl treatmentEventDAO;
 
-    @Autowired
-    private PatientDAOImpl patientDAO;
 
     @Autowired
-    private TreatmentDAOImpl treatmentDAO;
+    private PatientServiceImpl patientService;
 
     @Transactional
-    public List<TreatmentEventDTOImpl> getAll() {
-        List<TreatmentEvent> treatmentEventList = treatmentEventDAO.getAll();
-        return toTreatmentEventDTOList(treatmentEventList);
+    public List<TreatmentEventDTOImpl> getAll() throws DataBaseException {
+        try {
+            List<TreatmentEvent> treatmentEventList = treatmentEventDAO.getAll();
+            return toTreatmentEventDTOList(treatmentEventList);
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
     @Transactional
-    public void save(TreatmentEventDTOImpl treatmentEventDTO) {
+    public void save(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
         TreatmentEvent treatmentEvent = new TreatmentEvent();
-        BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
-        treatmentEventDAO.save(treatmentEvent);
+        try {
+            BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
+            treatmentEventDAO.save(treatmentEvent);
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'save' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
+    }
+
+
+    public void update(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
+        try {
+            treatmentEventDAO.update(toTreatmentEvent(treatmentEventDTO));
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'update' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
+
+    }
+
+    @Transactional//????????
+    public void delete(int id) throws DataBaseException {
+        try {
+            treatmentEventDAO.delete(id);
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'delete' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
     @Transactional
-    public void update(TreatmentEventDTOImpl treatmentEventDTO) {
-        treatmentEventDAO.update(toTreatmentEvent(treatmentEventDTO));
-    }
-
-    @Transactional
-    public void delete(int id) {
-        treatmentEventDAO.delete(id);
-    }
-
-    @Transactional
-    public TreatmentEventDTOImpl get(int id) {
+    public TreatmentEventDTOImpl get(int id) throws DataBaseException {
         TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl();
-        BeanUtils.copyProperties(treatmentEventDAO.get(id), treatmentEventDTO);
+        try {
+            BeanUtils.copyProperties(treatmentEventDAO.get(id), treatmentEventDTO);
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'get' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
         return treatmentEventDTO;
     }
 
-    @Transactional
-    public List<TreatmentEventDTOImpl> createTimeTable(TreatmentDTOImpl treatmentDTO) {
-       /* TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl();
-
-
-        List<TreatmentEvent> treatmentEventList = new ArrayList<>();
-
-        String type = treatmentDTO.getType();
-        Patient patient = treatmentDAO.get(treatmentDTO.getTreatmentId()).getPatient();
-
-        ProcedureMedicine procedureMedicine = treatmentDAO.get(treatmentDTO.getTreatmentId()).getProcedureMedicine();
-
-        int timePattern = treatmentDTO.getTimePattern();
-        double dose = treatmentDTO.getDose();
-
-        String[] period = treatmentDTO.getPeriod().split(" ");
-
-
-
-
-        LocalDateTime startDate = LocalDateTime.now().plusDays(1);
-        LocalDateTime endDate = null;
-
-        String duration = "months";
-
-      //  switch (period[1]) {
-        switch (duration) {
-            case "days":
-                endDate = LocalDateTime.now().plusDays(Long.parseLong(period[0]));
-                break;
-            case "weeks":
-                endDate = LocalDateTime.now().plusWeeks(Long.parseLong(period[0]));
-                break;
-            case "months":
-                endDate = LocalDateTime.now().plusMonths(Long.parseLong(period[0]));
-                break;
-        }
-
-        while (startDate.isBefore(endDate)) {
-            TreatmentEvent treatmentEvent = new TreatmentEvent();
-            if (type.equals("treatment")) {
-               // startDate.plusDays((timePattern / 7));
-                for (int i = 1; i <= timePattern; i++) {
-                    treatmentEvent.setDose(dose);
-                    treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
-                            startDate.getDayOfMonth(), 8+ 24 - (24/i), 0, 0));
-                    startDate = startDate.plusDays(1);
-                }
-            }else{
-                treatmentEvent.setDose(1);
-                startDate = startDate.plusDays((7 / timePattern));
-            }
-            treatmentEvent.setPatient(patient);
-            treatmentEvent.setProcedureMedicine(procedureMedicine);
-            // treatmentEvent.setStatus();
-            treatmentEvent.setType(type);
-            treatmentEvent.setTreatment(treatmentDAO.get(treatmentDTO.getTreatmentId()));
-            treatmentEventDAO.save(treatmentEvent);
-            treatmentEventList.add(treatmentEvent);
-        }
-        return treatmentEventList;*/
-        return toTreatmentEventDTOList(treatmentEventDAO.createTimeTable(treatmentDAO.get(treatmentDTO.getTreatmentId())));
-    }
-
-    @Transactional
     public List<TreatmentEventDTOImpl> getByPatient(int patientId) {
         return toTreatmentEventDTOList(treatmentEventDAO.getByPatient(patientId));
     }
 
-    @Transactional
     public List<TreatmentEventDTOImpl> getNearestEvents(LocalDateTime time) {
         return toTreatmentEventDTOList(treatmentEventDAO.getNearestEvents(time));
     }
 
-    @Transactional
+
     public List<TreatmentEventDTOImpl> getTodayEvents(LocalDateTime time) {
         return toTreatmentEventDTOList(treatmentEventDAO.getTodayEvents(time));
     }
+
+    //methods for controller
+    @Transactional
+    public void updateStatus(int id, String status) throws DataBaseException {
+        TreatmentEventDTOImpl treatmentEventDTO = get(id);
+        treatmentEventDTO.setStatus(status);
+        update(treatmentEventDTO);
+    }
+
+    @Transactional
+    public void setCancelReason(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
+        TreatmentEventDTOImpl newTreatmentEventDTO = get(treatmentEventDTO.getId());
+        newTreatmentEventDTO.setStatus("canceled");
+        newTreatmentEventDTO.setCancelReason(treatmentEventDTO.getCancelReason());
+        update(newTreatmentEventDTO);
+    }
+
+    @Transactional
+    public List<TreatmentEventDTOImpl> showTodayTreatments() {
+        LocalDateTime nowDay = LocalDateTime.now();
+        return getTodayEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
+                nowDay.getDayOfMonth(), 8, 0, 0));
+    }
+
+    @Transactional
+    public List<TreatmentEventDTOImpl> showNearestHourTreatments() {
+        LocalDateTime nowDay = LocalDateTime.now();
+        return getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
+                nowDay.getDayOfMonth(), 8, 0, 0));
+    }
+
+    @Transactional
+    public List<TreatmentEventDTOImpl> findBySurname(String surname) throws DataBaseException {
+        List<PatientDTOImpl> patientDTOList = patientService.getBySurname(surname);
+        List<TreatmentEventDTOImpl> allEvents = new ArrayList<>();
+        for (PatientDTOImpl patientDTO : patientDTOList) {
+            //O(n^2)???????????
+            allEvents.addAll(getByPatient(patientDTO.getId()));
+        }
+        return allEvents;
+    }
+
 
     //convector's method from-to
 

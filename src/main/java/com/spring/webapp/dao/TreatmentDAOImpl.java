@@ -25,7 +25,7 @@ public class TreatmentDAOImpl {
 
     public List<Treatment> getAll() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Treatment ", Treatment.class).getResultList();
+        return session.createQuery("from Treatment", Treatment.class).getResultList();
     }
 
     public void save(Treatment treatment) {

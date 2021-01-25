@@ -4,7 +4,9 @@ package com.spring.webapp.entity;
 import com.spring.utils.YearMonthDateAttributeConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +25,26 @@ public class Patient{
     private String name;
 
     @Column(name = "surname")
+    @NotBlank(message = "Last name field must to be filled")
     private String surname;
 
     @Column(name = "ages")
    // @Convert(converter = YearMonthDateAttributeConverter.class)
+    @Min(value = 1, message = "Age has to be over 1 years old")
     private int ages;
 
 
     @Column(name = "insurance_number")
+    @Min(value = 0, message = "Must be inserted correct insurance number")
+    @NotNull
     private int insuranceNumber;
 
     @Column(name = "disease")
+    @NotBlank(message = "Disease field must to be filled")
     private String disease;
 
     @Column(name = "status")
+    @NotBlank(message = "Status field must to be filled")
     private String status;
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,

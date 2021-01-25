@@ -1,6 +1,10 @@
 package com.spring.webapp.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,6 +17,7 @@ public class Treatment {
     private int treatmentId;
 
     @Column(name = "type")
+    @NotBlank(message = "Type field must to be filled")
     private String type;
 
    /* @Column(name = "patient_id")
@@ -22,9 +27,14 @@ public class Treatment {
     private String typeID;*/
 
     @Column(name = "time_pattern")
+    @Min(value = 1, message = "1 - Min pattern")
+    @Max(value = 5, message = "5 - Max pattern")
+    @NotNull
     private int timePattern;
 
     @Column(name = "dose")
+    @Min(value = 0, message = "0 - Min dose")
+    @NotNull
     private double dose;
 
 

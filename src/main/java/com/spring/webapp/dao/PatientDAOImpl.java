@@ -20,6 +20,7 @@ public class PatientDAOImpl {
     @Autowired
     private SessionFactory sessionFactory;
 
+
     public List<Patient> getAll() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Patient", Patient.class).getResultList();
@@ -57,7 +58,7 @@ public class PatientDAOImpl {
 
     public List<Patient> getBySurname(String surname) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Patient> query = session.createQuery("from Patient " + "where surname = :patientSurname");
+        Query<Patient> query = session.createQuery("from Patient " + "where surname like:patientSurname");
         query.setParameter("patientSurname", surname);
         return query.list();
     }

@@ -47,6 +47,7 @@ function addForm() {
     inputPattern.className = "form-control";
     inputPattern.required = true;
     inputPattern.min = "1";
+    inputPattern.max = "5";
     container.appendChild(inputPattern);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));

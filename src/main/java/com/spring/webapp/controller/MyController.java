@@ -22,16 +22,8 @@ import java.util.List;
 public class MyController {
 
     @Autowired
-    private DoctorServiceImpl doctorService;
-
-    @Autowired
     private PatientServiceImpl patientService;
 
-    @Autowired
-    private TreatmentServiceImpl treatmentService;
-
-    @Autowired
-    private TreatmentEventServiceImpl treatmentEventService;
 
     private static final Logger logger = Logger.getLogger(MyController.class);
 
@@ -41,11 +33,7 @@ public class MyController {
         String role;
         for (int i = 0; i < roles.size(); i++) {
             role = roles.toArray()[i] + "";
-            //  logger.info("role verified" + i + " is -> " + role);
-            //verify if user contain role to view dashboard page default
             if (role.equals("ROLE_DOCTOR")) {
-                //    logger.warn("IDENTIFIED: ROLE_DASHBOARD = " + role );
-                //   mav.setViewName("dasboard");
                 logger.info("role verified" + i + " is -> " + role);
                 logger.info("name verified" + i + " is -> " + authentication.getName());
                 model.addAttribute("role", "Doctor");
@@ -57,8 +45,6 @@ public class MyController {
                 return "redirect:/nurse/";
             }
         }
-        //   model.addAttribute("role", authentication.getPrincipal());
-
         return "greeting";
     }
 
@@ -81,13 +67,10 @@ public class MyController {
         return "all-patient";
     }
 
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-
         return "general/login";
     }
-
 
     @RequestMapping("/viewPatient")
     public String viewPatient(@RequestParam("patientId") int id, Model model) throws DataBaseException {
@@ -96,10 +79,8 @@ public class MyController {
         return "patient-view";
     }
 
-
     @RequestMapping("/403")
     public String _403() {
         return "errors/403";
     }
-
 }

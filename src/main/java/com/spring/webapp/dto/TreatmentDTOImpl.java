@@ -6,7 +6,10 @@ import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,10 +22,13 @@ public class TreatmentDTOImpl implements EntityDTO {
     @NotBlank(message = "Type field must to be filled")
     private String type;
 
-    @NotBlank(message = "This field must to be filled")
+    @Min(value = 1, message = "1 - Min pattern")
+    @Max(value = 5, message = "5 - Max pattern")
+    @NotNull
     private int timePattern;
 
-    @NotBlank(message = "Dose field must to be filled")
+    @Min(value = 0, message = "0 - Min dose")
+    @NotNull
     private double dose;
 
     /*  @NotBlank(message = "Period field must to be filled")

@@ -29,16 +29,10 @@ import java.util.List;
 public class DoctorController {
 
     @Autowired
-    private DoctorServiceImpl doctorService;
-
-    @Autowired
     private PatientServiceImpl patientService;
 
     @Autowired
     private TreatmentServiceImpl treatmentService;
-
-    @Autowired
-    private TreatmentEventServiceImpl treatmentEventService;
 
 
     @RequestMapping("/deletePatient")

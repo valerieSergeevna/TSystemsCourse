@@ -10,6 +10,7 @@ import com.spring.webapp.service.TreatmentEventServiceImpl;
 import com.spring.webapp.service.TreatmentServiceImpl;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -77,6 +78,13 @@ public class NurseController {
     @RequestMapping("/nurse/findByDate")
     public String findByDate(@RequestParam("date") String date, Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.showTreatmentsByDate(date));
+        return "nurse/all-treatmentEvents";
+    }
+
+    @RequestMapping("/nurse/getByType")
+    public String getByType(@RequestParam("treatmentType") String type, Model model) throws DataBaseException {
+        model.addAttribute("allEvents",
+                treatmentEventService.getByType(type));
         return "nurse/all-treatmentEvents";
     }
 }

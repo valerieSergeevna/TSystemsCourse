@@ -19,16 +19,6 @@ public class AdminController {
     @Autowired
     private DoctorServiceImpl doctorService;
 
-    @Autowired
-    private PatientServiceImpl patientService;
-
-    @Autowired
-    private TreatmentServiceImpl treatmentService;
-
-    @Autowired
-    private TreatmentEventServiceImpl treatmentEventService;
-
-
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model) {
         DoctorDTOImpl doctor = new DoctorDTOImpl();

@@ -58,6 +58,28 @@
         </div>
     </form>
 
+    <form class="search-form" action="/nurse/getByType">
+        <div class="row mb-4">
+            <div class="col">
+                <div class="form-outline">
+                    <label class="form-label text-info" for="typeID">Find by date</label>
+                    <select class="form-control" id = "typeID"
+                            name="treatmentType" onclick="window.location.href = '/nurse/getByType'">
+                        <option value="medicine">medicine</option>
+                        <option  value="procedure">procedure</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-outline">
+                    <label class="form-label"></label>
+                    <input type="submit" value="Find" style="float: left; margin-top:30px;"
+                           class="btn btn-xs btn-outline-info "/>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <table class="table table-light table-hover">
         <thead style="background-color:skyblue">
         <tr class="text-white">

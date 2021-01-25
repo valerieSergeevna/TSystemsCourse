@@ -2,6 +2,7 @@ package com.spring.webapp.dao;
 
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
+import com.spring.webapp.dto.TreatmentEventDTOImpl;
 import com.spring.webapp.entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -202,6 +203,13 @@ public class TreatmentEventDAOImpl {
         Session session = sessionFactory.getCurrentSession();
         Query<TreatmentEvent> query = session.createQuery("from TreatmentEvent " + "where treatmentTime >=:time order by treatmentTime");
         query.setParameter("time", time);
+        return query.list();
+    }
+
+    public List<TreatmentEvent> getByType(String treatmentType) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<TreatmentEvent> query = session.createQuery("from TreatmentEvent " + "where type =:treatmentType");
+        query.setParameter("treatmentType", treatmentType);
         return query.list();
     }
 }

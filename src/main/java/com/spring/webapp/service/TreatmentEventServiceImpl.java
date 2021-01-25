@@ -36,8 +36,7 @@ public class TreatmentEventServiceImpl {
     @Transactional
     public List<TreatmentEventDTOImpl> getAll() throws DataBaseException {
         try {
-            List<TreatmentEvent> treatmentEventList = treatmentEventDAO.getAll();
-            return toTreatmentEventDTOList(treatmentEventList);
+            return toTreatmentEventDTOList(treatmentEventDAO.getAll());
         } catch (
                 HibernateException ex) {
             logger.error("[!TreatmentEventServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
@@ -90,14 +89,27 @@ public class TreatmentEventServiceImpl {
         TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl();
         try {
             BeanUtils.copyProperties(treatmentEventDAO.get(id), treatmentEventDTO);
+            return treatmentEventDTO;
         } catch (
                 HibernateException ex) {
             logger.error("[!TreatmentEventServiceImpl 'get' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
-        return treatmentEventDTO;
     }
+
+    @Transactional
+    public List<TreatmentEventDTOImpl> getByType(String treatmentType) throws DataBaseException {
+        try {
+            return toTreatmentEventDTOList(treatmentEventDAO.getByType(treatmentType));
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'getByType' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
+    }
+
 
     public List<TreatmentEventDTOImpl> getByPatient(int patientId) throws DataBaseException {
         try {
@@ -177,7 +189,6 @@ public class TreatmentEventServiceImpl {
         return getTodayEvents(TimeParser.fromLocalDateToLocalDateTime(LocalDate.parse(time)));
     }
 
-
     //convector's method from-to
 
     public List<TreatmentEventDTOImpl> toTreatmentEventDTOList(List<TreatmentEvent> treatmentsEventList) {
@@ -215,5 +226,6 @@ public class TreatmentEventServiceImpl {
         treatmentEvent.setStatus(treatmentEventDTO.getStatus());
         return treatmentEvent;
     }
+
 
 }

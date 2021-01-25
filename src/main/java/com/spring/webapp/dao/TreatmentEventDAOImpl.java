@@ -33,7 +33,7 @@ public class TreatmentEventDAOImpl {
 
     public void save(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
-        //   session.evict(treatmentEvent);
+        //session.evict(treatmentEvent);
         //treatmentEvent = session.merge(treatmentEvent);
         session.saveOrUpdate(treatmentEvent);
         session.clear();
@@ -41,7 +41,6 @@ public class TreatmentEventDAOImpl {
 
     public void update(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
-
       //  session.update(treatmentEvent);
         session.merge(treatmentEvent);
     }
@@ -192,6 +191,11 @@ public class TreatmentEventDAOImpl {
         query.setParameter("time", time);
         query.setParameter("endTime", endTime);
         return query.list();
+    }
+
+    public List<TreatmentEvent> getByDate(LocalDateTime time) {
+        //use this method to get list by another date
+        return getTodayEvents(time);
     }
 
     public List<TreatmentEvent> sortByDate(LocalDateTime time) {

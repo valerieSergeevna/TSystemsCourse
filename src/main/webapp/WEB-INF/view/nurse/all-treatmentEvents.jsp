@@ -1,3 +1,4 @@
+<%@ page import="java.time.LocalDateTime" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -8,7 +9,7 @@
 </head>
 <body>
 <br>
-<h2 class="text-info"> Events list</h2>
+<h2 class="text-info event">Events list</h2>
 <br>
 <div class="container">
     <input type="button" class="btn btn-outline-secondary btn-sm" id="all" value="Show all treatments"
@@ -20,7 +21,7 @@
     <br><br>
     <%--Find patient's treatment <input type="text" name="patientSurname" size="30"
                         value="" onsubmit="window.location.href = '/nurse/findBySurname'">--%>
-    <form class="search-form" action="/nurse/findBySurname">
+    <form class="search-form search-surname" action="/nurse/findBySurname">
         <div class="row mb-4">
             <div class="col">
                 <div class="form-outline">
@@ -30,15 +31,33 @@
             </div>
             <div class="col">
                 <div class="form-outline">
-                    <label class="form-label" for="form3Example2"></label>
-                    <input type="submit" id="form3Example2" value="Find" style="float: left; margin-top:30px;"
+                    <label class="form-label"></label>
+                    <input type="submit" value="Find" style="float: left; margin-top:55px;"
                            class="btn btn-xs btn-outline-info "/>
                 </div>
             </div>
         </div>
-        <%--  Find patient's treatment <input name="patientSurname"/>
-          <input type="submit" value="Find" class="btn  btn-outline-info"/>--%>
     </form>
+
+    <form class="search-form search-date" action="/nurse/findByDate">
+        <div class="row mb-4">
+            <div class="col">
+                <div class="form-outline">
+                    <label class="form-label text-info" for="datepicker">Find by date</label>
+                    <input type="date" class="form-control datepicker" name="date"
+                           id="datepicker" value="">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-outline">
+                    <label class="form-label"></label>
+                    <input type="submit" value="Find" style="float: left; margin-top:30px;"
+                           class="btn btn-xs btn-outline-info "/>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <table class="table table-light table-hover">
         <thead style="background-color:skyblue">
         <tr class="text-white">
@@ -63,7 +82,6 @@
                 <td>${event.treatmentTime}</td>
                 <td>${event.dose}</td>
                 <td>${event.status}</td>
-
                 <td>
                     <c:url var="showReasonButton" value="/nurse/cancelStatus">
                         <c:param name="eventId" value="${event.id}"></c:param>
@@ -93,7 +111,7 @@
                                class="btn btn-outline-success"
                                onclick="window.location.href ='${updateCompletedButton}'" disabled/>
                         <input type="button" value="canceled" class="btn btn-outline-danger"
-                               onclick="window.location.href ='${updateCanceledButton}'"disabled/>
+                               onclick="window.location.href ='${updateCanceledButton}'" disabled/>
                     </c:if>
 
                 </td>
@@ -102,5 +120,8 @@
         <br>
     </table>
 </div>
+<script type="text/javascript">
+    <%@include file="/resources/scripts/appScript.js"%>
+</script>
 </body>
 </html>

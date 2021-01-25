@@ -19,7 +19,7 @@ public class ProcedureMedicineDAOImpl {
 
     public List<ProcedureMedicine> getAll() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from ProcedureMedicine ", ProcedureMedicine.class).getResultList();
+        return session.createQuery("from ProcedureMedicine order by type", ProcedureMedicine.class).getResultList();
     }
 
     public void save(ProcedureMedicine procedureMedicine) {

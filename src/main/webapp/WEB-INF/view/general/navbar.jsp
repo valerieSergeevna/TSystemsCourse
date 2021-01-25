@@ -14,7 +14,7 @@
                     <a class="nav-link text-info" href="/patients">Patients </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-info" href="#">Medicines/Procedures</a>
+                    <a class="nav-link text-info" href="/medicineProcedure">Medicines/Procedures</a>
                 </li>
                 <security:authorize access="hasRole('NURSE')">
                     <li class="nav-item">

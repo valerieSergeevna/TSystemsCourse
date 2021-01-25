@@ -2,6 +2,7 @@ package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
+import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.service.*;
 import org.apache.log4j.Logger;
@@ -23,6 +24,9 @@ public class MyController {
 
     @Autowired
     private PatientServiceImpl patientService;
+
+    @Autowired
+    private ProcedureMedicineServiceImpl procedureMedicineService;
 
 
     private static final Logger logger = Logger.getLogger(MyController.class);
@@ -74,10 +78,16 @@ public class MyController {
 
     @RequestMapping("/viewPatient")
     public String viewPatient(@RequestParam("patientId") int id, Model model) throws DataBaseException {
-        PatientDTOImpl patientDTO = patientService.get(id);
-        model.addAttribute("patient", patientDTO);
+        model.addAttribute("patient", patientService.get(id));
         return "patient-view";
     }
+
+    @RequestMapping("/medicineProcedure")
+    public String viewMedicineProcedure( Model model) throws DataBaseException {
+        model.addAttribute("allMedicineProcedure", procedureMedicineService.getAll());
+        return "medicine-procedure";
+    }
+
 
     @RequestMapping("/403")
     public String _403() {

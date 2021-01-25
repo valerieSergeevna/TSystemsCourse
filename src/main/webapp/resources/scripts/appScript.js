@@ -75,7 +75,7 @@ function addForm() {
     inputStartDate.name = "startDate";
     inputStartDate.className = "form-control datepicker";
     inputStartDate.required = true;
-   // inputStartDate.pattern ="\d{4}-\d{2}-\d{2}";
+    // inputStartDate.pattern ="\d{4}-\d{2}-\d{2}";
     //  inputStartDate.id="datepicker1";
     container.appendChild(inputStartDate);
     container.appendChild(document.createElement("br"));
@@ -87,7 +87,7 @@ function addForm() {
     inputEndDate.className = "form-control datepicker";
     //    inputEndDate.id="datepicker2";
     inputEndDate.required = true;
-   // inputEndDate.pattern = "\d{4}-\d{2}-\d{2}";
+    // inputEndDate.pattern = "\d{4}-\d{2}-\d{2}";
     container.appendChild(inputEndDate);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));

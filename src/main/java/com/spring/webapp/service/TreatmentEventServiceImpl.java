@@ -1,6 +1,7 @@
 package com.spring.webapp.service;
 
 import com.spring.exception.DataBaseException;
+import com.spring.utils.TimeParser;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
@@ -72,7 +73,7 @@ public class TreatmentEventServiceImpl {
 
     }
 
-    @Transactional//????????
+    @Transactional
     public void delete(int id) throws DataBaseException {
         try {
             treatmentEventDAO.delete(id);
@@ -98,17 +99,35 @@ public class TreatmentEventServiceImpl {
         return treatmentEventDTO;
     }
 
-    public List<TreatmentEventDTOImpl> getByPatient(int patientId) {
-        return toTreatmentEventDTOList(treatmentEventDAO.getByPatient(patientId));
+    public List<TreatmentEventDTOImpl> getByPatient(int patientId) throws DataBaseException {
+        try {
+            return toTreatmentEventDTOList(treatmentEventDAO.getByPatient(patientId));
+        } catch (HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'getByPatient' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
-    public List<TreatmentEventDTOImpl> getNearestEvents(LocalDateTime time) {
-        return toTreatmentEventDTOList(treatmentEventDAO.getNearestEvents(time));
+    public List<TreatmentEventDTOImpl> getNearestEvents(LocalDateTime time) throws DataBaseException {
+        try {
+            return toTreatmentEventDTOList(treatmentEventDAO.getNearestEvents(time));
+        } catch (HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'getNearestEvents' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
 
-    public List<TreatmentEventDTOImpl> getTodayEvents(LocalDateTime time) {
-        return toTreatmentEventDTOList(treatmentEventDAO.getTodayEvents(time));
+    public List<TreatmentEventDTOImpl> getTodayEvents(LocalDateTime time) throws DataBaseException {
+        try {
+            return toTreatmentEventDTOList(treatmentEventDAO.getTodayEvents(time));
+        } catch (HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'getTodayEvents' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
     //methods for controller
@@ -128,14 +147,14 @@ public class TreatmentEventServiceImpl {
     }
 
     @Transactional
-    public List<TreatmentEventDTOImpl> showTodayTreatments() {
+    public List<TreatmentEventDTOImpl> showTodayTreatments() throws DataBaseException {
         LocalDateTime nowDay = LocalDateTime.now();
         return getTodayEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
                 nowDay.getDayOfMonth(), 8, 0, 0));
     }
 
     @Transactional
-    public List<TreatmentEventDTOImpl> showNearestHourTreatments() {
+    public List<TreatmentEventDTOImpl> showNearestHourTreatments() throws DataBaseException {
         LocalDateTime nowDay = LocalDateTime.now();
         return getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
                 nowDay.getDayOfMonth(), 8, 0, 0));
@@ -150,6 +169,12 @@ public class TreatmentEventServiceImpl {
             allEvents.addAll(getByPatient(patientDTO.getId()));
         }
         return allEvents;
+    }
+
+    @Transactional
+    public List<TreatmentEventDTOImpl> showTreatmentsByDate(String time) throws DataBaseException {
+        //use this method to get another date
+        return getTodayEvents(TimeParser.fromLocalDateToLocalDateTime(LocalDate.parse(time)));
     }
 
 

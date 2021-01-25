@@ -56,14 +56,14 @@ public class NurseController {
     }
 
     @RequestMapping("/nurse/")
-    public String showTodayTreatments(Model model) {
+    public String showTodayTreatments(Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.showTodayTreatments());
         return "nurse/all-treatmentEvents";
 
     }
 
     @RequestMapping("/nurse/showNearestHourTreatments")
-    public String showNearestHourTreatments(Model model) {
+    public String showNearestHourTreatments(Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.showNearestHourTreatments());
         return "nurse/all-treatmentEvents";
     }
@@ -71,6 +71,12 @@ public class NurseController {
     @RequestMapping("/nurse/findBySurname")
     public String findBySurname(@RequestParam("patientSurname") String surname, Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.findBySurname(surname));
+        return "nurse/all-treatmentEvents";
+    }
+
+    @RequestMapping("/nurse/findByDate")
+    public String findByDate(@RequestParam("date") String date, Model model) throws DataBaseException {
+        model.addAttribute("allEvents", treatmentEventService.showTreatmentsByDate(date));
         return "nurse/all-treatmentEvents";
     }
 }

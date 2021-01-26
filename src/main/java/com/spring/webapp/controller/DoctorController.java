@@ -1,5 +1,6 @@
 package com.spring.webapp.controller;
 
+import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.utils.TimeParser;
@@ -50,7 +51,7 @@ public class DoctorController {
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
     public String saveTreatment(@Validated @ModelAttribute("patient") PatientDTOImpl patientDTO,
                                 BindingResult bindingResult,
-                                HttpServletRequest request,Authentication authentication, Model model) throws DataBaseException {
+                                HttpServletRequest request,Authentication authentication, Model model) throws DataBaseException, ClientException {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("patient", patientDTO);

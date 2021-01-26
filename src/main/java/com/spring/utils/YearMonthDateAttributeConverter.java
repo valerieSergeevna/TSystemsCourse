@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.time.Instant;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.util.Optional;
 
 public class YearMonthDateAttributeConverter implements AttributeConverter<YearMonth, Date> {
 
@@ -30,6 +31,6 @@ public class YearMonthDateAttributeConverter implements AttributeConverter<YearM
                             .toLocalDate()
             );
         }
-        return null;
+        return null;//need to change to Optional.of
     }
 }

@@ -1,8 +1,10 @@
 package com.spring.webapp.service;
 
+import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.utils.TimeParser;
+import com.spring.webapp.TreatmentType;
 import com.spring.webapp.controller.MyController;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -111,9 +114,9 @@ PatientServiceImpl {
     @Transactional
     public void update(PatientDTOImpl patientDTO) throws DataBaseException {
         try {
-        patientDTO.setDoctor(doctorDAO.get(patientDTO.getDoctor().getId()));
-        Patient patient = toPatient(patientDTO);
-        patientDAO.update(patient);
+            patientDTO.setDoctor(doctorDAO.get(patientDTO.getDoctor().getId()));
+            Patient patient = toPatient(patientDTO);
+            patientDAO.update(patient);
         } catch (HibernateException ex) {
             logger.error("[!PatientServiceImpl 'update' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
@@ -161,18 +164,6 @@ PatientServiceImpl {
             throw new DataBaseException(ex.getMessage());
         }
     }
-
-  /*  @Transactional
-    public List<TreatmentDTOImpl> getTreatments(int id) {//it's already exist, need to FIX
-        List<Treatment> treatmentList = patientDAO.getTreatments(id);
-        return treatmentList.stream()
-                .map(treatment -> {TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(),
-                        treatment.getTimePattern(), treatment.getDose());
-                treatmentDTO.setStartDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getStartDate()));
-                treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
-                return treatmentDTO;})
-                .collect(Collectors.toList());
-    }*/
 
 
     public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patientDTO, DoctorDTOImpl doctor) throws DataBaseException {
@@ -249,7 +240,7 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public void saveTreatmentInfo(PatientDTOImpl patientDTO, HttpServletRequest request, Authentication authentication) throws DataBaseException {
+    public void saveTreatmentInfo(PatientDTOImpl patientDTO, HttpServletRequest request, Authentication authentication) throws DataBaseException, ClientException {
         List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
         String[] itemValues = request.getParameterValues("treatment");
         String[] typeValues = request.getParameterValues("treatmentType");
@@ -260,42 +251,47 @@ PatientServiceImpl {
         String[] startDate = request.getParameterValues("startDate");
         String[] endDate = request.getParameterValues("endDate");
 
-        int treatmentIdCount = 0;
-        if (itemValues != null) {
-            for (int i = 0; i < itemValues.length; i++) {
-                TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
-                        typeValues[i], Integer.parseInt(patternValues[i]), Double.parseDouble(doseValues[i]));
-                treatmentDTO.setTypeName(typeNameValues[i]);
-                treatmentDTO.setStartDate(TimeParser.parseToLocalDate(startDate[i]));
-                treatmentDTO.setEndDate(TimeParser.parseToLocalDate(endDate[i]));
-                treatmentDTOList.add(treatmentDTO);
-            }
-            treatmentIdCount = itemValues.length;
-        }
-
-        if (typeValues != null) {
-            if (typeValues.length > treatmentIdCount) {
-                for (int i = treatmentIdCount; i < typeValues.length; i++) {
-                    TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
-                    //DUPLICATE CODE^
-                    treatmentDTO.setType(typeValues[i]);
+        try {
+            int treatmentIdCount = 0;
+            if (itemValues != null) {
+                for (int i = 0; i < itemValues.length; i++) {
+                    TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
+                            TreatmentType.valueOf(typeValues[i]), Integer.parseInt(patternValues[i]),
+                            typeNameValues[i].equals("medicine")?Double.parseDouble(doseValues[i]):1);
                     treatmentDTO.setTypeName(typeNameValues[i]);
-                    treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
-                    treatmentDTO.setDose(Double.parseDouble(doseValues[i]));
                     treatmentDTO.setStartDate(TimeParser.parseToLocalDate(startDate[i]));
                     treatmentDTO.setEndDate(TimeParser.parseToLocalDate(endDate[i]));
                     treatmentDTOList.add(treatmentDTO);
                 }
+                treatmentIdCount = itemValues.length;
             }
-        }
-        if (patientDTO.getStatus().equals("discharged")) {
-            update(patientDTO);
-            for (TreatmentDTOImpl treatmentDTO : treatmentDTOList) {
-                treatmentService.delete(treatmentDTO.getTreatmentId());
+
+            if (typeValues != null) {
+                if (typeValues.length > treatmentIdCount) {
+                    for (int i = treatmentIdCount; i < typeValues.length; i++) {
+                        TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl();
+                        //DUPLICATE CODE^
+                        treatmentDTO.setType(TreatmentType.valueOf(typeValues[i]));
+                        treatmentDTO.setTypeName(typeNameValues[i]);
+                        treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
+                        treatmentDTO.setDose(typeNameValues[i].equals("medicine")?Double.parseDouble(doseValues[i]):1);
+                        treatmentDTO.setStartDate(TimeParser.parseToLocalDate(startDate[i]));
+                        treatmentDTO.setEndDate(TimeParser.parseToLocalDate(endDate[i]));
+                        treatmentDTOList.add(treatmentDTO);
+                    }
+                }
             }
-        } else {
-            String doctorName = authentication.getName();
-            saveOrUpdateTreatments(treatmentDTOList, patientDTO, doctorService.getByUserName(doctorName));
+            if (patientDTO.getStatus().equals("discharged")) {
+                update(patientDTO);
+                for (TreatmentDTOImpl treatmentDTO : treatmentDTOList) {
+                    treatmentService.delete(treatmentDTO.getTreatmentId());
+                }
+            } else {
+                String doctorName = authentication.getName();
+                saveOrUpdateTreatments(treatmentDTOList, patientDTO, doctorService.getByUserName(doctorName));
+            }
+        }catch (NumberFormatException ex){
+            throw new ClientException("incorrect input, please, double check your inputs");
         }
     }
 

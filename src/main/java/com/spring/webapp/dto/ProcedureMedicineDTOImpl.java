@@ -1,5 +1,6 @@
 package com.spring.webapp.dto;
 
+import com.spring.webapp.TreatmentType;
 import com.spring.webapp.entity.Treatment;
 
 import javax.persistence.CascadeType;
@@ -11,12 +12,12 @@ import java.util.List;
 public class ProcedureMedicineDTOImpl implements EntityDTO {
     private int id;
     private String name;
-    private String type;
+    private TreatmentType type;
 
     public ProcedureMedicineDTOImpl() {
     }
 
-    public ProcedureMedicineDTOImpl( int id, String name, String type) {
+    public ProcedureMedicineDTOImpl( int id, String name, TreatmentType type) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -38,11 +39,11 @@ public class ProcedureMedicineDTOImpl implements EntityDTO {
         this.name = name;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 }

@@ -117,15 +117,17 @@
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example9${count.index}">Time Pattern </label>
-                    <input type="text" class="form-control"
+                    <input type="number" class="form-control"
                            id="form3Example9${count.index}" name="treatmentPattern"
                            value="${treatment.timePattern}" required min = "1" max="5">
                 </div>
+                <c:if test="${treatment.type.toString().equals('medicine')}">
                 <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example10${count.index}">Dose</label>
-                    <input type="text" class="form-control"
+                    <input type="number" class="form-control"
                            id="form3Example10${count.index}" name="treatmentDose" value="${treatment.dose}" required min = "0">
                 </div>
+                </c:if>
                 <div class="form-outline mb-4">
                         <%--<label class="form-label" for="form3Example11${count.index}">Period</label>--%>
                     <h4>Period</h4>

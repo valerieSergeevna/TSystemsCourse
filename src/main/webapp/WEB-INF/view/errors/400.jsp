@@ -6,11 +6,10 @@
 </head>
 <body>
 <div class="container">
-    <h3 align="center" class="text-info">Sorry, it's not you, it's US:(</h3>
+    <img class = "permission-denied" src="<c:url value = "/resources/img/pngegg.png"/>"/>
+    <h3 align="center" class="text-info">Bad request:(</h3>
     <br>
-    <h4 align="center"  class="text-info"> We will fix this problem.</h4>
-    <br>
-    <img class = "server-trouble" src="<c:url value = "/resources/img/server_error.png"/>"/>
+    <h4 align="center"  class="text-info"> Please, go back.</h4>
 </div>
 </body>
 </html>

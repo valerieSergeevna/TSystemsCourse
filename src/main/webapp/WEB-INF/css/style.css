@@ -17,9 +17,15 @@ body{
     border-radius: 0 0 20px 0;
 }
 
-.permission-denied{
+.permission-denied,.server-trouble{
     align-items: center;
     text-align: center;
+}
+
+img.server-trouble{
+    width: 400px;
+    height: 200px;
+    margin-left: 33%;
 }
 
 img.permission-denied{

@@ -1,5 +1,6 @@
 package com.spring.webapp.dto;
 
+import com.spring.webapp.TreatmentType;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
@@ -19,8 +20,8 @@ public class TreatmentDTOImpl implements EntityDTO {
 
     private int treatmentId;
 
-    @NotBlank(message = "Type field must to be filled")
-    private String type;
+    @NotNull(message = "Type field must to be filled")
+    private TreatmentType type;
 
     @Min(value = 1, message = "1 - Min pattern")
     @Max(value = 5, message = "5 - Max pattern")
@@ -51,7 +52,7 @@ public class TreatmentDTOImpl implements EntityDTO {
     public TreatmentDTOImpl() {
     }
 
-    public TreatmentDTOImpl(int id, String type, int timePattern, double dose) {
+    public TreatmentDTOImpl(int id, TreatmentType type, int timePattern, double dose) {
         this.treatmentId = id;
         this.type = type;
         this.timePattern = timePattern;
@@ -67,11 +68,11 @@ public class TreatmentDTOImpl implements EntityDTO {
         this.treatmentId = id;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 

@@ -19,8 +19,6 @@
     <input type="button" class="btn btn-outline-secondary btn-sm" id="today" value="Show today's treatments"
            onclick="window.location.href = '../../..'"/>
     <br><br>
-    <%--Find patient's treatment <input type="text" name="patientSurname" size="30"
-                        value="" onsubmit="window.location.href = '/nurse/findBySurname'">--%>
     <form class="search-form search-surname" action="/nurse/findBySurname">
         <div class="row mb-4">
             <div class="col">
@@ -64,7 +62,7 @@
                 <div class="form-outline">
                     <label class="form-label text-info" for="typeID">Find by date</label>
                     <select class="form-control" id = "typeID"
-                            name="treatmentType" onclick="window.location.href = '/nurse/getByType'">
+                            name="treatmentType">
                         <option value="medicine">medicine</option>
                         <option  value="procedure">procedure</option>
                     </select>

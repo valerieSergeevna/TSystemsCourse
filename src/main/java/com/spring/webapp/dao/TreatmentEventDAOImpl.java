@@ -1,5 +1,6 @@
 package com.spring.webapp.dao;
 
+import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.dto.TreatmentEventDTOImpl;
@@ -90,7 +91,7 @@ public class TreatmentEventDAOImpl {
             }
         }
 
-        String type = treatment.getType();
+        TreatmentType type = treatment.getType();
         Patient patient = treatment.getPatient();
 
         ProcedureMedicine procedureMedicine = treatment.getProcedureMedicine();
@@ -109,7 +110,7 @@ public class TreatmentEventDAOImpl {
 
         while (startDate.isBefore(endDate)) {
            // TreatmentEvent treatmentEvent;
-            if (type.equals("medicine")) {
+            if (type.toString().equals("medicine")) {
                 for (int i = 0; i < timePattern; i++) {
                     addToListAndInitTreatmentEvent(treatmentEventList,patient,
                             dose,LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
@@ -147,7 +148,7 @@ public class TreatmentEventDAOImpl {
 
                 save(treatmentEvent);
                 treatmentEventList.add(treatmentEvent);*/
-                startDate = startDate.plusDays(8 - (7 / timePattern));
+                startDate = startDate.plusDays(7 / timePattern);
             }
 
         }
@@ -156,7 +157,7 @@ public class TreatmentEventDAOImpl {
 
     private void addToListAndInitTreatmentEvent(List<TreatmentEvent> treatmentEventList,
                                                 Patient patient, double dose,
-                                                LocalDateTime time,String type, Treatment treatment,ProcedureMedicine procedureMedicine){
+                                                LocalDateTime time,TreatmentType type, Treatment treatment,ProcedureMedicine procedureMedicine){
         TreatmentEvent treatmentEvent = new TreatmentEvent();
         treatmentEvent.setDose(dose);
         treatmentEvent.setTreatmentTime(time);
@@ -209,7 +210,7 @@ public class TreatmentEventDAOImpl {
     public List<TreatmentEvent> getByType(String treatmentType) {
         Session session = sessionFactory.getCurrentSession();
         Query<TreatmentEvent> query = session.createQuery("from TreatmentEvent " + "where type =:treatmentType");
-        query.setParameter("treatmentType", treatmentType);
+        query.setParameter("treatmentType", TreatmentType.valueOf(treatmentType));
         return query.list();
     }
 }

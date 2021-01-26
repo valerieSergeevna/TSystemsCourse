@@ -93,4 +93,10 @@ public class MyController {
     public String _403() {
         return "errors/403";
     }
+
+    @RequestMapping("/400")
+    public String _400() {
+        return "errors/400";
+    }
+
 }

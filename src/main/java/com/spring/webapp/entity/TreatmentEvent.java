@@ -1,5 +1,7 @@
 package com.spring.webapp.entity;
 
+import com.spring.webapp.TreatmentType;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +19,8 @@ public class TreatmentEvent {
     private int id;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private TreatmentType type;
 
     @Column(name = "time")
     private LocalDateTime treatmentTime;
@@ -50,7 +53,7 @@ public class TreatmentEvent {
     public TreatmentEvent() {
     }
 
-    public TreatmentEvent(String type, LocalDateTime treatmentTime, double dose, String status, String cancelReason) {
+    public TreatmentEvent(TreatmentType type, LocalDateTime treatmentTime, double dose, String status, String cancelReason) {
         this.type = type;
         this.treatmentTime = treatmentTime;
         this.dose = dose;
@@ -66,11 +69,11 @@ public class TreatmentEvent {
         this.id = id;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 

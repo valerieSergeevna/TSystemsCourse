@@ -1,5 +1,6 @@
 package com.spring.webapp.controller;
 
+import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.MyException;
 import com.spring.exception.ResourceNotFoundException;
@@ -7,7 +8,9 @@ import com.spring.webapp.service.TreatmentEventServiceImpl;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,12 +32,29 @@ public class ExceptionHandlerController {
         return "/errors/server-error";
     }
 
+    @ExceptionHandler(ClientException.class)
+    public String handleNumberFormatException(ClientException ex, Model model) {
+        //Do something additional if required
+      /*  ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("error");
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;*/
+        model.addAttribute("message", ex.getMessage());
+        return "/errors/client-error";
+    }
+
 
   //  @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handleResourceNotFoundException() {
         return "/errors/404";
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
+    public String showCustomMessage(){
+        return "/errors/400";
     }
 
 }

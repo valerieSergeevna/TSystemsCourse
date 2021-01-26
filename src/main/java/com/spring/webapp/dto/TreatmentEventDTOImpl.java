@@ -1,5 +1,6 @@
 package com.spring.webapp.dto;
 
+import com.spring.webapp.TreatmentType;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
@@ -11,7 +12,7 @@ import java.util.Date;
 public class TreatmentEventDTOImpl {
 
     private int id;
-    private String type;
+    private TreatmentType type;
     private LocalDateTime treatmentTime;
     private double dose;
     private String status;
@@ -24,7 +25,7 @@ public class TreatmentEventDTOImpl {
     public TreatmentEventDTOImpl() {
     }
 
-    public TreatmentEventDTOImpl(int id, String type, LocalDateTime treatmentTime, double dose, String status) {
+    public TreatmentEventDTOImpl(int id, TreatmentType type, LocalDateTime treatmentTime, double dose, String status) {
         this.id = id;
         this.type = type;
         this.treatmentTime = treatmentTime;
@@ -40,11 +41,11 @@ public class TreatmentEventDTOImpl {
         this.id = id;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 

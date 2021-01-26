@@ -42,7 +42,7 @@ function addForm() {
     container.appendChild(document.createElement("br"));
 
     container.append('Time Pattern (times/day) ');
-    inputPattern.type = "text";
+    inputPattern.type = "number";
     inputPattern.name = "treatmentPattern";
     inputPattern.className = "form-control";
     inputPattern.required = true;
@@ -53,7 +53,7 @@ function addForm() {
     container.appendChild(document.createElement("br"));
 
     container.append('Dose (gr/time)');
-    inputDose.type = "text";
+    inputDose.type = "number";
     inputDose.name = "treatmentDose";
     inputDose.className = "form-control";
     inputDose.required = true;
@@ -91,6 +91,21 @@ function addForm() {
     container.appendChild(inputEndDate);
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
+}
+
+function doseSelected(a) {
+
+    let label = a.value;
+
+    if (label == 1) {
+        document.getElementById("Label1").style.display = 'block';
+        document.getElementById("Label2").style.display = 'none';
+        document.getElementById("Label3").style.display = 'none';
+    } else if (label == 2) {
+        document.getElementById("Label1").style.display = 'none';
+        document.getElementById("Label2").style.display = 'block';
+        document.getElementById("Label3").style.display = 'none';
+    }
 }
 
 $('body').on('focus', ".datepicker", function () {

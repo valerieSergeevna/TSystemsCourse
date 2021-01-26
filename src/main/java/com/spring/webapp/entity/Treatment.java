@@ -1,5 +1,7 @@
 package com.spring.webapp.entity;
 
+import com.spring.webapp.TreatmentType;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,8 +19,9 @@ public class Treatment {
     private int treatmentId;
 
     @Column(name = "type")
-    @NotBlank(message = "Type field must to be filled")
-    private String type;
+    @NotNull(message = "Type field must to be filled")
+    @Enumerated(EnumType.STRING)
+    private TreatmentType type;
 
    /* @Column(name = "patient_id")
     private String patientID;
@@ -67,7 +70,7 @@ public class Treatment {
     public Treatment() {
     }
 
-    public Treatment(String type, int timePattern,double dose, LocalDateTime startDate, LocalDateTime endDate) {
+    public Treatment(TreatmentType type, int timePattern,double dose, LocalDateTime startDate, LocalDateTime endDate) {
         this.type = type;
         this.timePattern = timePattern;
         this.dose = dose;
@@ -83,11 +86,11 @@ public class Treatment {
         this.treatmentId = id;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 

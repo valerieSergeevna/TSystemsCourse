@@ -1,5 +1,7 @@
 package com.spring.webapp.entity;
 
+import com.spring.webapp.TreatmentType;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,8 @@ public class ProcedureMedicine {
     private String name;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private TreatmentType type;
 
 
   /*  @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH,
@@ -26,7 +29,7 @@ public class ProcedureMedicine {
     public ProcedureMedicine() {
     }
 
-    public ProcedureMedicine( String name, String type) {
+    public ProcedureMedicine( String name, TreatmentType type) {
         this.name = name;
         this.type = type;
     }
@@ -63,11 +66,11 @@ public class ProcedureMedicine {
         this.name = name;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 }

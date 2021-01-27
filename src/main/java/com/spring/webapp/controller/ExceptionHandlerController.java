@@ -51,7 +51,10 @@ public class ExceptionHandlerController {
         return "/errors/404";
     }
 
+
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+   // @ExceptionHandler()
 
     public String showCustomMessage(){
         return "/errors/400";

@@ -1,5 +1,6 @@
 package com.spring.webapp.service;
 
+import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.utils.TimeParser;
 import com.spring.webapp.dao.*;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -169,7 +171,7 @@ public class TreatmentEventServiceImpl {
     public List<TreatmentEventDTOImpl> showNearestHourTreatments() throws DataBaseException {
         LocalDateTime nowDay = LocalDateTime.now();
         return getNearestEvents(LocalDateTime.of(nowDay.getYear(), nowDay.getMonth(),
-                nowDay.getDayOfMonth(), 8, 0, 0));
+                nowDay.getDayOfMonth(), nowDay.getHour(), 0, 0));
     }
 
     @Transactional
@@ -184,9 +186,13 @@ public class TreatmentEventServiceImpl {
     }
 
     @Transactional
-    public List<TreatmentEventDTOImpl> showTreatmentsByDate(String time) throws DataBaseException {
-        //use this method to get another date
-        return getTodayEvents(TimeParser.fromLocalDateToLocalDateTime(LocalDate.parse(time)));
+    public List<TreatmentEventDTOImpl> showTreatmentsByDate(String time) throws DataBaseException, ClientException {
+        try {
+            //use this method to get another date
+            return getTodayEvents(TimeParser.fromLocalDateToLocalDateTime(LocalDate.parse(time)));
+        } catch (DateTimeParseException ex) {
+            throw new ClientException("incorrect input date");
+        }
     }
 
     //convector's method from-to

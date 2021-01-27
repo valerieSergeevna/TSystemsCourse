@@ -43,7 +43,7 @@ public class TreatmentEventDAOImpl {
 
     public void update(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
-      //  session.update(treatmentEvent);
+        //  session.update(treatmentEvent);
         session.merge(treatmentEvent);
     }
 
@@ -80,8 +80,8 @@ public class TreatmentEventDAOImpl {
                         currentTreatmentEvent.setStatus(treatmentEvent.getStatus());
                     currentTreatmentEvent.setProcedureMedicine(treatmentEvent.getProcedureMedicine());
                     currentTreatmentEvent.setTreatment(treatmentEvent.getTreatment());
-                    currentTreatmentEvent.setDose(treatmentEvent.getDose());
-                    currentTreatmentEvent.setType(treatmentEvent.getType());
+                    currentTreatmentEvent.setDose(treatment.getDose());
+                    currentTreatmentEvent.setType(treatment.getType());
                     currentTreatmentEvent.setPatient(treatmentEvent.getPatient());
                     update(currentTreatmentEvent);
                 }
@@ -99,7 +99,7 @@ public class TreatmentEventDAOImpl {
         int timePattern = treatment.getTimePattern();
         double dose = treatment.getDose();
 
-     //   String[] period = treatment.getPeriod().split(" ");
+        //   String[] period = treatment.getPeriod().split(" ");
 
 
         LocalDateTime startDate = treatment.getStartDate();
@@ -108,14 +108,14 @@ public class TreatmentEventDAOImpl {
 
         deleteByTreatment(treatment.getTreatmentId());
 
-        while (startDate.isBefore(endDate)) {
-           // TreatmentEvent treatmentEvent;
+        while (startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
+            // TreatmentEvent treatmentEvent;
             if (type.toString().equals("medicine")) {
                 for (int i = 0; i < timePattern; i++) {
-                    addToListAndInitTreatmentEvent(treatmentEventList,patient,
-                            dose,LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
-                                    startDate.getDayOfMonth(), 8 + ((12 / timePattern)*i), 0, 0),
-                            type,treatment,procedureMedicine);
+                    addToListAndInitTreatmentEvent(treatmentEventList, patient,
+                            dose, LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+                                    startDate.getDayOfMonth(), 8 + ((12 / timePattern) * i), 0, 0),
+                            type, treatment, procedureMedicine);
                    /* treatmentEvent = new TreatmentEvent();
                     treatmentEvent.setDose(dose);
                     treatmentEvent.setTreatmentTime(LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
@@ -131,10 +131,10 @@ public class TreatmentEventDAOImpl {
                 }
                 startDate = startDate.plusDays(1);
             } else {
-                addToListAndInitTreatmentEvent(treatmentEventList,patient,
-                        1,LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+                addToListAndInitTreatmentEvent(treatmentEventList, patient,
+                        1, LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
                                 startDate.getDayOfMonth(), 14, 0, 0),
-                        type,treatment,procedureMedicine);
+                        type, treatment, procedureMedicine);
                /* treatmentEvent = new TreatmentEvent();
                 treatmentEvent.setDose(1);
                 startDate = startDate.plusDays(8 - (7 / timePattern));
@@ -148,7 +148,7 @@ public class TreatmentEventDAOImpl {
 
                 save(treatmentEvent);
                 treatmentEventList.add(treatmentEvent);*/
-                startDate = startDate.plusDays(7 / timePattern);
+                startDate = startDate.plusDays(7/timePattern);
             }
 
         }
@@ -157,7 +157,7 @@ public class TreatmentEventDAOImpl {
 
     private void addToListAndInitTreatmentEvent(List<TreatmentEvent> treatmentEventList,
                                                 Patient patient, double dose,
-                                                LocalDateTime time,TreatmentType type, Treatment treatment,ProcedureMedicine procedureMedicine){
+                                                LocalDateTime time, TreatmentType type, Treatment treatment, ProcedureMedicine procedureMedicine) {
         TreatmentEvent treatmentEvent = new TreatmentEvent();
         treatmentEvent.setDose(dose);
         treatmentEvent.setTreatmentTime(time);

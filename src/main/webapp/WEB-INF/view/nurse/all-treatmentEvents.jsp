@@ -43,7 +43,7 @@
                 <div class="form-outline">
                     <label class="form-label text-info" for="datepicker">Find by date</label>
                     <input type="date" class="form-control datepicker" name="date"
-                           id="datepicker" value="">
+                           id="datepicker" required>
                 </div>
             </div>
             <div class="col">
@@ -93,7 +93,9 @@
         </tr>
         </thead>
         <c:forEach var="event" items="${allEvents}">
-            <tr class="text-info">
+            <c:if test="${event.treatmentTime.isBefore(currentTime)}"><tr class="text-info" bgcolor="#d3d3d3"></c:if>
+            <c:if test="${event.treatmentTime.isAfter(currentTime) || event.treatmentTime.isEqual(currentTime)}">
+                <tr class="text-info"></c:if>
                 <td>${event.patient.name}</td>
                 <td>${event.patient.surname}</td>
                 <td>${event.patient.disease}</td>

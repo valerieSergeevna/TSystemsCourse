@@ -27,7 +27,7 @@
             </div>
             <c:if test="${patient.treatments.size() != 0}">
                 <div class="card-body">
-                    <h3 class="card-title">Treatments:</h3>
+                    <h3 class="card-title">Prescriptions:</h3>
                     <c:forEach items="${patient.treatments}" var="treatment" varStatus="count">
                         <input type="hidden" name="treatment" value="${treatment.treatmentId}">
                         <h4 class="card-title">${treatment.typeName}</h4>

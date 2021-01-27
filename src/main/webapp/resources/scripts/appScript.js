@@ -41,7 +41,7 @@ function addForm() {
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
 
-    container.append('Time Pattern (times/day) ');
+    container.append('Time Pattern (times/day(week)) ');
     inputPattern.type = "number";
     inputPattern.name = "treatmentPattern";
     inputPattern.className = "form-control";
@@ -54,6 +54,7 @@ function addForm() {
 
     container.append('Dose (gr/time)');
     inputDose.type = "number";
+    inputDose.step ="0.001";
     inputDose.name = "treatmentDose";
     inputDose.className = "form-control";
     inputDose.required = true;
@@ -113,6 +114,7 @@ $('body').on('focus', ".datepicker", function () {
         dateFormat: 'yy-mm-dd'
     });
 });
+
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()

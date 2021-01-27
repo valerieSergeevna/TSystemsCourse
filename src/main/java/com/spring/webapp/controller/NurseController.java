@@ -1,5 +1,6 @@
 package com.spring.webapp.controller;
 
+import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.webapp.dto.PatientDTOImpl;
@@ -31,6 +32,7 @@ public class NurseController {
     @RequestMapping("/nurse/showAllTreatments")
     public String showAllEvents(Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.getAll());
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
     }
 
@@ -59,6 +61,7 @@ public class NurseController {
     @RequestMapping("/nurse/")
     public String showTodayTreatments(Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.showTodayTreatments());
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
 
     }
@@ -66,18 +69,21 @@ public class NurseController {
     @RequestMapping("/nurse/showNearestHourTreatments")
     public String showNearestHourTreatments(Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.showNearestHourTreatments());
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
     }
 
     @RequestMapping("/nurse/findBySurname")
     public String findBySurname(@RequestParam("patientSurname") String surname, Model model) throws DataBaseException {
         model.addAttribute("allEvents", treatmentEventService.findBySurname(surname));
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
     }
 
     @RequestMapping("/nurse/findByDate")
-    public String findByDate(@RequestParam("date") String date, Model model) throws DataBaseException {
+    public String findByDate(@RequestParam("date") String date, Model model) throws DataBaseException, ClientException {
         model.addAttribute("allEvents", treatmentEventService.showTreatmentsByDate(date));
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
     }
 
@@ -85,6 +91,7 @@ public class NurseController {
     public String getByType(@RequestParam("treatmentType") String type, Model model) throws DataBaseException {
         model.addAttribute("allEvents",
                 treatmentEventService.getByType(type));
+        model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
     }
 }

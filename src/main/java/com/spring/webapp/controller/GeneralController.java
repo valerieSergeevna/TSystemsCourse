@@ -1,8 +1,6 @@
 package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
-import com.spring.exception.ServerException;
-import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.service.*;
 import org.apache.log4j.Logger;
@@ -20,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-public class MyController {
+public class GeneralController {
 
     @Autowired
     private PatientServiceImpl patientService;
@@ -29,7 +27,7 @@ public class MyController {
     private ProcedureMedicineServiceImpl procedureMedicineService;
 
 
-    private static final Logger logger = Logger.getLogger(MyController.class);
+    private static final Logger logger = Logger.getLogger(GeneralController.class);
 
     @RequestMapping("/")
     public String greet(Model model, Authentication authentication) {

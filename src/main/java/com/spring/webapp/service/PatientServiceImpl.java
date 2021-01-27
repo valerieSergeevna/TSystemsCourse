@@ -2,10 +2,8 @@ package com.spring.webapp.service;
 
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
-import com.spring.exception.ServerException;
 import com.spring.utils.TimeParser;
 import com.spring.webapp.TreatmentType;
-import com.spring.webapp.controller.MyController;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -257,7 +254,7 @@ PatientServiceImpl {
                 for (int i = 0; i < itemValues.length; i++) {
                     TreatmentDTOImpl treatmentDTO = new TreatmentDTOImpl(Integer.parseInt(itemValues[i]),
                             TreatmentType.valueOf(typeValues[i]), Integer.parseInt(patternValues[i]),
-                            typeNameValues[i].equals("medicine")?Double.parseDouble(doseValues[i]):1);
+                            typeValues[i].equals("medicine")?Double.parseDouble(doseValues[i]):1);
                     treatmentDTO.setTypeName(typeNameValues[i]);
                     treatmentDTO.setStartDate(TimeParser.parseToLocalDate(startDate[i]));
                     treatmentDTO.setEndDate(TimeParser.parseToLocalDate(endDate[i]));
@@ -274,7 +271,7 @@ PatientServiceImpl {
                         treatmentDTO.setType(TreatmentType.valueOf(typeValues[i]));
                         treatmentDTO.setTypeName(typeNameValues[i]);
                         treatmentDTO.setTimePattern(Integer.parseInt(patternValues[i]));
-                        treatmentDTO.setDose(typeNameValues[i].equals("medicine")?Double.parseDouble(doseValues[i]):1);
+                        treatmentDTO.setDose(typeValues[i].equals("medicine")?Double.parseDouble(doseValues[i]):1);
                         treatmentDTO.setStartDate(TimeParser.parseToLocalDate(startDate[i]));
                         treatmentDTO.setEndDate(TimeParser.parseToLocalDate(endDate[i]));
                         treatmentDTOList.add(treatmentDTO);

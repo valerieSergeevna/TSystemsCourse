@@ -38,15 +38,13 @@ public class NurseController {
 
     @RequestMapping("nurse/updateStatus")
     public String updateStatus(@RequestParam("eventId") int id,
-                               @RequestParam("eventStatus") String status,
-                               HttpServletRequest request) throws DataBaseException {
+                               @RequestParam("eventStatus") String status) throws DataBaseException {
         treatmentEventService.updateStatus(id, status);
         return "redirect:/nurse/";
     }
 
     @RequestMapping("nurse/cancelStatus")
     public String cancelStatus(@RequestParam("eventId") int id,
-                               @RequestParam("eventStatus") String status,
                                Model model) throws DataBaseException {
         model.addAttribute("cancelEvent", treatmentEventService.get(id));
         return "nurse/cancel-info";

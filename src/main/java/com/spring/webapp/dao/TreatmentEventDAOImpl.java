@@ -34,18 +34,20 @@ public class TreatmentEventDAOImpl {
         return query.list();
     }
 
-    public void save(TreatmentEvent treatmentEvent) {
+    public TreatmentEvent save(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
         //session.evict(treatmentEvent);
         //treatmentEvent = session.merge(treatmentEvent);
         session.saveOrUpdate(treatmentEvent);
         session.clear();
+        return treatmentEvent;
     }
 
-    public void update(TreatmentEvent treatmentEvent) {
+    public TreatmentEvent update(TreatmentEvent treatmentEvent) {
         Session session = sessionFactory.getCurrentSession();
         //  session.update(treatmentEvent);
         session.merge(treatmentEvent);
+        return treatmentEvent;
     }
 
     public TreatmentEvent get(int id) {

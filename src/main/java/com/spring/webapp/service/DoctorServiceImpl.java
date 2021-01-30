@@ -42,11 +42,11 @@ public class DoctorServiceImpl {
     }
 
     @Transactional
-    public void save(DoctorDTOImpl doctorDTO) throws DataBaseException {
+    public DoctorDTOImpl save(DoctorDTOImpl doctorDTO) throws DataBaseException {
         Doctor doctor = new Doctor();
         BeanUtils.copyProperties(doctorDTO, doctor);
         try {
-            doctorDAO.save(doctor);
+            return toDoctorDTO(doctorDAO.save(doctor));
         } catch (HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'save' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));

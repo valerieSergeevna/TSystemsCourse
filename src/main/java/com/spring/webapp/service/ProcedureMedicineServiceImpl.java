@@ -4,7 +4,9 @@ import com.spring.exception.DataBaseException;
 import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
 import com.spring.webapp.dto.ProcedureMedicineDTOImpl;
+import com.spring.webapp.dto.TreatmentEventDTOImpl;
 import com.spring.webapp.entity.ProcedureMedicine;
+import com.spring.webapp.entity.TreatmentEvent;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.springframework.beans.BeanUtils;
@@ -41,11 +43,11 @@ public class ProcedureMedicineServiceImpl {
     }
 
     @Transactional
-    public void save(ProcedureMedicineDTOImpl procedureMedicineDTO) throws DataBaseException {
+    public ProcedureMedicineDTOImpl save(ProcedureMedicineDTOImpl procedureMedicineDTO) throws DataBaseException {
         ProcedureMedicine treatment = new ProcedureMedicine();
         try {
             BeanUtils.copyProperties(procedureMedicineDTO, treatment);
-            procedureMedicineDAO.save(treatment);
+            return toProcedureMedicineDTO(procedureMedicineDAO.save(treatment));
         } catch (
                 HibernateException ex) {
             logger.error("[!ProcedureMedicineServiceImpl 'save' method:" + ex.getMessage() + "!]");
@@ -78,5 +80,11 @@ public class ProcedureMedicineServiceImpl {
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
+    }
+
+    //
+    public ProcedureMedicineDTOImpl toProcedureMedicineDTO(ProcedureMedicine procedureMedicine) {
+        return new ProcedureMedicineDTOImpl(procedureMedicine.getId(),
+                procedureMedicine.getName(),procedureMedicine.getType());
     }
 }

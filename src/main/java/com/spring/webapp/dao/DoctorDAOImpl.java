@@ -1,5 +1,6 @@
 package com.spring.webapp.dao;
 
+import com.spring.exception.ServerException;
 import com.spring.webapp.entity.Doctor;
 import org.hibernate.QueryException;
 import org.hibernate.Session;
@@ -22,22 +23,24 @@ public class DoctorDAOImpl {
         return session.createQuery("from Doctor", Doctor.class).getResultList();
     }
 
-    public void save(Doctor doctor) {
+    public Doctor save(Doctor doctor) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(doctor);
+        return doctor;
     }
 
     public Doctor get(int id) {
         Session session = sessionFactory.getCurrentSession();
-
-        Doctor doctor = session.get(Doctor.class, id);
-        return doctor;
+        return session.get(Doctor.class, id);
     }
 
-    public Doctor getByUserName(String name) {
+    public Doctor getByUserName(String name) throws ServerException {
         Session session = sessionFactory.getCurrentSession();
         Query<Doctor> query= session.createQuery("from Doctor " + "where userName =:name");
         query.setParameter("name", name);
+        if (query.list().size() == 0){
+            throw new NullPointerException();
+        }
         return query.list().get(0);
     }
 

@@ -2,6 +2,7 @@ package com.spring.webapp.service;
 
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
+import com.spring.exception.ServerException;
 import com.spring.utils.TimeParser;
 import com.spring.webapp.PatientStatus;
 import com.spring.webapp.TreatmentType;
@@ -71,7 +72,7 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public List<PatientDTOImpl> getAllByDoctorUserName(String name) throws DataBaseException {
+    public List<PatientDTOImpl> getAllByDoctorUserName(String name) throws DataBaseException, ServerException {
         try {
             Doctor doctor = doctorDAO.getByUserName(name);
             List<Patient> patientsList = patientDAO.getAllByDoctorId(doctor.getId());
@@ -80,6 +81,10 @@ PatientServiceImpl {
             logger.error("[!PatientServiceImpl 'getAllByDoctorUserName' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
+        }catch (NullPointerException ex){
+            logger.error("[!PatientServiceImpl 'getAllByDoctorUserName' method:" + "Can't find doctor with " + name +" username" + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new ServerException("Can't find doctor with " + name +" username");
         }
     }
 
@@ -96,11 +101,11 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public void save(PatientDTOImpl patientDTO) throws DataBaseException {
+    public PatientDTOImpl save(PatientDTOImpl patientDTO) throws DataBaseException {
         Patient patient = new Patient();
         BeanUtils.copyProperties(patientDTO, patient);
         try {
-            patientDAO.save(patient);
+            return toPatientDTO(patientDAO.save(patient));
         } catch (HibernateException ex) {
             logger.error("[!PatientServiceImpl 'save' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
@@ -110,11 +115,11 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public void update(PatientDTOImpl patientDTO) throws DataBaseException {
+    public PatientDTOImpl update(PatientDTOImpl patientDTO) throws DataBaseException {
         try {
             patientDTO.setDoctor(doctorDAO.get(patientDTO.getDoctor().getId()));
             Patient patient = toPatient(patientDTO);
-            patientDAO.update(patient);
+            return toPatientDTO(patientDAO.update(patient));
         } catch (HibernateException ex) {
             logger.error("[!PatientServiceImpl 'update' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));

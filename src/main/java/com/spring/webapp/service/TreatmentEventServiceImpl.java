@@ -49,11 +49,12 @@ public class TreatmentEventServiceImpl {
     }
 
     @Transactional
-    public void save(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
+    public TreatmentEventDTOImpl save(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
         TreatmentEvent treatmentEvent = new TreatmentEvent();
         try {
-            BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
-            treatmentEventDAO.save(treatmentEvent);
+           // BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
+            treatmentEvent= toTreatmentEvent(treatmentEventDTO);
+            return toTreatmentEventDTO(treatmentEventDAO.save(treatmentEvent));
         } catch (
                 HibernateException ex) {
             logger.error("[!TreatmentEventServiceImpl 'save' method:" + ex.getMessage() + "!]");
@@ -63,9 +64,9 @@ public class TreatmentEventServiceImpl {
     }
 
 
-    public void update(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
+    public TreatmentEventDTOImpl update(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
         try {
-            treatmentEventDAO.update(toTreatmentEvent(treatmentEventDTO));
+            return toTreatmentEventDTO(treatmentEventDAO.update(toTreatmentEvent(treatmentEventDTO)));
         } catch (
                 HibernateException ex) {
             logger.error("[!TreatmentEventServiceImpl 'update' method:" + ex.getMessage() + "!]");

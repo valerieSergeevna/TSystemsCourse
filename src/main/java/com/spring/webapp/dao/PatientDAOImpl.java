@@ -26,27 +26,23 @@ public class PatientDAOImpl {
         return session.createQuery("from Patient", Patient.class).getResultList();
     }
 
-    public void save(Patient patient) {
+    public Patient save(Patient patient) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(patient);
-        session.clear();
+        session.clear();//
+        return patient;
     }
 
-    public void update(Patient patient) {
+    public Patient update(Patient patient) {
         Session session = sessionFactory.getCurrentSession();
-     // session.evict(patient);
-    //    session.flush();
         session.merge(patient);
-     //   Patient patient1 = get(patient.getId());
-//        session.clear();
+        return patient;
     }
 
 
     public Patient get(int id) {
         Session session = sessionFactory.getCurrentSession();
-
-        Patient patient = session.get(Patient.class, id);
-        return patient;
+        return session.get(Patient.class, id);
     }
 
     public void delete(int id) {

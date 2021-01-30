@@ -1,6 +1,7 @@
 package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
+import com.spring.exception.ServerException;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.service.*;
 import org.apache.log4j.Logger;
@@ -51,7 +52,7 @@ public class GeneralController {
     }
 
     @RequestMapping("/patients")
-    public String showAllPatients(Model model, Authentication authentication) throws DataBaseException {
+    public String showAllPatients(Model model, Authentication authentication) throws DataBaseException, ServerException {
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
         String role;
         List<PatientDTOImpl> allPatient = new ArrayList<>();
@@ -85,7 +86,6 @@ public class GeneralController {
         model.addAttribute("allMedicineProcedure", procedureMedicineService.getAll());
         return "medicine-procedure";
     }
-
 
     @RequestMapping("/403")
     public String _403() {

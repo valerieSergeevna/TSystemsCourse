@@ -28,32 +28,22 @@ public class TreatmentDAOImpl {
         return session.createQuery("from Treatment", Treatment.class).getResultList();
     }
 
-    public void save(Treatment treatment) {
+    public Treatment save(Treatment treatment) {
         Session session = sessionFactory.getCurrentSession();
-      //  Query query = session.createQuery("select ")
-
-
         session.saveOrUpdate(treatment);
-       // session.evict(treatment);
-        session.clear();
-
+        session.clear();//
+        return treatment;
     }
 
-    public void update(Treatment treatment) {
+    public Treatment update(Treatment treatment) {
         Session session = sessionFactory.getCurrentSession();
-     //  session.evict(treatment);
-
         session.merge(treatment);
-  //      session.clear();
-       // session.flush();
-     //   session.merge(treatment);
+        return treatment;
     }
 
     public Treatment get(int id) {
         Session session = sessionFactory.getCurrentSession();
-
-        Treatment treatment = session.get(Treatment.class, id);
-        return treatment;
+        return session.get(Treatment.class, id);
     }
 
     public int getIdByProcedureMedicineId(int id) {

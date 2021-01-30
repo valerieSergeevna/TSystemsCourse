@@ -22,14 +22,15 @@ public class ProcedureMedicineDAOImpl {
         return session.createQuery("from ProcedureMedicine order by type", ProcedureMedicine.class).getResultList();
     }
 
-    public void save(ProcedureMedicine procedureMedicine) {
+    public ProcedureMedicine save(ProcedureMedicine procedureMedicine) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select name from ProcedureMedicine  where name =:prMedName");
         query.setParameter("prMedName", procedureMedicine.getName());
         if(query.list().isEmpty()){
             session.save(procedureMedicine);
         }
-        session.clear();
+        session.clear();//
+        return procedureMedicine;
     }
 
     public ProcedureMedicine get(int id) {

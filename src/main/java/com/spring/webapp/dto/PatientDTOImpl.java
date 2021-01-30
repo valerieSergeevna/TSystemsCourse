@@ -1,6 +1,8 @@
 package com.spring.webapp.dto;
 
+import com.spring.webapp.PatientStatus;
 import com.spring.webapp.entity.Doctor;
+import org.springframework.security.access.method.P;
 
 import javax.print.Doc;
 import javax.validation.constraints.Min;
@@ -22,7 +24,7 @@ public class PatientDTOImpl {
     @NotBlank(message = "Disease field must to be filled")
     private String disease;
 
-    @NotBlank(message = "Status field must to be filled")
+    @NotNull(message = "Status field must to be filled")
     private String status;
 
     @Min(value = 1, message = "Age has to be over 1 years old")

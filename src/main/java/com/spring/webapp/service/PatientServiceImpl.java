@@ -3,6 +3,7 @@ package com.spring.webapp.service;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.utils.TimeParser;
+import com.spring.webapp.PatientStatus;
 import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
@@ -152,7 +153,8 @@ PatientServiceImpl {
         PatientDTOImpl patientDTO = new PatientDTOImpl();
         try {
             Patient patient = patientDAO.get(id);
-            BeanUtils.copyProperties(patient, patientDTO);
+           // BeanUtils.copyProperties(patient, patientDTO);
+            patientDTO = toPatientDTO(patient);
             patientDTO.setTreatments(treatmentDAO.toTreatmentDTOList(patient.getTreatments()));
             return patientDTO;
         } catch (HibernateException ex) {
@@ -244,7 +246,6 @@ PatientServiceImpl {
         String[] typeNameValues = request.getParameterValues("treatmentName");
         String[] patternValues = request.getParameterValues("treatmentPattern");
         String[] doseValues = request.getParameterValues("treatmentDose");
-        // String[] periodValues = request.getParameterValues("treatmentPeriod");
         String[] startDate = request.getParameterValues("startDate");
         String[] endDate = request.getParameterValues("endDate");
 
@@ -278,13 +279,14 @@ PatientServiceImpl {
                     }
                 }
             }
-            if (patientDTO.getStatus().equals("discharged")) {
+            if (patientDTO.getStatus().equals(PatientStatus.DISCHARGED.toString())) {
                 update(patientDTO);
                 for (TreatmentDTOImpl treatmentDTO : treatmentDTOList) {
                     treatmentService.delete(treatmentDTO.getTreatmentId());
                 }
             } else {
                 String doctorName = authentication.getName();
+                patientDTO.setStatus(PatientStatus.IN_PROCESS.toString());
                 saveOrUpdateTreatments(treatmentDTOList, patientDTO, doctorService.getByUserName(doctorName));
             }
         }catch (NumberFormatException ex){
@@ -313,7 +315,7 @@ PatientServiceImpl {
 
     public PatientDTOImpl toPatientDTO(Patient patient) {
         PatientDTOImpl patientDTO = new PatientDTOImpl(patient.getId(), patient.getName(),
-                patient.getSurname(), patient.getAges(), patient.getDisease(), patient.getStatus(),
+                patient.getSurname(), patient.getAges(), patient.getDisease(), patient.getStatus().getTitle(),
                 treatmentDAO.toTreatmentDTOList(patient.getTreatments()), patient.getDoctor());
         patientDTO.setInsuranceNumber(patient.getInsuranceNumber());
         return patientDTO;
@@ -321,7 +323,7 @@ PatientServiceImpl {
 
     public Patient toPatient(PatientDTOImpl patientDTO) {
         Patient patient = new Patient(patientDTO.getName(), patientDTO.getSurname(), patientDTO.getAges(), patientDTO.getInsuranceNumber(),
-                patientDTO.getDisease(), patientDTO.getStatus());
+                patientDTO.getDisease(), PatientStatus.fromTitle(patientDTO.getStatus()));
         if (patientDTO.getId() > 0) {
             patient.setId(patientDTO.getId());
         }

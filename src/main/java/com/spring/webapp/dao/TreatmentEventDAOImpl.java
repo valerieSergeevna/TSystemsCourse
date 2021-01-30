@@ -1,5 +1,6 @@
 package com.spring.webapp.dao;
 
+import com.spring.webapp.EventStatus;
 import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
@@ -163,7 +164,7 @@ public class TreatmentEventDAOImpl {
         treatmentEvent.setTreatmentTime(time);
         treatmentEvent.setPatient(patient);
         treatmentEvent.setProcedureMedicine(procedureMedicine);
-        treatmentEvent.setStatus("in plan");
+        treatmentEvent.setStatus(EventStatus.IN_PLAN);
         treatmentEvent.setType(type);
         treatmentEvent.setTreatment(treatment);
         save(treatmentEvent);

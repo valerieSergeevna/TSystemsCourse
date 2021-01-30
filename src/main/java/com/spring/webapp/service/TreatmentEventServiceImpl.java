@@ -3,6 +3,7 @@ package com.spring.webapp.service;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.utils.TimeParser;
+import com.spring.webapp.EventStatus;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
@@ -205,11 +206,11 @@ public class TreatmentEventServiceImpl {
 
     public TreatmentEventDTOImpl toTreatmentEventDTO(TreatmentEvent treatmentEvent) {
         TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(treatmentEvent.getId(), treatmentEvent.getType(),
-                treatmentEvent.getTreatmentTime(), treatmentEvent.getDose(), treatmentEvent.getStatus());
+                treatmentEvent.getTreatmentTime(), treatmentEvent.getDose(), treatmentEvent.getStatus().getTitle());
         treatmentEventDTO.setPatient(treatmentEvent.getPatient());
         treatmentEventDTO.setTreatment(treatmentEvent.getTreatment());
         treatmentEventDTO.setProcedureMedicine(treatmentEvent.getProcedureMedicine());
-        treatmentEventDTO.setStatus(treatmentEvent.getStatus());
+        treatmentEventDTO.setStatus(treatmentEvent.getStatus().getTitle());
         treatmentEventDTO.setCancelReason(treatmentEvent.getCancelReason());
         return treatmentEventDTO;
     }
@@ -222,14 +223,14 @@ public class TreatmentEventServiceImpl {
 
     public TreatmentEvent toTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
         TreatmentEvent treatmentEvent = new TreatmentEvent(treatmentEventDTO.getType(), treatmentEventDTO.getTreatmentTime(), treatmentEventDTO.getDose(),
-                treatmentEventDTO.getStatus(), treatmentEventDTO.getCancelReason());
+                EventStatus.fromTitle(treatmentEventDTO.getStatus()), treatmentEventDTO.getCancelReason());
         if (treatmentEventDTO.getId() > 0) {
             treatmentEvent.setId(treatmentEventDTO.getId());
         }
         treatmentEvent.setTreatment(treatmentEventDTO.getTreatment());
         treatmentEvent.setPatient(treatmentEventDTO.getPatient());
         treatmentEvent.setProcedureMedicine(treatmentEventDTO.getProcedureMedicine());
-        treatmentEvent.setStatus(treatmentEventDTO.getStatus());
+        treatmentEvent.setStatus( EventStatus.fromTitle(treatmentEventDTO.getStatus()));
         return treatmentEvent;
     }
 

@@ -1,13 +1,11 @@
 package com.spring.webapp.entity;
 
+import com.spring.utils.converter.EventStatusConverter;
+import com.spring.webapp.EventStatus;
 import com.spring.webapp.TreatmentType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "treatment_events")
@@ -29,7 +27,8 @@ public class TreatmentEvent {
     private double dose;
 
     @Column(name = "status")
-    private String status;
+    @Convert(converter = EventStatusConverter.class)
+    private EventStatus status;
 
     @Column(name = "cancel_reason")
     private String cancelReason;
@@ -53,7 +52,7 @@ public class TreatmentEvent {
     public TreatmentEvent() {
     }
 
-    public TreatmentEvent(TreatmentType type, LocalDateTime treatmentTime, double dose, String status, String cancelReason) {
+    public TreatmentEvent(TreatmentType type, LocalDateTime treatmentTime, double dose, EventStatus status, String cancelReason) {
         this.type = type;
         this.treatmentTime = treatmentTime;
         this.dose = dose;
@@ -93,11 +92,11 @@ public class TreatmentEvent {
         this.dose = dose;
     }
 
-    public String getStatus() {
+    public EventStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EventStatus status) {
         this.status = status;
     }
 

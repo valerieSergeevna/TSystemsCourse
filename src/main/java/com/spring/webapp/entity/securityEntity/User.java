@@ -14,10 +14,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Size(min=2, message = "min 2 signs")
+    @Size(min = 2, message = "min 2 signs")
     private String username;
-    @Size(min=2, message = "min 2 signs")
+    @Size(min = 2, message = "min 2 signs")
     private String password;
+
+    private String googleName;
+    private String googleUsername;
+
+
+
     @Transient
     private String passwordConfirm;
 
@@ -34,6 +40,23 @@ public class User implements UserDetails {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getGoogleName() {
+        return googleName;
+    }
+
+    public void setGoogleName(String googleName) {
+        this.googleName = googleName;
+    }
+
+    public String getGoogleUsername() {
+        return googleUsername;
+    }
+
+    public void setGoogleUsername(String googleUsername) {
+        this.googleUsername = googleUsername;
+    }
+
 
     @Override
     public String getUsername() {
@@ -93,4 +116,5 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 }

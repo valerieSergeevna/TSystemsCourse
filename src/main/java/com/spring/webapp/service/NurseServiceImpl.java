@@ -2,21 +2,15 @@ package com.spring.webapp.service;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.webapp.PatientStatus;
-import com.spring.webapp.dao.DoctorDAOImpl;
-import com.spring.webapp.dao.EntityDAO;
+import com.spring.webapp.dao.NurseDAOImpl;
 import com.spring.webapp.dto.DoctorDTOImpl;
-import com.spring.webapp.dto.EntityDTO;
-import com.spring.webapp.dto.PatientDTOImpl;
+import com.spring.webapp.dto.NurseDTOImpl;
 import com.spring.webapp.entity.Doctor;
-import com.spring.webapp.entity.Patient;
+import com.spring.webapp.entity.Nurse;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,16 +19,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DoctorServiceImpl {
+public class NurseServiceImpl {
     private static final Logger logger = Logger.getLogger(Doctor.class);
 
     @Autowired
-    private DoctorDAOImpl doctorDAO;
+    private NurseDAOImpl nurseDAO;
 
     @Transactional
-    public List<DoctorDTOImpl> getAll() throws DataBaseException {
+    public List<NurseDTOImpl> getAll() throws DataBaseException {
         try {
-            return toDoctorDTOList(doctorDAO.getAll());
+            return toNurseDTOList(nurseDAO.getAll());
         } catch (
                 HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
@@ -44,21 +38,20 @@ public class DoctorServiceImpl {
     }
 
     @Transactional
-    public DoctorDTOImpl save(DoctorDTOImpl doctorDTO) throws DataBaseException {
+    public NurseDTOImpl save(NurseDTOImpl nurseDTO) throws DataBaseException {
         try {
-            return toDoctorDTO(doctorDAO.save(toDoctor(doctorDTO)));
+            return toNurseDTO(nurseDAO.save(toNurse(nurseDTO)));
         } catch (HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'save' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
-
     }
 
     @Transactional
     public void delete(int id) throws DataBaseException {
         try {
-            doctorDAO.delete(id);
+            nurseDAO.delete(id);
         } catch (HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'delete' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
@@ -67,10 +60,9 @@ public class DoctorServiceImpl {
     }
 
     @Transactional
-    public DoctorDTOImpl get(int id) throws DataBaseException {
-        DoctorDTOImpl doctorDTO = new DoctorDTOImpl();
+    public NurseDTOImpl get(int id) throws DataBaseException {
         try {
-            return toDoctorDTO(doctorDAO.get(id));
+            return toNurseDTO(nurseDAO.get(id));
         } catch (HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'get' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
@@ -79,9 +71,9 @@ public class DoctorServiceImpl {
     }
 
     @Transactional
-    public DoctorDTOImpl getByUserName(String name) throws DataBaseException, ServerException {
+    public NurseDTOImpl getByUserName(String name) throws DataBaseException, ServerException {
         try {
-            return toDoctorDTO(doctorDAO.getByUserName(name));
+            return toNurseDTO(nurseDAO.getByUserName(name));
         }catch (HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'getByUserName' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
@@ -91,21 +83,21 @@ public class DoctorServiceImpl {
 
     //convert from-to
 
-    public DoctorDTOImpl toDoctorDTO(Doctor doctor) {
-        return new DoctorDTOImpl(doctor.getId(), doctor.getName(), doctor.getSurname(), doctor.getPosition(), doctor.getUserName());
+    public NurseDTOImpl toNurseDTO(Nurse nurse) {
+        return new NurseDTOImpl(nurse.getId(), nurse.getName(), nurse.getSurname(), nurse.getPosition(), nurse.getUserName());
     }
 
-    public List<DoctorDTOImpl> toDoctorDTOList(List<Doctor> doctorList) {
-        return doctorList.stream()
-                .map(doctor -> new DoctorDTOImpl(doctor.getId(), doctor.getName(), doctor.getSurname(), doctor.getPosition(), doctor.getUserName()))
+    public List<NurseDTOImpl> toNurseDTOList(List<Nurse> nurseList) {
+        return nurseList.stream()
+                .map(nurse -> new NurseDTOImpl(nurse.getId(), nurse.getName(), nurse.getSurname(), nurse.getPosition(), nurse.getUserName()))
                 .collect(Collectors.toList());
     }
 
-    public Doctor toDoctor(DoctorDTOImpl doctorDTO) {
-        Doctor doctor = new Doctor(doctorDTO.getName(), doctorDTO.getSurname(),doctorDTO.getPosition(),doctorDTO.getUsername());
-        if (doctorDTO.getId() > 0) {
-            doctor.setId(doctorDTO.getId());
+    public Nurse toNurse(NurseDTOImpl nurseDTO) {
+        Nurse nurse = new Nurse(nurseDTO.getName(), nurseDTO.getSurname(),nurseDTO.getPosition(),nurseDTO.getUsername());
+        if (nurseDTO.getId() > 0) {
+            nurse.setId(nurseDTO.getId());
         }
-        return doctor;
+        return nurse;
     }
 }

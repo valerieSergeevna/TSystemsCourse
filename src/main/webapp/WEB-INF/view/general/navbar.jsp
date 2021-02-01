@@ -16,9 +16,20 @@
                 <li class="nav-item">
                     <a class="nav-link text-info" href="/medicineProcedure">Medicines/Procedures</a>
                 </li>
-                <security:authorize access="hasRole('NURSE')">
+                <security:authorize access="hasAnyRole('NURSE', 'ADMIN')">
                     <li class="nav-item">
                         <a class="nav-link text-info" href="/nurse/showAllTreatments">Treatments event</a>
+                    </li>
+                </security:authorize>
+
+                <security:authorize access="hasRole('ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link text-info" href="/registration">Registration</a>
+                    </li>
+                </security:authorize>
+                <security:authorize access="hasRole('ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link text-info" href="/users">Users</a>
                     </li>
                 </security:authorize>
             </ul>
@@ -29,6 +40,9 @@
                     </security:authorize>
                     <security:authorize access="hasRole('NURSE')">
                         <div class="role text-info">Nurse</div>
+                    </security:authorize>
+                    <security:authorize access="hasRole('ADMIN')">
+                        <div class="role text-info">ADMIN</div>
                     </security:authorize>
 
                 </li>

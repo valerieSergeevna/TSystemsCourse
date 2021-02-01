@@ -51,7 +51,7 @@ public class DoctorController {
     @RequestMapping(value = "/saveTreatment", method = RequestMethod.POST)
     public String saveTreatment(@Validated @ModelAttribute("patient") PatientDTOImpl patientDTO,
                                 BindingResult bindingResult,
-                                HttpServletRequest request,Authentication authentication, Model model) throws DataBaseException, ClientException {
+                                HttpServletRequest request,Authentication authentication, Model model) throws DataBaseException, ClientException, ServerException {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("patient", patientDTO);

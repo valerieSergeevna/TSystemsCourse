@@ -244,7 +244,8 @@ PatientServiceImpl {
     }
 
     @Transactional
-    public void saveTreatmentInfo(PatientDTOImpl patientDTO, HttpServletRequest request, Authentication authentication) throws DataBaseException, ClientException {
+    public void saveTreatmentInfo(PatientDTOImpl patientDTO, HttpServletRequest request, Authentication authentication)
+            throws DataBaseException, ClientException, ServerException {
         List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
         String[] itemValues = request.getParameterValues("treatment");
         String[] typeValues = request.getParameterValues("treatmentType");

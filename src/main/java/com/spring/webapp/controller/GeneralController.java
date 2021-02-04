@@ -3,6 +3,7 @@ package com.spring.webapp.controller;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.webapp.dto.*;
+import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.service.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class GeneralController {
         List<PatientDTOImpl> allPatient = new ArrayList<>();
         String name = authentication.getName();
         for (int i = 0; i < roles.size(); i++) {
-            role = roles.toArray()[i] + "";
+            role = ((Role)roles.toArray()[i]).getAuthority() + "";
             if (role.equals("ROLE_DOCTOR")) {
                 allPatient = patientService.getAllByDoctorUserName(name);
             } else if (role.equals("ROLE_NURSE")) {

@@ -1,15 +1,18 @@
 package com.spring.webapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.spring.webapp.TreatmentType;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
-
-public class TreatmentEventDTOImpl {
+//@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = TreatmentEventDTOImpl.class)
+public class TreatmentEventDTOImpl implements Serializable {
 
     private int id;
     private TreatmentType type;
@@ -81,6 +84,10 @@ public class TreatmentEventDTOImpl {
         this.patient = patient;
     }
 
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
     public Treatment getTreatment() {
         return treatment;
     }
@@ -101,7 +108,4 @@ public class TreatmentEventDTOImpl {
         return cancelReason;
     }
 
-    public void setCancelReason(String cancelReason) {
-        this.cancelReason = cancelReason;
-    }
 }

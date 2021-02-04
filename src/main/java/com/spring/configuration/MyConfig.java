@@ -3,17 +3,22 @@ package com.spring.configuration;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import com.mchange.v2.c3p0.DataSources;
+import org.apache.catalina.Context;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.hibernate.boot.model.naming.ImplicitNamingStrategy;
 import org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jca.endpoint.GenericMessageEndpointFactory;
+import org.springframework.jms.connection.SingleConnectionFactory;
+import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -28,6 +33,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.jms.ConnectionFactory;
+import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -123,5 +130,24 @@ public class MyConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
+   /* @Bean
+    public TomcatServletWebServerFactory tomcatFactory() {
+        return new TomcatServletWebServerFactory() {
+            @Override
+            protected void postProcessContext(Context context) {
+                ((StandardJarScanner) context.getJarScanner()).setScanManifest(false);
+            }};
+    }*/
+
+    /*
+    @Bean
+    public ConnectionFactory notificationsConnectionFactory() throws IllegalArgumentException, NamingException {
+        JndiObjectFactoryBean jndi = new JndiObjectFactoryBean();
+        jndi.setJndiName("java:/ConnectionFactory");
+        jndi.setLookupOnStartup(true);
+        jndi.setProxyInterface(ConnectionFactory.class);
+        jndi.afterPropertiesSet();
+        return  new SingleConnectionFactory((ConnectionFactory)jndi.getObject());
+    }*/
 
 }

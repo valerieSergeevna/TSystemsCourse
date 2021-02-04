@@ -6,8 +6,7 @@ import com.spring.webapp.dao.DoctorDAOImpl;
 import com.spring.webapp.dao.NurseDAOImpl;
 import com.spring.webapp.dao.securityDAO.RoleDAO;
 import com.spring.webapp.dao.securityDAO.UserDAO;
-import com.spring.webapp.dto.AbstractDTOUser;
-import com.spring.webapp.dto.UserDTO;
+import com.spring.webapp.dto.*;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
 import com.spring.webapp.service.AdminServiceImpl;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -104,14 +104,43 @@ public class UserService implements UserDetailsService {
         return userDTOMap;
     }
 
-    public boolean saveUser(User user, String role) {
+    public boolean saveUser(User user, HttpServletRequest request) throws DataBaseException {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
             return false;
         }
 
-        user.setRoles(Collections.singleton(new Role(1L, role)));
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String position = request.getParameter("position");
+        String role = request.getParameter("role");
+        String userName = user.getUsername();
+        int roleId = 0;
+
+        switch (role) {
+            case "doctor":
+                role = "ROLE_DOCTOR";
+                doctorService.save((DoctorDTOImpl)setFields(new DoctorDTOImpl(),
+                        name,surname,position,userName));
+                roleId = 1;
+                break;
+            case "nurse":
+                role = "ROLE_NURSE";
+                nurseService.save((NurseDTOImpl) setFields(new NurseDTOImpl(),
+                        name,surname,position,userName));
+                roleId = 3;
+                break;
+            case "admin":
+                role = "ROLE_ADMIN";
+                adminService.save((AdminDTOImpl) setFields(new AdminDTOImpl(),
+                        name,surname,position,userName));
+                roleId = 2;
+                break;
+            default:break;
+        }
+
+        user.setRoles(Collections.singleton(new Role(Integer.toUnsignedLong(roleId), role)));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
@@ -135,5 +164,14 @@ public class UserService implements UserDetailsService {
             return role.getAuthority();
         }
         return null;
+    }
+
+    private AbstractDTOUser setFields(AbstractDTOUser abstractDTOUser,String name, String surname,
+                                      String position, String username){
+        abstractDTOUser.setName(name);
+        abstractDTOUser.setSurname(surname);
+        abstractDTOUser.setPosition(position);
+        abstractDTOUser.setUsername(username);
+        return abstractDTOUser;
     }
 }

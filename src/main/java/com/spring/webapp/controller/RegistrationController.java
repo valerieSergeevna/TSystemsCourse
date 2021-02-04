@@ -29,14 +29,7 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private DoctorServiceImpl doctorService;
 
-    @Autowired
-    private NurseServiceImpl nurseService;
-
-    @Autowired
-    private AdminServiceImpl adminService;
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -56,32 +49,8 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords don't match");
             return "admin/registration";
         }
-        String role = "";
-        String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
-        String position = request.getParameter("position");
-        String userRole = request.getParameter("role");
-        String userName = userForm.getUsername();
 
-        switch (userRole) {
-            case "doctor":
-                role = "ROLE_DOCTOR";
-                doctorService.save((DoctorDTOImpl)setFields(new DoctorDTOImpl(),
-                        name,surname,position,userName));
-                break;
-            case "nurse":
-                role = "ROLE_NURSE";
-                nurseService.save((NurseDTOImpl) setFields(new NurseDTOImpl(),
-                        name,surname,position,userName));
-                break;
-            case "admin":
-                role = "ROLE_ADMIN";
-                adminService.save((AdminDTOImpl) setFields(new AdminDTOImpl(),
-                        name,surname,position,userForm.getUsername()));
-                break;
-            default:
-        }
-        if (!userService.saveUser(userForm, role)) {
+        if (!userService.saveUser(userForm, request)) {
             model.addAttribute("usernameError", "User name is not uniq");
             return "admin/registration";
         }
@@ -89,12 +58,5 @@ public class RegistrationController {
         return "redirect:/";
     }
 
-    private AbstractDTOUser setFields(AbstractDTOUser abstractDTOUser,String name, String surname,
-                           String position, String username){
-        abstractDTOUser.setName(name);
-        abstractDTOUser.setSurname(surname);
-        abstractDTOUser.setPosition(position);
-        abstractDTOUser.setUsername(username);
-        return abstractDTOUser;
-    }
+
 }

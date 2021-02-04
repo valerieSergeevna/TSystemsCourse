@@ -17,7 +17,7 @@
     <input type="button" class="btn btn-outline-secondary btn-sm" id="hour" value="Show nearest hour treatments"
            onclick="window.location.href = '/nurse/showNearestHourTreatments'"/>
     <input type="button" class="btn btn-outline-secondary btn-sm" id="today" value="Show today's treatments"
-           onclick="window.location.href = '../../..'"/>
+           onclick="window.location.href = '/nurse/'"/>
     <br><br>
     <form class="search-form search-surname" action="/nurse/findBySurname">
         <div class="row mb-4">

@@ -46,7 +46,7 @@
         <br>
     </table>
 
-    <security:authorize access="hasRole('DOCTOR')">
+    <security:authorize access="hasAnyRole('DOCTOR','ADMIN')">
     <input type="button" value="Add" class="btn btn-outline-success" onclick="window.location.href = '/addNewPatient'"/>
     </security:authorize>
 

@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
-//@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = TreatmentEventDTOImpl.class)
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = TreatmentEventDTOImpl.class)
 public class TreatmentEventDTOImpl implements Serializable {
 
     private int id;
@@ -103,7 +103,6 @@ public class TreatmentEventDTOImpl implements Serializable {
     public void setProcedureMedicine(ProcedureMedicine procedureMedicine) {
         this.procedureMedicine = procedureMedicine;
     }
-
     public String getCancelReason() {
         return cancelReason;
     }

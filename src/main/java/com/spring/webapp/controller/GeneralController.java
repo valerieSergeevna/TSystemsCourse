@@ -2,10 +2,16 @@ package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
+import com.spring.jms.JmsMessageTreatmentEvent;
+import com.spring.jms.JmsProducer;
+import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.service.*;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +34,9 @@ public class GeneralController {
 
     @Autowired
     private ProcedureMedicineServiceImpl procedureMedicineService;
+
+    @Autowired
+    private JmsProducer producer;
 
 
     private static final Logger logger = Logger.getLogger(GeneralController.class);
@@ -73,6 +83,17 @@ public class GeneralController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
+        TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(1, TreatmentType.medicine,
+                LocalDateTime.now(),1,"in plan");
+        treatmentEventDTO.setCancelReason("");
+        treatmentEventDTO.setProcedureMedicine(null);
+        treatmentEventDTO.setTreatment(null);
+        treatmentEventDTO.setPatient(null);
+        List<TreatmentEventDTOImpl> treatmentEventDTOList = new ArrayList<>();
+        treatmentEventDTOList.add(treatmentEventDTO);
+        JmsMessageTreatmentEvent jmsMessageTreatmentEvent = new JmsMessageTreatmentEvent();
+        jmsMessageTreatmentEvent.setTreatmentEventDTOList(treatmentEventDTOList);
+        producer.send(jmsMessageTreatmentEvent);
         return "general/login";
     }
 

@@ -10,21 +10,22 @@ import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 import javax.annotation.Resource;
 import javax.annotation.Resources;
-import javax.jms.ConnectionFactory;
+import javax.jms.*;
 
 
 @Configuration
 public class ActiveMqConnectionFactoryConfig {
-/*
+
     @Bean
     public ConnectionFactory connectionFactory(){
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
-        connectionFactory.setBrokerURL("tcp://localhost:8161");
+        connectionFactory.setBrokerURL("tcp://localhost:61616");
         connectionFactory.setUserName("admin");
         connectionFactory.setPassword("admin");
         return connectionFactory;
@@ -46,8 +47,30 @@ public class ActiveMqConnectionFactoryConfig {
         factory.setMessageConverter(jacksonJmsMessageConverter());
         configurer.configure(factory, connectionFactory);
         return factory;
+    }
+
+ /*  @Bean
+    public MessageConverter converter() {
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter() {
+
+            @Override
+            public Message toMessage(Object object, Session session) throws JMSException, MessageConversionException {
+                TextMessage message = (TextMessage) super.toMessage(object, session);
+                System.out.println("outbound json: " + message.getText());
+                return message;
+            }
+
+            @Override
+            public Object fromMessage(Message message) throws JMSException, MessageConversionException {
+                System.out.println("inbound json: " + ((TextMessage) message).getText());
+                return super.fromMessage(message);
+            }
+
+        };
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("type");
+        return converter;
     }*/
-/*
 
     @Bean
     public JmsTemplate jmsTemplate(){
@@ -55,5 +78,5 @@ public class ActiveMqConnectionFactoryConfig {
         template.setMessageConverter(jacksonJmsMessageConverter());
         template.setConnectionFactory(connectionFactory());
         return template;
-    }*/
+    }
 }

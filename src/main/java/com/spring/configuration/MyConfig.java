@@ -17,7 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jca.endpoint.GenericMessageEndpointFactory;
-import org.springframework.jms.connection.SingleConnectionFactory;
+//import org.springframework.jms.connection.SingleConnectionFactory;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;

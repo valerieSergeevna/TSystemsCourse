@@ -2,6 +2,7 @@ package com.spring.webapp.service;
 
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
+import com.spring.jms.JmsMessageTreatmentEvent;
 import com.spring.utils.TimeParser;
 import com.spring.webapp.EventStatus;
 import com.spring.webapp.dao.*;
@@ -52,8 +53,8 @@ public class TreatmentEventServiceImpl {
     public TreatmentEventDTOImpl save(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
         TreatmentEvent treatmentEvent = new TreatmentEvent();
         try {
-           // BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
-            treatmentEvent= toTreatmentEvent(treatmentEventDTO);
+            // BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
+            treatmentEvent = toTreatmentEvent(treatmentEventDTO);
             return toTreatmentEventDTO(treatmentEventDAO.save(treatmentEvent));
         } catch (
                 HibernateException ex) {
@@ -197,6 +198,23 @@ public class TreatmentEventServiceImpl {
         }
     }
 
+    @Transactional
+    public List<JmsMessageTreatmentEvent> getAllForTodayRest() throws DataBaseException {
+        List<TreatmentEventDTOImpl> treatmentEventDTOList = null;
+        try {
+            treatmentEventDTOList =  toTreatmentEventDTOList(treatmentEventDAO.getAll());
+        } catch (
+                HibernateException ex) {
+            logger.error("[!TreatmentEventServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
+        return treatmentEventDTOList.stream()
+                .map(this::toJmsTreatmentEvent)
+                .collect(Collectors.toList());
+    }
+
+
     //convector's method from-to
 
     public List<TreatmentEventDTOImpl> toTreatmentEventDTOList(List<TreatmentEvent> treatmentsEventList) {
@@ -231,8 +249,14 @@ public class TreatmentEventServiceImpl {
         treatmentEvent.setTreatment(treatmentEventDTO.getTreatment());
         treatmentEvent.setPatient(treatmentEventDTO.getPatient());
         treatmentEvent.setProcedureMedicine(treatmentEventDTO.getProcedureMedicine());
-        treatmentEvent.setStatus( EventStatus.fromTitle(treatmentEventDTO.getStatus()));
+        treatmentEvent.setStatus(EventStatus.fromTitle(treatmentEventDTO.getStatus()));
         return treatmentEvent;
+    }
+
+    public JmsMessageTreatmentEvent toJmsTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
+        return new JmsMessageTreatmentEvent(treatmentEventDTO.getType(), treatmentEventDTO.getTreatmentTime(),
+                treatmentEventDTO.getTreatment().getDose(), treatmentEventDTO.getStatus(),
+                treatmentEventDTO.getCancelReason(), treatmentEventDTO.getProcedureMedicine().getName());
     }
 
 

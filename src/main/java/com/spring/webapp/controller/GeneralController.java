@@ -1,5 +1,7 @@
 package com.spring.webapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.jms.JmsMessageTreatmentEvent;
@@ -17,10 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NamingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,8 +83,8 @@ public class GeneralController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(1, TreatmentType.medicine,
+    public String login() throws NamingException {
+       /* TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(1, TreatmentType.medicine,
                 LocalDateTime.now(),1,"in plan");
         treatmentEventDTO.setCancelReason("");
         treatmentEventDTO.setProcedureMedicine(null);
@@ -92,10 +93,11 @@ public class GeneralController {
         List<TreatmentEventDTOImpl> treatmentEventDTOList = new ArrayList<>();
         treatmentEventDTOList.add(treatmentEventDTO);
         JmsMessageTreatmentEvent jmsMessageTreatmentEvent = new JmsMessageTreatmentEvent();
-        jmsMessageTreatmentEvent.setTreatmentEventDTOList(treatmentEventDTOList);
-        producer.send(jmsMessageTreatmentEvent);
+        jmsMessageTreatmentEvent.setTreatmentEventDTOList(treatmentEventDTOList);*/
+     //   producer.send("App1");
         return "general/login";
     }
+
 
     @RequestMapping("/viewPatient")
     public String viewPatient(@RequestParam("patientId") int id, Model model) throws DataBaseException {

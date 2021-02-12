@@ -3,9 +3,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <modules>
-    <module>rehaBoard</module>
-  </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -192,26 +189,40 @@
       <version>5.0.12.Final</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-activemq</artifactId>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-starter-activemq</artifactId>-->
+<!--    </dependency>-->
 
     <dependency>
-      <groupId>javax.jms</groupId>
-      <artifactId>jms-api</artifactId>
-      <version>1.1-rev-1</version>
-      <scope>provided</scope>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-ejb-client-bom</artifactId>
+      <version>7.2.0.Final</version>
+      <type>pom</type>
     </dependency>
 
-    <dependency>
-      <groupId>org.messaginghub</groupId>
-      <artifactId>pooled-jms</artifactId>
-    </dependency>
+
+    <!--    <dependency>-->
+<!--      <groupId>javax.jms</groupId>-->
+<!--      <artifactId>jms-api</artifactId>-->
+<!--      <version>1.1-rev-1</version>-->
+<!--      <scope>provided</scope>-->
+<!--    </dependency>-->
+
+<!--    <dependency>-->
+<!--      <groupId>org.messaginghub</groupId>-->
+<!--      <artifactId>pooled-jms</artifactId>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>5.2.8.RELEASE</version>
     </dependency>
 
     <dependency>
@@ -221,9 +232,42 @@
       <scope>compile</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-jms-client-bom</artifactId>
+      <version>10.0.0.Final</version>
+      <type>pom</type>
+    </dependency>
 
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-core</artifactId>
+      <version>5.7.0</version>
+    </dependency>
 
+    <dependency>
+      <groupId>javax.jms</groupId>
+      <artifactId>javax.jms-api</artifactId>
+      <version>2.0.1</version>
+    </dependency>
 
+    <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-naming-client</artifactId>
+      <version>1.0.13.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.xnio</groupId>
+      <artifactId>xnio-api</artifactId>
+      <version>3.8.4.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.1.1</version>
+    </dependency>
 
   </dependencies>
 

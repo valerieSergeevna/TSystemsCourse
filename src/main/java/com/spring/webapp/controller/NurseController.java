@@ -1,5 +1,8 @@
 package com.spring.webapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
@@ -14,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -92,4 +92,13 @@ public class NurseController {
         model.addAttribute("currentTime", LocalDateTime.now());
         return "nurse/all-treatmentEvents";
     }
+
+    @GetMapping(value = "/todaysTreatmentsEvents", produces = "application/json")
+    @ResponseBody
+    public String getEventsRest() throws JsonProcessingException, DataBaseException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper.writeValueAsString(treatmentEventService.getAllForTodayRest());
+    }
+
 }

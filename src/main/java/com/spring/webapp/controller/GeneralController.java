@@ -36,9 +36,6 @@ public class GeneralController {
     @Autowired
     private ProcedureMedicineServiceImpl procedureMedicineService;
 
-    @Autowired
-    private JmsProducer producer;
-
 
     private static final Logger logger = Logger.getLogger(GeneralController.class);
 

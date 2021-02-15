@@ -18,35 +18,6 @@ import javax.annotation.Resource;
 import javax.annotation.Resources;
 import javax.jms.*;
 
-//@Configuration
-//public class JsonConfig {
-//    @Bean // Serialize message content to json using TextMessage
-//    public MessageConverter jacksonJmsMessageConverter() {
-//        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-//        converter.setTargetType(MessageType.TEXT);
-//        converter.setTypeIdPropertyName("_type");
-//        return converter;
-//    }
-//
-//    @Bean
-//    public JmsListenerContainerFactory<?> jsaFactory(ConnectionFactory connectionFactory,
-//                                                     DefaultJmsListenerContainerFactoryConfigurer configurer) {
-//        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-//        factory.setMessageConverter(jacksonJmsMessageConverter());
-//        configurer.configure(factory, connectionFactory);
-//        return factory;
-//    }
-//
-//}
-
-
-//
-//|
-//|
-//|
-//V
-
-
 @Configuration
 public class ActiveMqConnectionFactoryConfig {
 

@@ -144,11 +144,11 @@
       <version>1.2.17</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.security.oauth.boot</groupId>
-      <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-      <version>2.0.0.RELEASE</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.security.oauth.boot</groupId>-->
+<!--      <artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
+<!--      <version>2.0.0.RELEASE</version>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -189,17 +189,17 @@
       <version>5.0.12.Final</version>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-starter-activemq</artifactId>-->
-<!--    </dependency>-->
-
     <dependency>
-      <groupId>org.jboss.as</groupId>
-      <artifactId>jboss-as-ejb-client-bom</artifactId>
-      <version>7.2.0.Final</version>
-      <type>pom</type>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-activemq</artifactId>
     </dependency>
+
+<!--    <dependency>-->
+<!--      <groupId>org.jboss.as</groupId>-->
+<!--      <artifactId>jboss-as-ejb-client-bom</artifactId>-->
+<!--      <version>7.2.0.Final</version>-->
+<!--      <type>pom</type>-->
+<!--    </dependency>-->
 
 
     <!--    <dependency>-->
@@ -213,11 +213,6 @@
 <!--      <groupId>org.messaginghub</groupId>-->
 <!--      <artifactId>pooled-jms</artifactId>-->
 <!--    </dependency>-->
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
@@ -240,6 +235,13 @@
     </dependency>
 
     <dependency>
+      <groupId>org.wildfly</groupId>
+      <artifactId>wildfly-ejb-client-bom</artifactId>
+      <version>22.0.1.Final</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-core</artifactId>
       <version>5.7.0</version>
@@ -257,17 +259,37 @@
       <version>1.0.13.Final</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.jboss.xnio</groupId>
-      <artifactId>xnio-api</artifactId>
-      <version>3.8.4.Final</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.jboss.xnio</groupId>-->
+<!--      <artifactId>xnio-api</artifactId>-->
+<!--      <version>3.8.4.Final</version>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>javax.ws.rs-api</artifactId>
       <version>2.1.1</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron</artifactId>
+      <version>1.5.0.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron-client</artifactId>
+      <version>1.14.2.Final</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.wildfly.wildfly-http-client</groupId>
+      <artifactId>wildfly-http-naming-client</artifactId>
+      <version>1.1.5.Final</version>
+    </dependency>
+
 
   </dependencies>
 

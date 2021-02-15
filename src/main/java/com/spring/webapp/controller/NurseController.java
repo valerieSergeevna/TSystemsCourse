@@ -97,7 +97,7 @@ public class NurseController {
     @ResponseBody
     public String getEventsRest() throws JsonProcessingException, DataBaseException {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+ //       objectMapper.registerModule(new JavaTimeModule());
         return objectMapper.writeValueAsString(treatmentEventService.getAllForTodayRest());
     }
 

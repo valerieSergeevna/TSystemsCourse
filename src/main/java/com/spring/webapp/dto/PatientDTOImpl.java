@@ -131,4 +131,25 @@ public class PatientDTOImpl {
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
+
+    public List<TreatmentDTOImpl> treatmentsToUpdateOrAdd(List<TreatmentDTOImpl> treatmentDTOList) {
+        if (treatments == null) return treatmentDTOList;
+        List<TreatmentDTOImpl> updateTreatmentDTOList = new ArrayList<>();
+        for (TreatmentDTOImpl newTreatment : treatmentDTOList) {
+            if (!isTreatmentExist(newTreatment)){
+                updateTreatmentDTOList.add(newTreatment);
+            }
+        }
+        return updateTreatmentDTOList;
+    }
+
+    private boolean isTreatmentExist(TreatmentDTOImpl newTreatmentDTO) {
+        for (TreatmentDTOImpl treatmentDTO : treatments) {
+            if (treatmentDTO.equals(newTreatmentDTO)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

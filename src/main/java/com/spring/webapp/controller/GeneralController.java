@@ -94,7 +94,6 @@ public class GeneralController {
         treatmentEventDTOList.add(treatmentEventDTO);
         JmsMessageTreatmentEvent jmsMessageTreatmentEvent = new JmsMessageTreatmentEvent();
         jmsMessageTreatmentEvent.setTreatmentEventDTOList(treatmentEventDTOList);*/
-     //   producer.send("App1");
         return "general/login";
     }
 

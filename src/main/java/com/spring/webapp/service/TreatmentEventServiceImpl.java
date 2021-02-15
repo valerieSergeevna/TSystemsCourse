@@ -254,7 +254,7 @@ public class TreatmentEventServiceImpl {
     }
 
     public JmsMessageTreatmentEvent toJmsTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
-        return new JmsMessageTreatmentEvent(treatmentEventDTO.getType(), treatmentEventDTO.getTreatmentTime(),
+        return new JmsMessageTreatmentEvent(treatmentEventDTO.getType(),
                 treatmentEventDTO.getTreatment().getDose(), treatmentEventDTO.getStatus(),
                 treatmentEventDTO.getCancelReason(), treatmentEventDTO.getProcedureMedicine().getName());
     }

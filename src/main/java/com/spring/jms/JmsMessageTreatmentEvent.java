@@ -63,7 +63,7 @@ import java.util.List;
 //}
 public class JmsMessageTreatmentEvent {
     private TreatmentType type;
-    private LocalDateTime treatmentTime;
+  //  private LocalDateTime treatmentTime;
     private double dose;
     private String status;
     private String cancelReason;
@@ -73,10 +73,10 @@ public class JmsMessageTreatmentEvent {
     public JmsMessageTreatmentEvent() {
     }
 
-    public JmsMessageTreatmentEvent(TreatmentType type,  LocalDateTime treatmentTime,
+    public JmsMessageTreatmentEvent(TreatmentType type,
                                     double dose, String status, String cancelReason, String name) {
         this.type = type;
-        this.treatmentTime = treatmentTime;
+     //   this.treatmentTime = treatmentTime;
         this.dose = dose;
         this.status = status;
         this.cancelReason = cancelReason;
@@ -90,14 +90,14 @@ public class JmsMessageTreatmentEvent {
     public void setType(TreatmentType type) {
         this.type = type;
     }
-
-    public LocalDateTime getTreatmentTime() {
-        return treatmentTime;
-    }
-
-    public void setTreatmentTime(LocalDateTime treatmentTime) {
-        this.treatmentTime = treatmentTime;
-    }
+//
+//    public LocalDateTime getTreatmentTime() {
+//        return treatmentTime;
+//    }
+//
+//    public void setTreatmentTime(LocalDateTime treatmentTime) {
+//        this.treatmentTime = treatmentTime;
+//    }
 
     public double getDose() {
         return dose;

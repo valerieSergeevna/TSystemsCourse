@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 
 public class TreatmentDTOImpl implements EntityDTO {
@@ -113,5 +114,24 @@ public class TreatmentDTOImpl implements EntityDTO {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TreatmentDTOImpl that = (TreatmentDTOImpl) o;
+        return treatmentId == that.treatmentId &&
+                timePattern == that.timePattern &&
+                Double.compare(that.dose, dose) == 0 &&
+                type == that.type &&
+                Objects.equals(startDate, that.startDate) &&
+                Objects.equals(endDate, that.endDate) &&
+                Objects.equals(typeName, that.typeName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(treatmentId, type, timePattern, dose, startDate, endDate, typeName);
     }
 }

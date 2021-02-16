@@ -3,6 +3,7 @@ package com.spring.webapp.service;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.jms.JmsMessageTreatmentEvent;
+import com.spring.jms.JmsProducer;
 import com.spring.utils.TimeParser;
 import com.spring.webapp.EventStatus;
 import com.spring.webapp.dao.*;
@@ -36,6 +37,9 @@ public class TreatmentEventServiceImpl {
 
     @Autowired
     private PatientServiceImpl patientService;
+
+    @Autowired
+    private JmsProducer producer;
 
     @Transactional
     public List<TreatmentEventDTOImpl> getAll() throws DataBaseException {
@@ -153,6 +157,7 @@ public class TreatmentEventServiceImpl {
         TreatmentEventDTOImpl treatmentEventDTO = get(id);
         treatmentEventDTO.setStatus(status);
         update(treatmentEventDTO);
+        producer.send("UPDATE");
     }
 
     @Transactional
@@ -202,7 +207,9 @@ public class TreatmentEventServiceImpl {
     public List<JmsMessageTreatmentEvent> getAllForTodayRest() throws DataBaseException {
         List<TreatmentEventDTOImpl> treatmentEventDTOList = null;
         try {
-            treatmentEventDTOList =  toTreatmentEventDTOList(treatmentEventDAO.getAll());
+            LocalDateTime nowDay = LocalDateTime.now();
+            treatmentEventDTOList =  getTodayEvents(LocalDateTime.of(nowDay.getYear(),
+                    nowDay.getMonth(),nowDay.getDayOfMonth(), 8, 0, 0));
         } catch (
                 HibernateException ex) {
             logger.error("[!TreatmentEventServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
@@ -254,7 +261,8 @@ public class TreatmentEventServiceImpl {
     }
 
     public JmsMessageTreatmentEvent toJmsTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
-        return new JmsMessageTreatmentEvent(treatmentEventDTO.getType(),
+        return new JmsMessageTreatmentEvent(treatmentEventDTO.getPatient().getName(),
+                treatmentEventDTO.getPatient().getSurname(),treatmentEventDTO.getType(),
                 treatmentEventDTO.getTreatment().getDose(), treatmentEventDTO.getStatus(),
                 treatmentEventDTO.getCancelReason(), treatmentEventDTO.getProcedureMedicine().getName());
     }

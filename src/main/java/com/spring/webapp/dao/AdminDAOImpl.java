@@ -3,6 +3,8 @@ package com.spring.webapp.dao;
 import com.spring.exception.ServerException;
 import com.spring.webapp.entity.Admin;
 import com.spring.webapp.entity.Doctor;
+import com.spring.webapp.entity.Nurse;
+import org.checkerframework.checker.units.qual.A;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -25,6 +27,12 @@ public class AdminDAOImpl {
     public Admin save(Admin admin) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(admin);
+        return admin;
+    }
+
+    public Admin update(Admin admin) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(admin);
         return admin;
     }
 

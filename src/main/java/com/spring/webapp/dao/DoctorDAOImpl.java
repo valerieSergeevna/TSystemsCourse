@@ -2,6 +2,7 @@ package com.spring.webapp.dao;
 
 import com.spring.exception.ServerException;
 import com.spring.webapp.entity.Doctor;
+import com.spring.webapp.entity.Nurse;
 import org.hibernate.QueryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -32,6 +33,12 @@ public class DoctorDAOImpl {
     public Doctor get(int id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Doctor.class, id);
+    }
+
+    public Doctor update(Doctor doctor) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(doctor);
+        return doctor;
     }
 
     public Doctor getByUserName(String name) throws ServerException {

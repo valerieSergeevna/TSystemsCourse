@@ -3,6 +3,7 @@ package com.spring.webapp.dao;
 import com.spring.exception.ServerException;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Nurse;
+import com.spring.webapp.entity.Patient;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -25,6 +26,12 @@ public class NurseDAOImpl {
     public Nurse save(Nurse nurse) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(nurse);
+        return nurse;
+    }
+
+    public Nurse update(Nurse nurse) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(nurse);
         return nurse;
     }
 

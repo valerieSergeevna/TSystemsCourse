@@ -55,7 +55,7 @@ PatientServiceImpl {
     private TreatmentServiceImpl treatmentService;
 
     @Autowired
-    private DoctorServiceImpl doctorService;
+    private DoctorUserServiceImpl doctorService;
 
     @Autowired
     private TreatmentEventServiceImpl treatmentEventService;

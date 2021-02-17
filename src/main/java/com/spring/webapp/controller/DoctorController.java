@@ -3,13 +3,8 @@ package com.spring.webapp.controller;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.utils.TimeParser;
 import com.spring.webapp.dto.PatientDTOImpl;
-import com.spring.webapp.dto.TreatmentDTOImpl;
-import com.spring.webapp.dto.TreatmentEventDTOImpl;
-import com.spring.webapp.service.DoctorServiceImpl;
 import com.spring.webapp.service.PatientServiceImpl;
-import com.spring.webapp.service.TreatmentEventServiceImpl;
 import com.spring.webapp.service.TreatmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class DoctorController {

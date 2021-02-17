@@ -10,8 +10,8 @@ import com.spring.webapp.dto.*;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
 import com.spring.webapp.service.AdminServiceImpl;
-import com.spring.webapp.service.DoctorServiceImpl;
-import com.spring.webapp.service.NurseServiceImpl;
+import com.spring.webapp.service.DoctorUserServiceImpl;
+import com.spring.webapp.service.NurseUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,12 +38,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     DoctorDAOImpl doctorDAO;
     @Autowired
-    DoctorServiceImpl doctorService;
+    DoctorUserServiceImpl doctorService;
 
     @Autowired
     NurseDAOImpl nurseDAO;
     @Autowired
-    NurseServiceImpl nurseService;
+    NurseUserServiceImpl nurseService;
 
     @Autowired
     AdminServiceImpl adminService;

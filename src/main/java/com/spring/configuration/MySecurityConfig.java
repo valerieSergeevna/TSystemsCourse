@@ -43,8 +43,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/registration","/users").hasRole("ADMIN")
-                    .antMatchers("/").permitAll()
+                    .antMatchers("/registration","/users", "/updateUser").hasRole("ADMIN")
+                   // .antMatchers("/").permitAll()
                     .antMatchers("/","/viewPatient","/patients").hasAnyRole("DOCTOR", "NURSE","ADMIN")
                     .antMatchers("/doctor/updateTreatmentInfo").hasAnyRole("DOCTOR","ADMIN")
                     .antMatchers("/nurse/showAllTreatments","nurse/cancelStatus",
@@ -52,7 +52,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/")
                     .permitAll()
                 .and()
                     .logout()

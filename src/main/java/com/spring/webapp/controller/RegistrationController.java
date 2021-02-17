@@ -1,18 +1,9 @@
 package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
-import com.spring.webapp.dto.AbstractDTOUser;
-import com.spring.webapp.dto.AdminDTOImpl;
-import com.spring.webapp.dto.DoctorDTOImpl;
-import com.spring.webapp.dto.NurseDTOImpl;
-import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
-import com.spring.webapp.service.AdminServiceImpl;
-import com.spring.webapp.service.DoctorServiceImpl;
-import com.spring.webapp.service.NurseServiceImpl;
 import com.spring.webapp.service.securityService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,7 +46,7 @@ public class RegistrationController {
             return "admin/registration";
         }
 
-        return "redirect:/";
+        return "admin/registration";
     }
 
 

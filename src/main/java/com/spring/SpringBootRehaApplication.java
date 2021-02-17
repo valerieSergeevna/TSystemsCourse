@@ -24,7 +24,6 @@ import org.json.JSONObject;
 @EntityScan(basePackages = "com.spring.webapp.entity")
 public class SpringBootRehaApplication extends SpringBootServletInitializer {
 
-
     public static void main(String[] args) {
         SpringApplication.run(SpringBootRehaApplication.class, args);
         /*String jsonText =  new Gson().toJson(listOfObjects);

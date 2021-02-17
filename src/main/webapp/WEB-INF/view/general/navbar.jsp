@@ -22,11 +22,11 @@
                     </li>
                 </security:authorize>
 
-                <security:authorize access="hasRole('ADMIN')">
-                    <li class="nav-item">
-                        <a class="nav-link text-info" href="/registration">Registration</a>
-                    </li>
-                </security:authorize>
+<%--                <security:authorize access="hasRole('ADMIN')">--%>
+<%--                    <li class="nav-item">--%>
+<%--                        <a class="nav-link text-info" href="/registration">Registration</a>--%>
+<%--                    </li>--%>
+<%--                </security:authorize>--%>
                 <security:authorize access="hasRole('ADMIN')">
                     <li class="nav-item">
                         <a class="nav-link text-info" href="/users">Users</a>

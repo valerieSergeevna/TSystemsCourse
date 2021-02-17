@@ -35,11 +35,24 @@ public class ExceptionHandlerController {
         return "/errors/server-error";
     }
 
+//    @ExceptionHandler(Exception.class)
+//    public String handleAllException(Exception ex) {
+//        //Do something additional if required
+//      /*  ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("error");
+//        modelAndView.addObject("message", ex.getMessage());
+//        return modelAndView;*/
+//        logger.error(ex.getMessage());
+//        return "/errors/server-error";
+//    }
+
     @ExceptionHandler(ClientException.class)
     public String handleNumberFormatException(ClientException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
         return "/errors/client-error";
     }
+
+
 
 
   //  @ExceptionHandler(ResourceNotFoundException.class)

@@ -29,12 +29,16 @@ import java.util.List;
 
 @Controller
 public class GeneralController {
+    @Autowired
+    JmsProducer jmsProducer;
 
     @Autowired
     private PatientServiceImpl patientService;
 
     @Autowired
     private ProcedureMedicineServiceImpl procedureMedicineService;
+
+    boolean wakeUpFlag = false;
 
 
     private static final Logger logger = Logger.getLogger(GeneralController.class);
@@ -44,17 +48,19 @@ public class GeneralController {
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
         String role;
         for (int i = 0; i < roles.size(); i++) {
-            role = roles.toArray()[i] + "";
-            if (role.equals("ROLE_DOCTOR")) {
-                logger.info("role verified" + i + " is -> " + role);
-                logger.info("name verified" + i + " is -> " + authentication.getName());
-                model.addAttribute("role", "Doctor");
-                return "redirect:/patients";
-            } else if (role.equals("ROLE_NURSE")) {
-                logger.info("role verified" + i + " is -> " + role);
-                logger.info("name verified" + i + " is -> " + authentication.getName());
-                model.addAttribute("role", "Nurse");
-                return "redirect:/nurse/";
+            role = ((Role) roles.toArray()[i]).getAuthority() + "";
+            logger.info("role verified" + i + " is -> " + role);
+            logger.info("name verified" + i + " is -> " + authentication.getName());
+            switch (role) {
+                case "ROLE_DOCTOR":
+                    model.addAttribute("role", "Doctor");
+                    return "redirect:/patients";
+                case "ROLE_NURSE":
+                    model.addAttribute("role", "Nurse");
+                    return "redirect:/nurse/";
+                case "ROLE_ADMIN":
+                    model.addAttribute("role", "Admin");
+                    return "redirect:/users";
             }
         }
         return "greeting";
@@ -67,7 +73,7 @@ public class GeneralController {
         List<PatientDTOImpl> allPatient = new ArrayList<>();
         String name = authentication.getName();
         for (int i = 0; i < roles.size(); i++) {
-            role = ((Role)roles.toArray()[i]).getAuthority() + "";
+            role = ((Role) roles.toArray()[i]).getAuthority() + "";
             if (role.equals("ROLE_DOCTOR")) {
                 allPatient = patientService.getAllByDoctorUserName(name);
             } else if (role.equals("ROLE_NURSE")) {
@@ -81,16 +87,11 @@ public class GeneralController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() throws NamingException {
-       /* TreatmentEventDTOImpl treatmentEventDTO = new TreatmentEventDTOImpl(1, TreatmentType.medicine,
-                LocalDateTime.now(),1,"in plan");
-        treatmentEventDTO.setCancelReason("");
-        treatmentEventDTO.setProcedureMedicine(null);
-        treatmentEventDTO.setTreatment(null);
-        treatmentEventDTO.setPatient(null);
-        List<TreatmentEventDTOImpl> treatmentEventDTOList = new ArrayList<>();
-        treatmentEventDTOList.add(treatmentEventDTO);
-        JmsMessageTreatmentEvent jmsMessageTreatmentEvent = new JmsMessageTreatmentEvent();
-        jmsMessageTreatmentEvent.setTreatmentEventDTOList(treatmentEventDTOList);*/
+        if (!wakeUpFlag) {
+            wakeUpFlag = true;
+            jmsProducer.send("UPDATE");
+        }
+
         return "general/login";
     }
 
@@ -102,7 +103,7 @@ public class GeneralController {
     }
 
     @RequestMapping("/medicineProcedure")
-    public String viewMedicineProcedure( Model model) throws DataBaseException {
+    public String viewMedicineProcedure(Model model) throws DataBaseException {
         model.addAttribute("allMedicineProcedure", procedureMedicineService.getAll());
         return "medicine-procedure";
     }

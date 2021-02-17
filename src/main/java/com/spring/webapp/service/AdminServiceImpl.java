@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AdminServiceImpl {
-    private static final Logger logger = Logger.getLogger(Doctor.class);
+public class AdminServiceImpl extends AbstractUserService<AdminDTOImpl>{
+    private static final Logger logger = Logger.getLogger(AdminServiceImpl.class);
 
     @Autowired
     private AdminDAOImpl adminDAO;
@@ -32,7 +32,18 @@ public class AdminServiceImpl {
             return toAdminDTOList(adminDAO.getAll());
         } catch (
                 HibernateException ex) {
-            logger.error("[!DoctorServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
+            logger.error("[!AdminServiceImpl 'getAll' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
+    }
+
+    @Transactional
+    public AdminDTOImpl update(AdminDTOImpl adminDTO) throws DataBaseException {
+        try {
+            return toAdminDTO(adminDAO.save(toAdmin(adminDTO)));
+        } catch (HibernateException ex) {
+            logger.error("[!AdminServiceImpl 'update' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
@@ -43,7 +54,7 @@ public class AdminServiceImpl {
         try {
             return toAdminDTO(adminDAO.save(toAdmin(adminDTO)));
         } catch (HibernateException ex) {
-            logger.error("[!DoctorServiceImpl 'save' method:" + ex.getMessage() + "!]");
+            logger.error("[!AdminServiceImpl 'save' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
@@ -55,7 +66,7 @@ public class AdminServiceImpl {
         try {
             adminDAO.delete(id);
         } catch (HibernateException ex) {
-            logger.error("[!DoctorServiceImpl 'delete' method:" + ex.getMessage() + "!]");
+            logger.error("[!AdminServiceImpl 'delete' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
@@ -66,7 +77,7 @@ public class AdminServiceImpl {
         try {
             return toAdminDTO(adminDAO.get(id));
         } catch (HibernateException ex) {
-            logger.error("[!DoctorServiceImpl 'get' method:" + ex.getMessage() + "!]");
+            logger.error("[!AdminServiceImpl 'get' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }
@@ -77,7 +88,7 @@ public class AdminServiceImpl {
         try {
             return toAdminDTO(adminDAO.getByUserName(name));
         }catch (HibernateException ex) {
-            logger.error("[!DoctorServiceImpl 'getByUserName' method:" + ex.getMessage() + "!]");
+            logger.error("[!AdminServiceImpl 'getByUserName' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
         }

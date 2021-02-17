@@ -2,27 +2,16 @@ package com.spring.webapp.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
-import com.spring.exception.ServerException;
-import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentEventDTOImpl;
-import com.spring.webapp.service.DoctorServiceImpl;
-import com.spring.webapp.service.PatientServiceImpl;
 import com.spring.webapp.service.TreatmentEventServiceImpl;
-import com.spring.webapp.service.TreatmentServiceImpl;
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class NurseController {

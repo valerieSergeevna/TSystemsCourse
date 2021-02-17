@@ -115,9 +115,17 @@ public class TreatmentEventDAOImpl {
             // TreatmentEvent treatmentEvent;
             if (type.toString().equals("medicine")) {
                 for (int i = 0; i < timePattern; i++) {
+                    int currentHour = 8 + ((12 / timePattern) * i);
+                    if (startDate.toLocalDate().isEqual(LocalDateTime.now().toLocalDate())) {
+                        if (LocalDateTime.now().getHour() + 1 + ((12 / timePattern) * i) < 22) {
+                            currentHour = LocalDateTime.now().getHour() + ((12 / timePattern) * i);
+                        } else {
+                            continue;
+                        }
+                    }
                     addToListAndInitTreatmentEvent(treatmentEventList, patient,
                             dose, LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
-                                    startDate.getDayOfMonth(), 8 + ((12 / timePattern) * i), 0, 0),
+                                    startDate.getDayOfMonth(), currentHour, 0, 0),
                             type, treatment, procedureMedicine);
                    /* treatmentEvent = new TreatmentEvent();
                     treatmentEvent.setDose(dose);
@@ -151,7 +159,7 @@ public class TreatmentEventDAOImpl {
 
                 save(treatmentEvent);
                 treatmentEventList.add(treatmentEvent);*/
-                startDate = startDate.plusDays(7/timePattern);
+                startDate = startDate.plusDays(7 / timePattern);
             }
 
         }

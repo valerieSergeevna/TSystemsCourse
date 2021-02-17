@@ -166,6 +166,7 @@ public class TreatmentEventServiceImpl {
         newTreatmentEventDTO.setStatus("canceled");
         newTreatmentEventDTO.setCancelReason(treatmentEventDTO.getCancelReason());
         update(newTreatmentEventDTO);
+        producer.send("UPDATE");
     }
 
     @Transactional

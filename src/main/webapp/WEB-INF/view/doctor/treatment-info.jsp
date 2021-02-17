@@ -1,4 +1,6 @@
 <%@ page import="com.spring.webapp.dto.PatientDTOImpl" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDate" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -139,12 +141,12 @@
                 <div class="form-outline mb-4">
                     <label class="form-label" for="datepicker1${count.index}">Start date</label>
                     <input type="date" class="form-control datepicker" name="startDate"
-                           id="datepicker1${count.index}" value="${treatment.startDate}" required pattern="\d{4}-\d{2}-\d{2}">
+                           id="datepicker1${count.index}" value="${treatment.startDate}"  required pattern="\d{4}-\d{2}-\d{2}" >
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="datepicker2${count.index}">End date</label>
                     <input type="date" class="form-control datepicker" name="endDate"
-                           id="datepicker2${count.index}" value="${treatment.endDate}" required pattern="\d{4}-\d{2}-\d{2}">
+                           id="datepicker2${count.index}" value="${treatment.endDate}" required pattern="\d{4}-\d{2}-\d{2}"}  >
                 </div>
                 <%--</form:form>--%>
 

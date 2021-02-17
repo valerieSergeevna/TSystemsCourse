@@ -109,8 +109,14 @@ function doseSelected(a) {
     }
 }
 
+let date = new Date();
+let currentMonth = date.getMonth();
+let currentDate = date.getDate();
+let currentYear = date.getFullYear();
+
 $('body').on('focus', ".datepicker", function () {
     $(this).datepicker({
+        minDate: new Date(currentYear, currentMonth, currentDate),
         dateFormat: 'yy-mm-dd'
     });
 });

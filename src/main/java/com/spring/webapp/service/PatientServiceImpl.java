@@ -290,11 +290,19 @@ PatientServiceImpl {
                     }
                 }
             }
-            List<TreatmentDTOImpl> updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,null);
+
+            List<TreatmentDTOImpl> updateTreatmentList;
+            if (patientDTO.getId() > 0) {
+               updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,
+                       treatmentService.toTreatmentDTOList(patientDAO.get(patientDTO.getId()).getTreatments()));
 //                    patientDAO.getTreatments(patientDTO.getId()));
-            if (updateTreatmentList == null || updateTreatmentList.size() == 0) {
-                return;
+                if (updateTreatmentList == null || updateTreatmentList.size() == 0) {
+                    return;
+                }
+            }else {
+                updateTreatmentList = treatmentDTOList;
             }
+
             if (patientDTO.getStatus().equals(PatientStatus.DISCHARGED.toString())) {
                 update(patientDTO);
                 for (TreatmentDTOImpl treatmentDTO : updateTreatmentList) {
@@ -318,7 +326,7 @@ PatientServiceImpl {
         if (treatmentDTOList == null) return null;
         List<TreatmentDTOImpl> updateTreatmentDTOList = new ArrayList<>();
         for (TreatmentDTOImpl newTreatment : treatmentDTOList) {
-            if (!isTreatmentExist(newTreatment, treatments)){
+            if (!isTreatmentExist(newTreatment, treatments)) {
                 updateTreatmentDTOList.add(newTreatment);
             }
         }
@@ -327,6 +335,10 @@ PatientServiceImpl {
 
     private boolean isTreatmentExist(TreatmentDTOImpl newTreatmentDTO, List<TreatmentDTOImpl> treatments) {
         for (TreatmentDTOImpl treatmentDTO : treatments) {
+            if (procedureMedicineDAO.getIdByName(newTreatmentDTO.getTypeName()) == -1)
+                return false;
+            treatmentDTO.setTypeName(procedureMedicineDAO
+                    .get(procedureMedicineDAO.getIdByName(newTreatmentDTO.getTypeName())).getName());
             if (treatmentDTO.equals(newTreatmentDTO)) {
                 return true;
             }

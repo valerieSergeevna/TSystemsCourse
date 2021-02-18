@@ -98,7 +98,7 @@ public class AdminController {
         }
 
 
-        String roles =((Role) userService.loadUserByUsername(userForm.getUsername()).getAuthorities()).getAuthority();
+        String roles =((Role)(userService.loadUserByUsername(userForm.getUsername()).getAuthorities().toArray()[0])).getAuthority();
         if ("ROLE_DOCTOR".equals(roles)) {
             doctorService.update(new DoctorDTOImpl(userForm.getId(),userForm.getName(),
                     userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));

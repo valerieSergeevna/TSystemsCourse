@@ -41,7 +41,7 @@ public class AdminServiceImpl extends AbstractUserService<AdminDTOImpl>{
     @Transactional
     public AdminDTOImpl update(AdminDTOImpl adminDTO) throws DataBaseException {
         try {
-            return toAdminDTO(adminDAO.save(toAdmin(adminDTO)));
+            return toAdminDTO(adminDAO.update(toAdmin(adminDTO)));
         } catch (HibernateException ex) {
             logger.error("[!AdminServiceImpl 'update' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));

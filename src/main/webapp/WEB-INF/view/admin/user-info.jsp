@@ -42,6 +42,11 @@
             <form:input class="form-control" id="form3Example3" path="position"/>
             <form:errors path="position"></form:errors>
         </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example4">Username</label>
+            <form:input class="form-control" id="form3Example4" path="username"/>
+            <form:errors path="username"></form:errors>
+        </div>
     </form:form>
 </div>
 </body>

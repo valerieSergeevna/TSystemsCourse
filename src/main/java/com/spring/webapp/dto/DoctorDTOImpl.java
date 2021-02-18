@@ -1,6 +1,6 @@
 package com.spring.webapp.dto;
 
-public class DoctorDTOImpl extends AbstractDTOUser {
+public class DoctorDTOImpl extends AllDTOUser {
     public DoctorDTOImpl() {
         super();
     }

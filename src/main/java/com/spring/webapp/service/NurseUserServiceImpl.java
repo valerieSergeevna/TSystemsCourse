@@ -82,7 +82,7 @@ public class NurseUserServiceImpl extends AbstractUserService<NurseDTOImpl> {
     @Transactional
     public NurseDTOImpl update(NurseDTOImpl UserDTO) throws DataBaseException {
         try {
-            return toNurseDTO(nurseDAO.save(toNurse(UserDTO)));
+            return toNurseDTO(nurseDAO.update(toNurse(UserDTO)));
         } catch (HibernateException ex) {
             logger.error("[!NurseServiceImpl 'update' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));

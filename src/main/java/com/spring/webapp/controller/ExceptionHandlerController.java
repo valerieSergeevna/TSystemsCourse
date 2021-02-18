@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
@@ -73,6 +74,8 @@ public class ExceptionHandlerController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String showServerError(Exception ex){
+        System.out.println(ex.getMessage());
+        System.out.println(Arrays.toString(ex.getStackTrace()));
         logger.error(ex.getMessage());
         return "/errors/server-error";
     }

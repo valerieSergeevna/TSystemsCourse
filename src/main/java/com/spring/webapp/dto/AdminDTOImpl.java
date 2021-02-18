@@ -1,6 +1,6 @@
 package com.spring.webapp.dto;
 
-public class AdminDTOImpl extends AbstractDTOUser {
+public class AdminDTOImpl extends AllDTOUser {
     public AdminDTOImpl() {
         super();
     }

@@ -2,9 +2,7 @@ package com.spring.webapp.service;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.webapp.dto.AbstractDTOUser;
-import com.spring.webapp.dto.UserDTO;
-import org.springframework.stereotype.Service;
+import com.spring.webapp.dto.AllDTOUser;
 
 import java.util.List;
 
@@ -16,27 +14,27 @@ public class AllUserService {
          this.abstractUserService = abstractUserService;
      }
 
-    public  List<AbstractDTOUser> getAll() throws DataBaseException{
+    public  List<AllDTOUser> getAll() throws DataBaseException{
         return abstractUserService.getAll();
     }
 
-    public  AbstractDTOUser save(AbstractDTOUser userDTO) throws DataBaseException{
-        return (AbstractDTOUser) abstractUserService.save(userDTO);
+    public AllDTOUser save(AllDTOUser userDTO) throws DataBaseException{
+        return (AllDTOUser) abstractUserService.save(userDTO);
     }
 
     public  void delete(int id) throws DataBaseException{
         abstractUserService.delete(id);
     }
 
-    public  AbstractDTOUser get(int id) throws DataBaseException{
-        return (AbstractDTOUser) abstractUserService.get(id);
+    public AllDTOUser get(int id) throws DataBaseException{
+        return (AllDTOUser) abstractUserService.get(id);
     }
 
-    public  AbstractDTOUser getByUserName(String name) throws DataBaseException, ServerException{
-         return (AbstractDTOUser)abstractUserService.getByUserName(name);
+    public AllDTOUser getByUserName(String name) throws DataBaseException, ServerException{
+         return (AllDTOUser)abstractUserService.getByUserName(name);
     }
 
-    public  AbstractDTOUser update(AbstractDTOUser UserDTO) throws DataBaseException{
-        return (AbstractDTOUser)abstractUserService.update(UserDTO);
+    public AllDTOUser update(AllDTOUser UserDTO) throws DataBaseException{
+        return (AllDTOUser)abstractUserService.update(UserDTO);
     }
 }

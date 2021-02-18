@@ -2,8 +2,7 @@ package com.spring.webapp.service;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.webapp.dto.AbstractDTOUser;
-import com.spring.webapp.dto.UserDTO;
+
 import java.util.List;
 
 public abstract class AbstractUserService<T> {

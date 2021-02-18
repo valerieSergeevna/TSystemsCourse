@@ -81,13 +81,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Map<User, AbstractDTOUser> allUsersWithInfo() throws ServerException, DataBaseException {
+    public Map<User, AllDTOUser> allUsersWithInfo() throws ServerException, DataBaseException {
 
         List<User> users = userRepository.findAll();
-        Map<User, AbstractDTOUser> userDTOMap = new HashMap<>();
+        Map<User, AllDTOUser> userDTOMap = new HashMap<>();
 
         for (User user : users) {
-            AbstractDTOUser userDTO;
+            AllDTOUser userDTO;
             switch (getRole(user.getRoles())) {
                 case "ROLE_DOCTOR":
                     userDTO = doctorService.getByUserName(user.getUsername());
@@ -166,12 +166,12 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    private AbstractDTOUser setFields(AbstractDTOUser abstractDTOUser,String name, String surname,
-                                      String position, String username){
-        abstractDTOUser.setName(name);
-        abstractDTOUser.setSurname(surname);
-        abstractDTOUser.setPosition(position);
-        abstractDTOUser.setUsername(username);
-        return abstractDTOUser;
+    private AllDTOUser setFields(AllDTOUser allDTOUser, String name, String surname,
+                                 String position, String username){
+        allDTOUser.setName(name);
+        allDTOUser.setSurname(surname);
+        allDTOUser.setPosition(position);
+        allDTOUser.setUsername(username);
+        return allDTOUser;
     }
 }

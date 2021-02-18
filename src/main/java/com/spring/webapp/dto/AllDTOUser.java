@@ -1,16 +1,16 @@
 package com.spring.webapp.dto;
 
-public abstract class AbstractDTOUser implements UserDTO{
+public  class AllDTOUser implements UserDTO{
     private int id;//????
     private String name;
     private String surname;
     private String position;
     private String username;
 
-    public AbstractDTOUser() {
+    public AllDTOUser() {
     }
 
-    public AbstractDTOUser(int id, String name, String surname, String position, String username) {
+    public AllDTOUser(int id, String name, String surname, String position, String username) {
         this.id = id;
         this.name = name;
         this.surname = surname;

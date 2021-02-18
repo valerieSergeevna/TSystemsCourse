@@ -2,8 +2,10 @@ package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.webapp.dto.AbstractDTOUser;
+import com.spring.webapp.dto.AdminDTOImpl;
+import com.spring.webapp.dto.AllDTOUser;
 import com.spring.webapp.dto.DoctorDTOImpl;
+import com.spring.webapp.dto.NurseDTOImpl;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
 import com.spring.webapp.service.*;
@@ -16,8 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.Set;
 
 @Controller
 public class AdminController {
@@ -74,7 +74,7 @@ public class AdminController {
 
         User user = userService.findUserById(userId);
 
-        AbstractDTOUser userDTO;
+        AllDTOUser userDTO;
         String roles = ((Role)userService.findUserById(userId).getRoles().toArray()[0]).getAuthority();
         if ("ROLE_DOCTOR".equals(roles)) {
             userDTO = doctorService.getByUserName(user.getUsername());
@@ -89,23 +89,27 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/saveUpdatedUser")
-    public String editUserInfo(@Validated  @ModelAttribute("userForm") AbstractDTOUser userForm, BindingResult bindingResult,
+    public String editUserInfo(@Validated  @ModelAttribute("userForm") AllDTOUser userForm, BindingResult bindingResult,
                                Model model, HttpServletRequest request) throws DataBaseException, ServerException {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("userForm", userForm);
             return  "admin/user-info";
         }
-        AllUserService allUserService;
-        String roles =((Role) userService.findUserById((long) userForm.getId()).getRoles().toArray()[0]).getAuthority();
+
+
+        String roles =((Role) userService.loadUserByUsername(userForm.getUsername()).getAuthorities()).getAuthority();
         if ("ROLE_DOCTOR".equals(roles)) {
-            allUserService = new AllUserService(doctorService);
+            doctorService.update(new DoctorDTOImpl(userForm.getId(),userForm.getName(),
+                    userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
         } else if ("ROLE_NURSE".equals(roles)) {
-            allUserService = new AllUserService(nurseService);
+            nurseService.update(new NurseDTOImpl(userForm.getId(),userForm.getName(),
+                    userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
         } else {
-            allUserService = new AllUserService(adminService);
+            adminService.update(new AdminDTOImpl(userForm.getId(),userForm.getName(),
+                    userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
         }
-        allUserService.update(userForm);
+
         return "redirect:/users";
     }
 

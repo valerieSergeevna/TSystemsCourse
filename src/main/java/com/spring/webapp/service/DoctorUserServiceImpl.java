@@ -37,7 +37,7 @@ public class DoctorUserServiceImpl extends AbstractUserService<DoctorDTOImpl> {
     @Transactional
     public DoctorDTOImpl update(DoctorDTOImpl doctorDTO) throws DataBaseException {
         try {
-            return toDoctorDTO(doctorDAO.save(toDoctor(doctorDTO)));
+            return toDoctorDTO(doctorDAO.update(toDoctor(doctorDTO)));
         } catch (HibernateException ex) {
             logger.error("[!DoctorServiceImpl 'update' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));

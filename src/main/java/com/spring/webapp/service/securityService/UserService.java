@@ -13,10 +13,12 @@ import com.spring.webapp.service.AdminServiceImpl;
 import com.spring.webapp.service.DoctorUserServiceImpl;
 import com.spring.webapp.service.NurseUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -49,7 +51,7 @@ public class UserService implements UserDetailsService {
     AdminServiceImpl adminService;
 
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    PasswordEncoder bCryptPasswordEncoder;
 
   /*  @Autowired(required = true)
     public void setUserRepository(UserDAO userRepository) {

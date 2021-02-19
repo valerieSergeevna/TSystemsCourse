@@ -15,13 +15,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,8 +54,24 @@ public class GeneralController {
 
     private static final Logger logger = Logger.getLogger(GeneralController.class);
 
+
+    @Autowired
+    TokenStore tokenStore;
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public void logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null) {
+            String tokenValue = authHeader.replace("Bearer", "").trim();
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+            tokenStore.removeAccessToken(accessToken);
+        }
+    }
+
     @RequestMapping("/")
-    public String greet(Model model, Authentication authentication) {
+    public String greet(Model model, Authentication authentication, Principal principal) {
+        String name = principal.getName();
         Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
         String role;
         for (int i = 0; i < roles.size(); i++) {
@@ -64,6 +91,11 @@ public class GeneralController {
             }
         }
         return "greeting";
+    }
+
+    @RequestMapping("/greet")
+    public String greetFromOauth(Model model, Authentication authentication, Principal principal) {
+       return "redirect:/";
     }
 
     @RequestMapping("/patients")

@@ -34,6 +34,9 @@
                    name="${_csrf.parameterName}"
                    value="${_csrf.token}"/>
             <button type="submit" class="btn btn-info btn-block" class="btn">Log in</button>
+            <div align="center">
+                <a href="/login/google">login via google</a>
+            </div>
         </form>
     </div>
 </body>

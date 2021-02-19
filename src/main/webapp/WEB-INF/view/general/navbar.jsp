@@ -46,6 +46,7 @@
                     </security:authorize>
 
                 </li>
+
                 <li class="nav-item">
                     <a class="role text-info" href="/logout">logout</a>
                 </li>
@@ -67,6 +68,6 @@
    </nav>--%>
 </head>
 <body>
-
+<script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
 </body>
 </html>

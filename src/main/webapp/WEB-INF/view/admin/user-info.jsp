@@ -47,6 +47,12 @@
             <form:input class="form-control" id="form3Example4" path="username"/>
             <form:errors path="username"></form:errors>
         </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example5">Email </label>
+            <input type="email" class="form-control"
+                   id="form3Example5" name="email"
+                   value="${user.googleUsername}" required placeholder="some@some.com">
+        </div>
     </form:form>
 </div>
 </body>

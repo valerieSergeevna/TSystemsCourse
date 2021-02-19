@@ -26,7 +26,7 @@ public class RegistrationController {
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 
-        return "admin/registration";
+        return "redirect:/users";
     }
 
     @PostMapping("/registration")
@@ -34,19 +34,19 @@ public class RegistrationController {
                           Model model, HttpServletRequest request) throws DataBaseException {
 
         if (bindingResult.hasErrors()) {
-            return "admin/registration";
+            return "redirect:/users";
         }
         if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
             model.addAttribute("passwordError", "Passwords don't match");
-            return "admin/registration";
+            return "redirect:/users";
         }
 
         if (!userService.saveUser(userForm, request)) {
             model.addAttribute("usernameError", "User name is not uniq");
-            return "admin/registration";
+            return "redirect:/users";
         }
 
-        return "admin/registration";
+        return "redirect:/users";
     }
 
 

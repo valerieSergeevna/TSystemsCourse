@@ -24,7 +24,8 @@ public class Doctor {
     @Column(name = "user_name")
     private String userName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+            CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "doctor")
     private List<Patient> patients;
 
     public Doctor() {

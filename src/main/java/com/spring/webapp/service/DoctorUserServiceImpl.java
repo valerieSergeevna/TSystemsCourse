@@ -3,8 +3,11 @@ package com.spring.webapp.service;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.webapp.dao.DoctorDAOImpl;
+import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dto.DoctorDTOImpl;
+import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.entity.Doctor;
+import com.spring.webapp.entity.Patient;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,13 @@ public class DoctorUserServiceImpl extends AbstractUserService<DoctorDTOImpl> {
 
     @Autowired
     private DoctorDAOImpl doctorDAO;
+
+    @Autowired
+    private PatientDAOImpl patientDAO;
+
+    @Autowired
+    private PatientServiceImpl patientService;
+
 
     @Transactional
     public List<DoctorDTOImpl> getAll() throws DataBaseException {

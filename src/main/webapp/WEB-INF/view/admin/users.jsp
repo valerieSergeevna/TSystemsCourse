@@ -47,6 +47,11 @@
     </c:url>
     <input type="button" value="Update" class="btn  btn-outline-info"
            onclick="window.location.href ='${updateButton}'"/>
+    <c:url var="deleteButton" value="/deleteUser">
+        <c:param name="userId" value="${user.key.id}"></c:param>
+    </c:url>
+    <input type="button" value="Delete" class="btn  btn-outline-danger"
+           onclick="window.location.href ='${deleteButton}'"/>
                 </td>
             </tr>
             </tbody>
@@ -82,6 +87,13 @@
                                 autofocus="true"></form:input>
                     <form:errors class="form-control" path="username"></form:errors>
                         ${usernameError}
+                </div>
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="emailId">Email</label>
+                    <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"
+                                autofocus="true"></form:input>
+                    <form:errors class="form-control" path="googleUsername"></form:errors>
+                        ${googleUsernameError}
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordId">Password</label>

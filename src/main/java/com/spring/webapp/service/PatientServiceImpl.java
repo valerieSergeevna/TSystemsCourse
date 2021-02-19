@@ -132,6 +132,19 @@ PatientServiceImpl {
         }
     }
 
+    @Transactional
+    public PatientDTOImpl eraseDoctor(PatientDTOImpl patientDTO) throws DataBaseException {
+        try {
+            patientDTO.setDoctor(null);
+            Patient patient = toPatient(patientDTO);
+            return toPatientDTO(patientDAO.update(patient));
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'update' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
+    }
+
 
     //  @Transactional
     public void delete(int id) throws DataBaseException {

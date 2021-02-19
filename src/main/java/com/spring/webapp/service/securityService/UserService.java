@@ -4,14 +4,14 @@ import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.webapp.dao.DoctorDAOImpl;
 import com.spring.webapp.dao.NurseDAOImpl;
+import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.securityDAO.RoleDAO;
 import com.spring.webapp.dao.securityDAO.UserDAO;
 import com.spring.webapp.dto.*;
+import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
-import com.spring.webapp.service.AdminServiceImpl;
-import com.spring.webapp.service.DoctorUserServiceImpl;
-import com.spring.webapp.service.NurseUserServiceImpl;
+import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -43,9 +44,15 @@ public class UserService implements UserDetailsService {
     DoctorUserServiceImpl doctorService;
 
     @Autowired
+    private MailService mailSender;
+
+    @Autowired
     NurseDAOImpl nurseDAO;
     @Autowired
     NurseUserServiceImpl nurseService;
+
+    @Autowired
+    PatientServiceImpl patientService;
 
     @Autowired
     AdminServiceImpl adminService;
@@ -110,7 +117,21 @@ public class UserService implements UserDetailsService {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
-            return false;
+            if (user.equals(userFromDB))
+                return false;
+            if (!request.getParameter("email").equals(userFromDB.getGoogleUsername())) {
+                user.setGoogleUsername(request.getParameter("email"));
+            }
+            if (!request.getParameter("username").equals(userFromDB.getUsername())) {
+                user.setUsername(request.getParameter("username"));
+            }
+            userRepository.save(user);
+//            if (!user.getGoogleUsername().isEmpty() && userFromDB.getGoogleUsername().isEmpty()) {
+//                String message = "Hi!" +
+//                        "\nCatch your password: " + user.getPassword() + " and username: " + user.getUsername() +
+//                        "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)";
+//                mailSender.send(user.getGoogleUsername(), "RehaApp password and username", message);
+//            }
         }
 
         String name = request.getParameter("name");
@@ -123,33 +144,61 @@ public class UserService implements UserDetailsService {
         switch (role) {
             case "doctor":
                 role = "ROLE_DOCTOR";
-                doctorService.save((DoctorDTOImpl)setFields(new DoctorDTOImpl(),
-                        name,surname,position,userName));
+                doctorService.save((DoctorDTOImpl) setFields(new DoctorDTOImpl(),
+                        name, surname, position, userName));
                 roleId = 1;
                 break;
             case "nurse":
                 role = "ROLE_NURSE";
                 nurseService.save((NurseDTOImpl) setFields(new NurseDTOImpl(),
-                        name,surname,position,userName));
+                        name, surname, position, userName));
                 roleId = 3;
                 break;
             case "admin":
                 role = "ROLE_ADMIN";
                 adminService.save((AdminDTOImpl) setFields(new AdminDTOImpl(),
-                        name,surname,position,userName));
+                        name, surname, position, userName));
                 roleId = 2;
                 break;
-            default:break;
+            default:
+                break;
         }
 
         user.setRoles(Collections.singleton(new Role(Integer.toUnsignedLong(roleId), role)));
+        String password = user.getPassword();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        if (!user.getGoogleUsername().isEmpty()) {
+            String message = "Hi!" +
+                    "\nCatch your password: " + password + " and username: " + user.getUsername() +
+                    "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)";
+            mailSender.send(user.getGoogleUsername(), "RehaApp password and username", message);
+        }
         return true;
     }
 
-    public boolean deleteUser(Long userId) {
+    public boolean deleteUser(Long userId) throws ServerException, DataBaseException {
         if (userRepository.findById(userId).isPresent()) {
+            User user = findUserById(userId);
+            String role = ((Role)user.getAuthorities().toArray()[0]).getAuthority();
+            switch (role) {
+                case "ROLE_DOCTOR":
+                    List<PatientDTOImpl> patientList = patientService.getAllByDoctorUserName(user.getUsername());
+                    for (PatientDTOImpl patientDTO:patientList) {
+                        patientService.eraseDoctor(patientDTO);
+                    }
+                    doctorService.delete(doctorService.getByUserName(user.getUsername()).getId());
+                    break;
+                case "ROLE_NURSE":
+                    nurseService.delete(nurseService.getByUserName(user.getUsername()).getId());
+                    break;
+                case "ROLE_ADMIN":
+                    role = "ROLE_ADMIN";
+                    adminService.delete(nurseService.getByUserName(user.getUsername()).getId());
+                    break;
+                default:
+                    break;
+            }
             userRepository.deleteById(userId);
             return true;
         }
@@ -169,7 +218,7 @@ public class UserService implements UserDetailsService {
     }
 
     private AllDTOUser setFields(AllDTOUser allDTOUser, String name, String surname,
-                                 String position, String username){
+                                 String position, String username) {
         allDTOUser.setName(name);
         allDTOUser.setSurname(surname);
         allDTOUser.setPosition(position);

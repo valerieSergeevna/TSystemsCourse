@@ -109,7 +109,16 @@ public class AdminController {
             adminService.update(new AdminDTOImpl(userForm.getId(),userForm.getName(),
                     userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
         }
+        User user = (User) userService.loadUserByUsername(userForm.getUsername());
+        userService.saveUser(user,request);
 
+
+        return "redirect:/users";
+    }
+
+    @RequestMapping(value = "/deleteUser")
+    public String deleteUser(@RequestParam("userId") Long userId) throws DataBaseException, ServerException {
+        userService.deleteUser(userId);
         return "redirect:/users";
     }
 

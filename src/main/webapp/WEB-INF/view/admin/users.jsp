@@ -57,7 +57,8 @@
             </tbody>
         </c:forEach>
     </table>
-    <div class="registration container">
+    <button class="btn btn-outline-info" id="registrationButton" >Nem user registration</button>
+    <div id = "registration" class="registration container" style="display: none;">
         <div>
             <form:form action = "/registration" method="POST" modelAttribute="userForm">
                 <h2 class="text-info">Registration</h2>
@@ -106,11 +107,14 @@
                     <form:errors class="form-control" path="password"></form:errors>
                         ${passwordError}
                 </div>
-                <button class="btn btn-outline-success" type="submit">Registration</button>
+                <button class="btn btn-outline-success" type="submit" >Registration</button>
             </form:form>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    <%@include file="/resources/scripts/appScript.js"%>
+</script>
 </body>
 </html>
 

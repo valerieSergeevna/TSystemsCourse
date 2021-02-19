@@ -23,7 +23,13 @@
         <c:if test="${patient.id != null}">
             <form:hidden path="id"></form:hidden>
         </c:if>
-        <form:hidden path="doctor.id"></form:hidden>
+        <security:authorize access="hasAnyRole('ADMIN')">
+            <div class="form-outline mb-4">
+                <label class="form-label" for="docId">Doctor id</label>
+                <form:input class="form-control" id="docId" path="doctor.id"/>
+                <form:errors path="doctor.id"></form:errors>
+            </div>
+        </security:authorize>
         <div class="row mb-4">
             <div class="col">
                 <div class="form-outline">
@@ -121,15 +127,16 @@
                     <label class="form-label" for="form3Example9${count.index}">Time Pattern (times/day(week)) </label>
                     <input type="number" class="form-control"
                            id="form3Example9${count.index}" name="treatmentPattern"
-                           value="${treatment.timePattern}" required min = "1" max="5">
+                           value="${treatment.timePattern}" required min="1" max="5">
                 </div>
 
                 <c:if test="${treatment.type.toString().equals('medicine')}">
-                <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example10${count.index}">Dose</label>
-                    <input type="number" class="form-control"
-                           id="form3Example10${count.index}" name="treatmentDose" value="${treatment.dose}" required min = "0" step = ".001">
-                </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example10${count.index}">Dose</label>
+                        <input type="number" class="form-control"
+                               id="form3Example10${count.index}" name="treatmentDose" value="${treatment.dose}" required
+                               min="0" step=".001">
+                    </div>
                 </c:if>
                 <c:if test="${treatment.type.toString().equals('procedure')}">
                     <input type="hidden" name="treatmentDose" value="1"></c:if>
@@ -141,12 +148,14 @@
                 <div class="form-outline mb-4">
                     <label class="form-label" for="datepicker1${count.index}">Start date</label>
                     <input type="date" class="form-control datepicker" name="startDate"
-                           id="datepicker1${count.index}" value="${treatment.startDate}"  required pattern="\d{4}-\d{2}-\d{2}" >
+                           id="datepicker1${count.index}" value="${treatment.startDate}" required
+                           pattern="\d{4}-\d{2}-\d{2}">
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="datepicker2${count.index}">End date</label>
                     <input type="date" class="form-control datepicker" name="endDate"
-                           id="datepicker2${count.index}" value="${treatment.endDate}" required pattern="\d{4}-\d{2}-\d{2}"}  >
+                           id="datepicker2${count.index}" value="${treatment.endDate}" required
+                           pattern="\d{4}-\d{2}-\d{2}" }>
                 </div>
                 <%--</form:form>--%>
 

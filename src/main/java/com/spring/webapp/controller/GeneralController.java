@@ -95,7 +95,7 @@ public class GeneralController {
 
     @RequestMapping("/greet")
     public String greetFromOauth(Model model, Authentication authentication, Principal principal) {
-       return "redirect:/";
+        return "redirect:/";
     }
 
     @RequestMapping("/patients")
@@ -110,6 +110,9 @@ public class GeneralController {
                 allPatient = patientService.getAllByDoctorUserName(name);
             } else if (role.equals("ROLE_NURSE")) {
                 model.addAttribute("role", "Nurse");
+                allPatient = patientService.getAll();
+            } else if (role.equals("ROLE_ADMIN")) {
+                model.addAttribute("role", "Admin");
                 allPatient = patientService.getAll();
             }
         }

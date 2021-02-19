@@ -32,7 +32,7 @@
                 <td>${patient.surname}</td>
                 <td>${patient.disease}</td>
                 <td>
-                    <security:authorize access="hasRole('DOCTOR')">
+                    <security:authorize access="hasAnyRole('DOCTOR','ADMIN')">
                     <input type="button" value="Update" class="btn  btn-outline-info"
                                                         onclick="window.location.href ='${updateButton}'"/>
                  <input type="button" value="Delete" class="btn btn-outline-danger"

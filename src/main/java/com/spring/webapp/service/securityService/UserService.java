@@ -187,14 +187,14 @@ public class UserService implements UserDetailsService {
                     for (PatientDTOImpl patientDTO:patientList) {
                         patientService.eraseDoctor(patientDTO);
                     }
-                    doctorService.delete(doctorService.getByUserName(user.getUsername()).getId());
+      //              doctorService.delete(doctorService.getByUserName(user.getUsername()).getId());
                     break;
                 case "ROLE_NURSE":
                     nurseService.delete(nurseService.getByUserName(user.getUsername()).getId());
                     break;
                 case "ROLE_ADMIN":
                     role = "ROLE_ADMIN";
-                    adminService.delete(nurseService.getByUserName(user.getUsername()).getId());
+                    adminService.delete(adminService.getByUserName(user.getUsername()).getId());
                     break;
                 default:
                     break;

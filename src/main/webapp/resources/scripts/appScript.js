@@ -109,6 +109,11 @@ function doseSelected(a) {
     }
 }
 
+$('#registrationButton').click(function(e){
+    e.preventDefault(); //to prevent standard click event
+    $('#registration').slideToggle(300);
+});
+
 let date = new Date();
 let currentMonth = date.getMonth();
 let currentDate = date.getDate();
@@ -148,6 +153,8 @@ $.ajaxSetup({
         }
     }
 });
+
+
 
 /*
 $(function () {

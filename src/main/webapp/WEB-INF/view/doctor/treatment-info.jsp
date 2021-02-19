@@ -168,8 +168,10 @@
         <br>
         <div id="container"></div>
         <br>
-        <input class="btn btn-outline-primary btn-sm" type="button" value="Add prescription"
+        <input class="btn btn-outline-primary btn-sm" id = "newTreatmentButton" type="button" value="Add prescription"
                onclick="addForm()"/>
+        <input class="btn btn-outline-danger btn-sm" id = "removeTreatmentButton" type="button" value="Delete prescription"
+               onclick="removeForm()" hidden = "true"/>
         <%----%>
         <br>
 

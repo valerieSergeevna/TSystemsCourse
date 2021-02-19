@@ -10,8 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.xml.ws.Response;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class NurseController {
@@ -89,5 +94,26 @@ public class NurseController {
  //       objectMapper.registerModule(new JavaTimeModule());
         return objectMapper.writeValueAsString(treatmentEventService.getAllForTodayRest());
     }
+
+    //rest
+
+
+//
+//    @RequestMapping("nurse/updateAjaxStatus")
+//    @ResponseBody
+//    public List<TreatmentEventDTOImpl> updateAjaxStatus(@RequestParam("eventId") int id,
+//                               @RequestParam("eventStatus") String status) throws DataBaseException {
+//        List<TreatmentEventDTOImpl> treatmentEventDTOList;
+//        treatmentEventService.updateStatus(id, status);
+//        treatmentEventDTOList = treatmentEventService.getAll();
+//        return treatmentEventDTOList;
+//
+//    }
+//
+//    @RequestMapping("nurse/updateAjaxStatus")
+//    @ResponseBody
+//    public List<TreatmentEventDTOImpl> ajaxToday() throws DataBaseException {
+//        return treatmentEventService.showTodayTreatments();
+//    }
 
 }

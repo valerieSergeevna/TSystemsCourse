@@ -57,7 +57,7 @@
             </tbody>
         </c:forEach>
     </table>
-    <button class="btn btn-outline-info" id="registrationButton" >Nem user registration</button>
+    <button class="btn btn-outline-info" id="registrationButton" >New user registration</button>
     <div id = "registration" class="registration container" style="display: none;">
         <div>
             <form:form action = "/registration" method="POST" modelAttribute="userForm">

@@ -8,6 +8,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/all-treatmentEvents.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/doctor/treatment-info.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/doctor" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/errors/client-error.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/errors" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/general/login.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/general" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/treatment-info.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view" />
       </map>
     </option>

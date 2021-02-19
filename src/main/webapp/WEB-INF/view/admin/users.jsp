@@ -79,8 +79,12 @@
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="RoleId">Role</label>
-                    <input type="text" class="form-control"
+                    <select type="text" class="form-control"
                            name="role" id="RoleId" value="" required>
+                        <option value="doctor">doctor</option>
+                        <option value="nurse">nurse</option>
+                        <option value="admin">admin</option>
+                    </select>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="userNameId">Username</label>

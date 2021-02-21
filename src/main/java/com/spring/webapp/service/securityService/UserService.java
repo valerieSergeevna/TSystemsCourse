@@ -30,8 +30,8 @@ import java.util.*;
 @Service
 //@ComponentScan(basePackages = "com.spring.webapp")
 public class UserService implements UserDetailsService {
-//    @PersistenceContext
-//    private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
 
     @Autowired
@@ -204,10 +204,10 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-//    public List<User> usergtList(Long idMin) {
-//        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-//                .setParameter("paramId", idMin).getResultList();
-//    }
+    public List<User> usergtList(Long idMin) {
+        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
+                .setParameter("paramId", idMin).getResultList();
+    }
 
     private String getRole(Set<Role> roles) {
         for (Role role : roles) {

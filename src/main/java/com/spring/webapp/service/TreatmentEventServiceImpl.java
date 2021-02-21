@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -262,10 +263,13 @@ public class TreatmentEventServiceImpl {
     }
 
     public JmsMessageTreatmentEvent toJmsTreatmentEvent(TreatmentEventDTOImpl treatmentEventDTO) {
-        return new JmsMessageTreatmentEvent(treatmentEventDTO.getPatient().getName(),
+        JmsMessageTreatmentEvent treatmentEvent = new JmsMessageTreatmentEvent(treatmentEventDTO.getPatient().getName(),
                 treatmentEventDTO.getPatient().getSurname(),treatmentEventDTO.getType(),
                 treatmentEventDTO.getTreatment().getDose(), treatmentEventDTO.getStatus(),
                 treatmentEventDTO.getCancelReason(), treatmentEventDTO.getProcedureMedicine().getName());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        treatmentEvent.setTreatmentTime(treatmentEventDTO.getTreatmentTime().format(formatter));
+        return treatmentEvent;
     }
 
 

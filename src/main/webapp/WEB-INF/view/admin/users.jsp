@@ -89,14 +89,14 @@
                 <div class="form-outline mb-4">
                     <label class="form-label" for="userNameId">Username</label>
                     <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"
-                                autofocus="true"></form:input>
+                               ></form:input>
                     <form:errors class="form-control" path="username"></form:errors>
                         ${usernameError}
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="emailId">Email</label>
                     <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"
-                                autofocus="true"></form:input>
+                                ></form:input>
                     <form:errors class="form-control" path="googleUsername"></form:errors>
                         ${googleUsernameError}
                 </div>

@@ -34,38 +34,40 @@
                 <td>${user.value.surname}</td>
                 <td>${user.value.position}</td>
                 <td>
-<%--                    <form action="" method="post">--%>
-<%--                        <input type="hidden" name="userId" value="${user.key.id}"/>--%>
-<%--                        <button type="submit"  class="btn btn-outline-danger">Delete</button>--%>
-<%--                    </form>--%>
-<%--                    <form action="/updateUser" method="get">--%>
-<%--                        <input type="hidden" name="userId" value="${user.key.id}"/>--%>
-<%--                        <button class="btn  btn-outline-info"  type="submit">Update</button>--%>
-<%--                    </form>--%>
-    <c:url var="updateButton" value="/updateUser">
-        <c:param name="userId" value="${user.key.id}"></c:param>
-    </c:url>
-    <input type="button" value="Update" class="btn  btn-outline-info"
-           onclick="window.location.href ='${updateButton}'"/>
-    <c:url var="deleteButton" value="/deleteUser">
-        <c:param name="userId" value="${user.key.id}"></c:param>
-    </c:url>
-    <input type="button" value="Delete" class="btn  btn-outline-danger"
-           onclick="window.location.href ='${deleteButton}'"/>
+                        <%--                    <form action="" method="post">--%>
+                        <%--                        <input type="hidden" name="userId" value="${user.key.id}"/>--%>
+                        <%--                        <button type="submit"  class="btn btn-outline-danger">Delete</button>--%>
+                        <%--                    </form>--%>
+                        <%--                    <form action="/updateUser" method="get">--%>
+                        <%--                        <input type="hidden" name="userId" value="${user.key.id}"/>--%>
+                        <%--                        <button class="btn  btn-outline-info"  type="submit">Update</button>--%>
+                        <%--                    </form>--%>
+                    <c:url var="updateButton" value="/updateUser">
+                        <c:param name="userId" value="${user.key.id}"></c:param>
+                    </c:url>
+                    <input type="button" value="Update" class="btn  btn-outline-info"
+                           onclick="window.location.href ='${updateButton}'"/>
+                    <c:url var="deleteButton" value="/deleteUser">
+                        <c:param name="userId" value="${user.key.id}"></c:param>
+                    </c:url>
+                    <input type="button" value="Delete" class="btn  btn-outline-danger"
+                           onclick="window.location.href ='${deleteButton}'"/>
                 </td>
             </tr>
             </tbody>
         </c:forEach>
     </table>
-    <button class="btn btn-outline-info" id="registrationButton" >New user registration</button>
-    <div id = "registration" class="registration container" style="display: none;">
+
+    <button class="btn btn-outline-info" id="registrationButton">New user registration</button>
+    <div id="registration" class="registration container" style="display: none;">
         <div>
-            <form:form action = "/registration" method="POST" modelAttribute="userForm">
+            <%--       <form:form action = "/registration" method="POST" modelAttribute="userForm">--%>
+            <form action="/registration">
                 <h2 class="text-info">Registration</h2>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="nameId">Name</label>
                     <input type="text"
-                           name="name" class="form-control" id = "nameId" value="" required>
+                           name="name" class="form-control" id="nameId" value="" required>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="SurnameId">Surname</label>
@@ -80,7 +82,7 @@
                 <div class="form-outline mb-4">
                     <label class="form-label" for="RoleId">Role</label>
                     <select type="text" class="form-control"
-                           name="role" id="RoleId" value="" required>
+                            name="role" id="RoleId" value="" required>
                         <option value="doctor">doctor</option>
                         <option value="nurse">nurse</option>
                         <option value="admin">admin</option>
@@ -88,31 +90,45 @@
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="userNameId">Username</label>
-                    <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"
-                               ></form:input>
-                    <form:errors class="form-control" path="username"></form:errors>
-                        ${usernameError}
+                    <input type="text"
+                           name="username" class="form-control" id="userNameId" placeholder="Username" value=""
+                           required >
+                    ${usernameError}
+
+                    <%--                    <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"--%>
+                    <%--                               ></form:input>--%>
+                    <%--                    <form:errors class="form-control" path="username"></form:errors>--%>
+                    <%--                        ${usernameError}--%>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="emailId">Email</label>
-                    <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"
-                                ></form:input>
-                    <form:errors class="form-control" path="googleUsername"></form:errors>
-                        ${googleUsernameError}
+                    <input type="text"
+                           name="email" class="form-control" id="emailId" placeholder="some@some.com" value="">
+                    <%--                    <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"--%>
+                    <%--                                ></form:input>--%>
+                    <%--                    <form:errors class="form-control" path="googleUsername"></form:errors>--%>
+                    <%--                        ${googleUsernameError}--%>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordId">Password</label>
-                    <form:input type="password"  class="form-control" id="passwordId" path="password" placeholder="Password"></form:input>
+                    <input type="password"
+                           name="password" class="form-control" id="passwordId" placeholder="Password" value=""
+                           required>
+                    <%--                    <form:input type="password"  class="form-control" id="passwordId" path="password" placeholder="Password"></form:input>--%>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordConfirmId">Password confirm</label>
-                    <form:input class="form-control" type="password" id="passwordConfirmId" path="passwordConfirm"
-                                placeholder="Confirm your password"></form:input>
-                    <form:errors class="form-control" path="password"></form:errors>
-                        ${passwordError}
+                    <input type="password"
+                           name="passwordConfirm" class="form-control" id="passwordConfirmId"
+                           placeholder="Password confirm" value="" required>
+
+                    <%--                    <form:input class="form-control" type="password" id="passwordConfirmId" path="passwordConfirm"--%>
+                    <%--                                placeholder="Confirm your password"></form:input>--%>
+                    <%--                    <form:errors class="form-control" path="password"></form:errors>--%>
+                    <%--                        ${passwordError}--%>
                 </div>
-                <button class="btn btn-outline-success" type="submit" >Registration</button>
-            </form:form>
+                <button class="btn btn-outline-success" type="submit">Registration</button>
+            </form>
         </div>
     </div>
 </div>

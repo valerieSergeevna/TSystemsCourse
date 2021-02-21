@@ -46,12 +46,15 @@
             <label class="form-label" for="form3Example4">Username</label>
             <form:input class="form-control" id="form3Example4" path="username"/>
             <form:errors path="username"></form:errors>
+            ${usernameError}
         </div>
         <div class="form-outline mb-4">
             <label class="form-label" for="form3Example5">Email </label>
             <input type="email" class="form-control"
                    id="form3Example5" name="email"
                    value="${user.googleUsername}" placeholder="some@some.com">
+            <input type="text" class="form-control" name="hiddenUsername"
+                   value="${user.username}" hidden>
         </div>
     </form:form>
 </div>

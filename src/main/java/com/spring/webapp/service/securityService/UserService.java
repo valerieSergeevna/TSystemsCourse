@@ -30,8 +30,8 @@ import java.util.*;
 @Service
 //@ComponentScan(basePackages = "com.spring.webapp")
 public class UserService implements UserDetailsService {
-    @PersistenceContext
-    private EntityManager em;
+//    @PersistenceContext
+//    private EntityManager em;
 
 
     @Autowired
@@ -113,24 +113,36 @@ public class UserService implements UserDetailsService {
         return userDTOMap;
     }
 
-    public boolean saveUser(User user, HttpServletRequest request) throws DataBaseException {
+    public boolean isUserExist(User user, HttpServletRequest request) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-        boolean isToSend = true;
-        String role = request.getParameter("role");
         if (userFromDB != null) {
-            if (user.equals(userFromDB))
-                return false;
-            if (!request.getParameter("email").equals(userFromDB.getGoogleUsername())) {
-                user.setGoogleUsername(request.getParameter("email"));
-            }
-            if (!request.getParameter("username").equals(userFromDB.getUsername())) {
-                user.setUsername(request.getParameter("username"));
-            }
-            isToSend = false;
-            role = ((Role) userFromDB.getRoles().toArray()[0]).getAuthority();
-            userRepository.save(user);
+            return true;
         }
+        return false;
+    }
 
+    public boolean updateUser(User user, HttpServletRequest request) throws DataBaseException {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (user.equals(userFromDB))
+            return true;
+//        if (userRepository.findByUsername(request.getParameter("username")) != null)
+//            return false;
+        if (!request.getParameter("email").equals(userFromDB.getGoogleUsername())) {
+            user.setGoogleUsername(request.getParameter("email"));
+        }
+        if (!request.getParameter("username").equals(userFromDB.getUsername())) {
+            user.setUsername(request.getParameter("username"));
+        }
+        String role = ((Role) userFromDB.getRoles().toArray()[0]).getAuthority();
+        setInfo(user, request, role);
+        userRepository.save(user);
+        return true;
+    }
+
+    public User findByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
+    }
+    public int setInfo(User user, HttpServletRequest request, String role) throws DataBaseException {
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
         String position = request.getParameter("position");
@@ -162,13 +174,22 @@ public class UserService implements UserDetailsService {
             default:
                 break;
         }
+        return roleId;
+    }
 
+    public boolean saveUser(User user, HttpServletRequest request) throws DataBaseException {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        String role = request.getParameter("role");
+        if (isUserExist(user, request))
+            return false;
+
+        int roleId = setInfo(user, request, role);
         user.setRoles(Collections.singleton(new Role(Integer.toUnsignedLong(roleId), role)));
         String password = user.getPassword();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         //check for null
-        if (!user.getGoogleUsername().isEmpty() && isToSend) {
+        if (!user.getGoogleUsername().isEmpty()) {
             String message = "Hi!" +
                     "\nCatch your password: " + password + " \nAnd username: " + user.getUsername() +
                     "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)";
@@ -204,10 +225,10 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public List<User> usergtList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
-    }
+//    public List<User> usergtList(Long idMin) {
+//        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
+//                .setParameter("paramId", idMin).getResultList();
+//    }
 
     private String getRole(Set<Role> roles) {
         for (Role role : roles) {

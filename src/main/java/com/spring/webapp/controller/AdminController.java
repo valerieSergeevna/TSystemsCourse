@@ -75,7 +75,7 @@ public class AdminController {
         User user = userService.findUserById(userId);
 
         AllDTOUser userDTO;
-        String roles = ((Role)userService.findUserById(userId).getRoles().toArray()[0]).getAuthority();
+        String roles = ((Role) userService.findUserById(userId).getRoles().toArray()[0]).getAuthority();
         if ("ROLE_DOCTOR".equals(roles)) {
             userDTO = doctorService.getByUserName(user.getUsername());
         } else if ("ROLE_NURSE".equals(roles)) {
@@ -83,34 +83,43 @@ public class AdminController {
         } else {
             userDTO = adminService.getByUserName(user.getUsername());
         }
-       model.addAttribute("userInfo", userDTO);
+        model.addAttribute("userInfo", userDTO);
         model.addAttribute("user", user);
         return "admin/user-info";
     }
 
     @RequestMapping(value = "/saveUpdatedUser")
-    public String editUserInfo(@Validated  @ModelAttribute("userForm") AllDTOUser userForm, BindingResult bindingResult,
+    public String editUserInfo(@Validated @ModelAttribute("userForm") AllDTOUser userForm, BindingResult bindingResult,
                                Model model, HttpServletRequest request) throws DataBaseException, ServerException {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("userForm", userForm);
-            return  "admin/user-info";
+            return "admin/user-info";
+        }
+        User user =userService.findByUsername(request.getParameter("username"));
+        User thisUser = (User) userService.loadUserByUsername(request.getParameter("hiddenUsername"));
+
+        if (user!=null&&!thisUser.getId().equals(user.getId())) {
+            model.addAttribute("usernameError", "This username already exists");
+            model.addAttribute("userId", thisUser.getId());
+            return "redirect:/updateUser";
         }
 
 
-        String roles =((Role)(userService.loadUserByUsername(userForm.getUsername()).getAuthorities().toArray()[0])).getAuthority();
+        userService.updateUser(thisUser, request);
+
+        String roles = ((Role) (userService.loadUserByUsername(userForm.getUsername()).getAuthorities().toArray()[0])).getAuthority();
         if ("ROLE_DOCTOR".equals(roles)) {
-            doctorService.update(new DoctorDTOImpl(userForm.getId(),userForm.getName(),
-                    userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
+            doctorService.update(new DoctorDTOImpl(userForm.getId(), userForm.getName(),
+                    userForm.getSurname(), userForm.getPosition(), userForm.getUsername()));
         } else if ("ROLE_NURSE".equals(roles)) {
-            nurseService.update(new NurseDTOImpl(userForm.getId(),userForm.getName(),
-                    userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
+            nurseService.update(new NurseDTOImpl(userForm.getId(), userForm.getName(),
+                    userForm.getSurname(), userForm.getPosition(), userForm.getUsername()));
         } else {
-            adminService.update(new AdminDTOImpl(userForm.getId(),userForm.getName(),
-                    userForm.getSurname(),userForm.getPosition(),userForm.getUsername()));
+            adminService.update(new AdminDTOImpl(userForm.getId(), userForm.getName(),
+                    userForm.getSurname(), userForm.getPosition(), userForm.getUsername()));
         }
-        User user = (User) userService.loadUserByUsername(userForm.getUsername());
-        userService.saveUser(user,request);
+        //  userService.saveUser(user,request);
 
 
         return "redirect:/users";

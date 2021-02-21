@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$USER_HOME$/IdeaProject/rehaBoard/src/main/webapp/index.xhtml" value="file://$USER_HOME$/IdeaProject/rehaBoard/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/../rehaBoard/src/main/webapp/index.xhtml" value="file://$PROJECT_DIR$/../rehaBoard/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/users.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/all-treatmentEvents.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/doctor/treatment-info.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/doctor" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/errors/client-error.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/errors" />

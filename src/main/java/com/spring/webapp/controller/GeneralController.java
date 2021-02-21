@@ -10,6 +10,7 @@ import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.service.*;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +54,6 @@ public class GeneralController {
 
 
     private static final Logger logger = Logger.getLogger(GeneralController.class);
-
 
     @Autowired
     TokenStore tokenStore;

@@ -334,6 +334,7 @@ PatientServiceImpl {
         }
     }
 
+
     private List<TreatmentDTOImpl> geTreatmentsToUpdateOrAdd(List<TreatmentDTOImpl> treatmentDTOList, List<TreatmentDTOImpl> treatments) {
         if (treatments == null) return treatmentDTOList;
         if (treatmentDTOList == null) return null;

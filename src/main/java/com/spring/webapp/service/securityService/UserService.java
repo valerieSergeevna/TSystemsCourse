@@ -30,8 +30,8 @@ import java.util.*;
 @Service
 //@ComponentScan(basePackages = "com.spring.webapp")
 public class UserService implements UserDetailsService {
-    @PersistenceContext
-    private EntityManager em;
+//    @PersistenceContext
+//    private EntityManager em;
 
 
     @Autowired
@@ -115,7 +115,8 @@ public class UserService implements UserDetailsService {
 
     public boolean saveUser(User user, HttpServletRequest request) throws DataBaseException {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
+        boolean isToSend = true;
+        String role = request.getParameter("role");
         if (userFromDB != null) {
             if (user.equals(userFromDB))
                 return false;
@@ -125,36 +126,34 @@ public class UserService implements UserDetailsService {
             if (!request.getParameter("username").equals(userFromDB.getUsername())) {
                 user.setUsername(request.getParameter("username"));
             }
+            isToSend = false;
+            role = ((Role) userFromDB.getRoles().toArray()[0]).getAuthority();
             userRepository.save(user);
-//            if (!user.getGoogleUsername().isEmpty() && userFromDB.getGoogleUsername().isEmpty()) {
-//                String message = "Hi!" +
-//                        "\nCatch your password: " + user.getPassword() + " and username: " + user.getUsername() +
-//                        "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)";
-//                mailSender.send(user.getGoogleUsername(), "RehaApp password and username", message);
-//            }
         }
 
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
         String position = request.getParameter("position");
-        String role = request.getParameter("role");
         String userName = user.getUsername();
         int roleId = 0;
 
         switch (role) {
             case "doctor":
+            case "ROLE_DOCTOR":
                 role = "ROLE_DOCTOR";
                 doctorService.save((DoctorDTOImpl) setFields(new DoctorDTOImpl(),
                         name, surname, position, userName));
                 roleId = 1;
                 break;
             case "nurse":
+            case "ROLE_NURSE":
                 role = "ROLE_NURSE";
                 nurseService.save((NurseDTOImpl) setFields(new NurseDTOImpl(),
                         name, surname, position, userName));
                 roleId = 3;
                 break;
             case "admin":
+            case "ROLE_ADMIN":
                 role = "ROLE_ADMIN";
                 adminService.save((AdminDTOImpl) setFields(new AdminDTOImpl(),
                         name, surname, position, userName));
@@ -168,9 +167,10 @@ public class UserService implements UserDetailsService {
         String password = user.getPassword();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        if (!user.getGoogleUsername().isEmpty()) {
+        //check for null
+        if (!user.getGoogleUsername().isEmpty() && isToSend) {
             String message = "Hi!" +
-                    "\nCatch your password: " + password + " and username: " + user.getUsername() +
+                    "\nCatch your password: " + password + " \nAnd username: " + user.getUsername() +
                     "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)";
             mailSender.send(user.getGoogleUsername(), "RehaApp password and username", message);
         }
@@ -180,20 +180,19 @@ public class UserService implements UserDetailsService {
     public boolean deleteUser(Long userId) throws ServerException, DataBaseException {
         if (userRepository.findById(userId).isPresent()) {
             User user = findUserById(userId);
-            String role = ((Role)user.getAuthorities().toArray()[0]).getAuthority();
+            String role = ((Role) user.getAuthorities().toArray()[0]).getAuthority();
             switch (role) {
                 case "ROLE_DOCTOR":
                     List<PatientDTOImpl> patientList = patientService.getAllByDoctorUserName(user.getUsername());
-                    for (PatientDTOImpl patientDTO:patientList) {
+                    for (PatientDTOImpl patientDTO : patientList) {
                         patientService.eraseDoctor(patientDTO);
                     }
-      //              doctorService.delete(doctorService.getByUserName(user.getUsername()).getId());
+                    //              doctorService.delete(doctorService.getByUserName(user.getUsername()).getId());
                     break;
                 case "ROLE_NURSE":
                     nurseService.delete(nurseService.getByUserName(user.getUsername()).getId());
                     break;
                 case "ROLE_ADMIN":
-                    role = "ROLE_ADMIN";
                     adminService.delete(adminService.getByUserName(user.getUsername()).getId());
                     break;
                 default:
@@ -205,10 +204,10 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public List<User> usergtList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
-    }
+//    public List<User> usergtList(Long idMin) {
+//        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
+//                .setParameter("paramId", idMin).getResultList();
+//    }
 
     private String getRole(Set<Role> roles) {
         for (Role role : roles) {

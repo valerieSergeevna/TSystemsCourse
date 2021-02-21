@@ -51,7 +51,7 @@
             <label class="form-label" for="form3Example5">Email </label>
             <input type="email" class="form-control"
                    id="form3Example5" name="email"
-                   value="${user.googleUsername}" required placeholder="some@some.com">
+                   value="${user.googleUsername}" placeholder="some@some.com">
         </div>
     </form:form>
 </div>

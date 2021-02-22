@@ -74,9 +74,10 @@ public class DoctorController {
 
 
     @RequestMapping("/doctor/updateTreatmentInfo")
-    public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) throws DataBaseException {
+    public String updateTreatmentInfo(@RequestParam("patientId") int id, Model model) throws DataBaseException, ServerException {
         PatientDTOImpl patientDTO = patientService.get(id);
         model.addAttribute("patient", patientDTO);
+        model.addAttribute("bin", patientService.getAllBinTreatmentsById(id));
         return "doctor/treatment-info";
     }
 

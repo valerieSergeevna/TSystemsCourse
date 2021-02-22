@@ -177,6 +177,86 @@
 
         <%--        <input type="submit" class="btn btn-outline-success btn-sm" value="Save"/>--%>
     </form:form>
+
+    <c:if test="${patient.treatments.size() != 0}">
+        <c:forEach items="${patient.treatments}" var="treatment" varStatus="count">
+            <input type="hidden" name="treatment" value="${treatment.treatmentId}">
+            <br>
+            <div class="col">
+                <div class="form-outline mb-4">
+                    <c:url var="deleteButton" value="/deleteTreatment">
+                        <c:param name="treatmentId" value="${treatment.treatmentId}"></c:param>
+                    </c:url>
+                    <button type="button" class="btn btn-outline-danger btn-circle"
+                            data-toggle="tooltip" data-placement="right"
+                            title="delete current prescription"
+                            onclick="window.location.href ='${deleteButton}'">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example7${count.index}">Medicine/Procedure name</label>
+                        <input type="text" class="form-control"
+                               id="form3Example7${count.index}" name="treatmentName"
+                               value="${treatment.typeName}" readonly>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="form3Example8${count.index}">Type</label>
+                            <input type="text" class="form-control"
+                                   id="form3Example8${count.index}"
+                                   name="treatmentType" value="${treatment.type}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="form3Example9${count.index}">Time Pattern (times/day(week)) </label>
+                <input type="number" class="form-control"
+                       id="form3Example9${count.index}" name="treatmentPattern"
+                       value="${treatment.timePattern}" required min="1" max="5">
+            </div>
+
+            <c:if test="${treatment.type.toString().equals('medicine')}">
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form3Example10${count.index}">Dose</label>
+                    <input type="number" class="form-control"
+                           id="form3Example10${count.index}" name="treatmentDose" value="${treatment.dose}" required
+                           min="0" step=".001">
+                </div>
+            </c:if>
+            <c:if test="${treatment.type.toString().equals('procedure')}">
+                <input type="hidden" name="treatmentDose" value="1"></c:if>
+
+            <div class="form-outline mb-4">
+                    <%--<label class="form-label" for="form3Example11${count.index}">Period</label>--%>
+                <h4>Period</h4>
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="datepicker1${count.index}">Start date</label>
+                <input type="date" class="form-control datepicker" name="startDate"
+                       id="datepicker1${count.index}" value="${treatment.startDate}" required
+                       pattern="\d{4}-\d{2}-\d{2}">
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="datepicker2${count.index}">End date</label>
+                <input type="date" class="form-control datepicker" name="endDate"
+                       id="datepicker2${count.index}" value="${treatment.endDate}" required
+                       pattern="\d{4}-\d{2}-\d{2}" }>
+            </div>
+            <%--</form:form>--%>
+
+            <%-- <input type="button" class="btn danger btn-circle btn-outline-danger btn-sm " value="Delete treatment"
+                    onclick="window.location.href ='${deleteButton}'"/><i class="fa fa-times"></i>
+            --%>
+
+        </c:forEach>
+    </c:if>
 </div>
 <script type="text/javascript">
     <%@include file="/resources/scripts/appScript.js"%>

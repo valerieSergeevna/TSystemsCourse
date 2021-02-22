@@ -8,14 +8,8 @@ import com.spring.utils.TimeParser;
 import com.spring.webapp.PatientStatus;
 import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dao.*;
-import com.spring.webapp.dto.DoctorDTOImpl;
-import com.spring.webapp.dto.PatientDTOImpl;
-import com.spring.webapp.dto.TreatmentDTOImpl;
-import com.spring.webapp.dto.TreatmentEventDTOImpl;
-import com.spring.webapp.entity.Doctor;
-import com.spring.webapp.entity.Patient;
-import com.spring.webapp.entity.ProcedureMedicine;
-import com.spring.webapp.entity.Treatment;
+import com.spring.webapp.dto.*;
+import com.spring.webapp.entity.*;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +34,8 @@ PatientServiceImpl {
     private PatientDAOImpl patientDAO;
 
     private TreatmentDAOImpl treatmentDAO;
+
+    private BinTreatmentsDAOImpl binTreatmentsDAO;
 
     private ProcedureMedicineDAOImpl procedureMedicineDAO;
 
@@ -90,6 +86,13 @@ PatientServiceImpl {
         this.doctorService = doctorService;
     }
 
+    @Autowired
+    public void setBinTreatmentsDAO(BinTreatmentsDAOImpl binTreatmentsDAO) {
+        this.binTreatmentsDAO = binTreatmentsDAO;
+    }
+
+
+    @Autowired
     public void setTreatmentEventService(TreatmentEventServiceImpl treatmentEventService) {
         this.treatmentEventService = treatmentEventService;
     }
@@ -125,6 +128,22 @@ PatientServiceImpl {
             logger.error("[!PatientServiceImpl 'getAllByDoctorUserName' method:" + "Can't find doctor with " + name + " username" + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new ServerException("Can't find doctor with " + name + " username");
+        }
+    }
+
+    @Transactional
+    public List<BinTreatmentDTOImpl> getAllBinTreatmentsById(int id) throws DataBaseException, ServerException {
+        try {
+            List<BinTreatment> binList = binTreatmentsDAO.getByPatientId(id);
+            return treatmentService.toBinTreatmentDTOList(binList);
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'getAllBinTreatmentsById' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        } catch (NullPointerException ex) {
+            logger.error("[!PatientServiceImpl 'getAllBinTreatmentsById' method:");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new ServerException("");
         }
     }
 
@@ -197,6 +216,7 @@ PatientServiceImpl {
         try {
             List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
             for (Treatment treatment : treatmentList) {
+                binTreatmentsDAO.save(treatmentService.toBinTreatment( treatment));
                 treatmentDAO.delete(treatment.getTreatmentId());
             }
         } catch (HibernateException ex) {

@@ -2,11 +2,14 @@ package com.spring.webapp.service;
 
 import com.spring.exception.DataBaseException;
 import com.spring.utils.TimeParser;
+import com.spring.webapp.dao.BinTreatmentsDAOImpl;
 import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
 import com.spring.webapp.dao.TreatmentEventDAOImpl;
+import com.spring.webapp.dto.BinTreatmentDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
+import com.spring.webapp.entity.BinTreatment;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 import com.spring.webapp.entity.TreatmentEvent;
@@ -32,6 +35,8 @@ public class TreatmentServiceImpl {
 
     private TreatmentEventDAOImpl treatmentEventDAO;
 
+    private BinTreatmentsDAOImpl binTreatmentsDAO;
+
     @Autowired
     public void setTreatmentDAO(TreatmentDAOImpl treatmentDAO) {
         this.treatmentDAO = treatmentDAO;
@@ -45,6 +50,11 @@ public class TreatmentServiceImpl {
     @Autowired
     public void setTreatmentEventDAO(TreatmentEventDAOImpl treatmentEventDAO) {
         this.treatmentEventDAO = treatmentEventDAO;
+    }
+
+    @Autowired
+    public void setBinTreatmentsDAO(BinTreatmentsDAOImpl binTreatmentsDAO) {
+        this.binTreatmentsDAO = binTreatmentsDAO;
     }
 
     @Transactional
@@ -92,6 +102,7 @@ public class TreatmentServiceImpl {
             for (TreatmentEvent treatmentEvent : treatmentEventList) {
                 treatmentEventDAO.delete(treatmentEvent.getId());
             }
+            binTreatmentsDAO.save(toBinTreatment(treatmentDAO.get(id)));
             treatmentDAO.delete(id);
         } catch (HibernateException ex) {
             logger.error("[!TreatmentServiceImpl 'delete' method:" + ex.getMessage() + "!]");
@@ -142,4 +153,37 @@ public class TreatmentServiceImpl {
         treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
         return treatmentDTO;
     }
+
+    public Treatment toTreatment(TreatmentDTOImpl treatmentDTO) {
+        Treatment treatment= new Treatment( treatmentDTO.getType(), treatmentDTO.getTimePattern(),
+                treatmentDTO.getDose(), TimeParser.fromLocalDateToLocalDateTime(treatmentDTO.getStartDate())
+                , TimeParser.fromLocalDateToLocalDateTime(treatmentDTO.getEndDate()));
+        treatment.setTreatmentId(treatmentDTO.getTreatmentId());
+        treatment.setProcedureMedicine(procedureMedicineDAO.get(procedureMedicineDAO.getIdByName(treatmentDTO.getTypeName())));
+        return treatment;
+    }
+
+    public BinTreatment toBinTreatment(Treatment treatment) {
+        BinTreatment binTreatment = new BinTreatment(treatment.getType(), treatment.getTimePattern(),
+                treatment.getDose(), treatment.getStartDate(), treatment.getEndDate());
+        binTreatment.setTreatmentId(treatment.getTreatmentId());
+        binTreatment.setProcedureMedicine(treatment.getProcedureMedicine());
+        binTreatment.setPatient(treatment.getPatient());
+        return binTreatment;
+    }
+
+    public BinTreatmentDTOImpl toBinTreatmentDTO(BinTreatment treatment) {
+        BinTreatmentDTOImpl treatmentDTO = new BinTreatmentDTOImpl(treatment.getTreatmentId(), treatment.getType(), treatment.getTimePattern(),
+                treatment.getDose());
+        treatmentDTO.setStartDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getStartDate()));
+        treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
+        return treatmentDTO;
+    }
+
+    public List<BinTreatmentDTOImpl> toBinTreatmentDTOList(List<BinTreatment> treatmentList) {
+        return treatmentList.stream()
+                .map(this::toBinTreatmentDTO)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -145,40 +145,48 @@ public class UserServiceTest {
         boolean isUserCreated = userService.saveUser(updateUser, request);
 
         Assert.assertTrue(isUserCreated);
-        Mockito.verify(mailSender,Mockito.times(1))
-               .send(user.getGoogleUsername(), "RehaApp password and username", Mockito.anyString());
+//        Mockito.verify(mailSender,Mockito.times(1))
+//               .send(user.getGoogleUsername(), "RehaApp password and username", Mockito.anyString());
 
     }
 
+    @Test
+    public void saveUserTestWithMessage() throws DataBaseException {
+        User updateUser  = new User();
+        user.setUsername("doc");
+        user.setGoogleUsername("some@some.com");
+        user.setPassword("qwerty");
+        Mockito.when(request.getParameter("email")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("name")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("surname")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("role")).thenReturn("doctor");
 
+        Mockito.when(userDAO.findByUsername("doc")).thenReturn(null);
+        boolean isUserCreated = userService.saveUser(user, request);
 
-//    @Test
-//    public void deleteUserTest() throws DataBaseException, ServerException {
-//        Mockito.doNothing()
-//                .doThrow(new RuntimeException()).when(userDAO).delete(user);
-//
-//        PatientDTOImpl patient1 = patientService.toPatientDTO(patientList.get(0));
-//        PatientDTOImpl patient2 = patientService.toPatientDTO(patientList.get(1));
-//
-//        Mockito.when((patientService.eraseDoctor(patient1)))
-//                .thenReturn(patient1);
-//        Mockito.when((patientService.eraseDoctor(patient2)))
-//                .thenReturn(patient2);
-//
-//        Mockito.when((patientService.getAllByDoctorUserName("doc")))
-//                .thenReturn(patientService.toPatientDTOList(patientList));
-//        Mockito.when((userDAO.findById(1L)))
-//                .thenReturn();
-//
-//        boolean isUserCreated = userService.deleteUser(1L);
-//
-//        Mockito.verify(userDAO,Mockito.times(1)).delete(user);
-//        Mockito.verify(patientService,Mockito.times(1))
-//                .eraseDoctor(patientService.toPatientDTO(patientList.get(0)));
-//        Mockito.verify(patientService,Mockito.times(1))
-//                .eraseDoctor(patientService.toPatientDTO(patientList.get(1)));
-//        Assert.assertFalse(isUserCreated);
-//    }
+        Assert.assertTrue(isUserCreated);
+        Mockito.verify(mailSender)
+               .send(user.getGoogleUsername(), "RehaApp password and username", "Hi!" +
+                       "\nCatch your password: " + "qwerty"+ " \nAnd username: " + user.getUsername() +
+                       "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)" );
 
+    }
+
+    @Test
+    public void saveNotUniqUserTest() throws DataBaseException {
+        User oldUser  = new User();
+        oldUser.setUsername("doc");
+        user.setUsername("doc");
+        user.setGoogleUsername("some@some.com");
+        user.setPassword("qwerty");
+        Mockito.when(request.getParameter("email")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("name")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("surname")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("role")).thenReturn("doctor");
+
+        Mockito.when(userDAO.findByUsername("doc")).thenReturn(oldUser);
+        boolean isUserCreated = userService.saveUser(user, request);
+        Assert.assertFalse(isUserCreated);
+    }
 
 }

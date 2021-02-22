@@ -52,7 +52,7 @@ public class TreatmentServiceImpl {
         Treatment treatment = new Treatment();
         BeanUtils.copyProperties(treatmentDTO, treatment);
         try {
-            int procedureMedicineID = procedureMedicineDAO.getIdByName(treatment.getProcedureMedicine().getName());
+            int procedureMedicineID = procedureMedicineDAO.getIdByName(treatmentDTO.getTypeName());
             if (procedureMedicineID > 0) {
                 treatment.setProcedureMedicine(procedureMedicineDAO.get(procedureMedicineID));
                 procedureMedicineDAO.delete(procedureMedicineDAO.getIdByName(""));

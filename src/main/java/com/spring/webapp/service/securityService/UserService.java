@@ -189,7 +189,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         //check for null
-        if (!user.getGoogleUsername().isEmpty()) {
+        if (user.getGoogleUsername()!=null&&!user.getGoogleUsername().isEmpty()) {
             String message = "Hi!" +
                     "\nCatch your password: " + password + " \nAnd username: " + user.getUsername() +
                     "\n Now you can log in in this app:  http://localhost:8080/" + "\n Have a good day:)";

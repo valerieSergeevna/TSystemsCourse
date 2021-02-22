@@ -92,11 +92,11 @@ public class PatientServiceTest {
         doctor.setSurname("doc");
 
         patientList = new ArrayList<>();
-        Patient patient1 = new Patient("TestName", "TestSurname", 12, 123456, "Cold",PatientStatus.IN_PROCESS);
+        Patient patient1 = new Patient("TestName", "TestSurname", 12, 123456, "Cold", PatientStatus.IN_PROCESS);
         patient1.setId(1);
         patientList.add(patient1);
 
-        Patient patient2 = new Patient("TestName2", "TestSurname2", 22, 123456, "Cold",PatientStatus.IN_PROCESS);
+        Patient patient2 = new Patient("TestName2", "TestSurname2", 22, 123456, "Cold", PatientStatus.IN_PROCESS);
         patient1.setId(2);
         patient2.setDoctor(doctor);
         patientList.add(patient2);
@@ -142,16 +142,4 @@ public class PatientServiceTest {
         Assert.assertEquals(patientService.getAllByDoctorUserName("doc").get(0).getId(), patients.get(0).getId());
     }
 
-//
-//    @Test
-//    public void dischargedPatientTest() throws DataBaseException {
-//        List<TreatmentDTOImpl> treatmentDTOList = new ArrayList<>();
-//        treatmentDTOList.add(new TreatmentDTOImpl());
-//        patientDTO.setTreatments(treatmentDTOList);
-//        patientDTO.setStatus(PatientStatus.DISCHARGED.getTitle());
-//        Mockito.when(patientDAO.update(patientService.toPatient(patientDTO))).thenReturn(patientService.toPatient(patientDTO));
-//        Mockito.verify(treatmentDAO).delete(0);
-//        patientService.dischargePatient(patientDTO,treatmentDTOList);
-//        Assert.assertEquals(treatmentDTOList.size(), 0);
-//    }
 }

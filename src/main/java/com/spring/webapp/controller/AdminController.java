@@ -11,6 +11,7 @@ import com.spring.webapp.entity.securityEntity.User;
 import com.spring.webapp.service.*;
 import com.spring.webapp.service.securityService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,35 +23,58 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class AdminController {
 
-    @Autowired
+
     private DoctorUserServiceImpl doctorService;
 
-    @Autowired
     private UserService userService;
 
-    @Autowired
     private NurseUserServiceImpl nurseService;
 
+    private AdminServiceImpl adminService;
 
     @Autowired
-    private AdminServiceImpl adminService;
+    public void setDoctorService(DoctorUserServiceImpl doctorService) {
+        this.doctorService = doctorService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setNurseService(NurseUserServiceImpl nurseService) {
+        this.nurseService = nurseService;
+    }
+
+    @Autowired
+    public void setAdminService(AdminServiceImpl adminService) {
+        this.adminService = adminService;
+    }
+
+    private String usernameError;
+
+
 
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model) {
         DoctorDTOImpl doctor = new DoctorDTOImpl();
         model.addAttribute("doctor", doctor);
+        usernameError = null;
         return "doctor/doctor-info";
     }
 
     @RequestMapping("/saveDoctor")
     public String saveDoctor(@ModelAttribute("doctor") DoctorDTOImpl doctor) throws DataBaseException {
         doctorService.save(doctor);
+        usernameError = null;
         return "redirect:/";////!!!
     }
 
     @RequestMapping("/deleteDoctor")
     public String deleteDoctor(@RequestParam("docId") int id) throws DataBaseException {
         doctorService.delete(id);
+        usernameError = null;
         return "redirect:/";//////!!!
     }
 
@@ -59,13 +83,15 @@ public class AdminController {
     public String updateDoctorInfo(@RequestParam("docId") int id, Model model) throws DataBaseException {
         DoctorDTOImpl doctorDTO = doctorService.get(id);
         model.addAttribute("doctor", doctorDTO);
+        usernameError = null;
         return "doctor/doctor-info";
     }
 
     @GetMapping("/users")
     public String userList(Model model) throws ServerException, DataBaseException {
         model.addAttribute("allUsers", userService.allUsersWithInfo());
-        model.addAttribute("userForm", new User());
+       // model.addAttribute("userForm", new User());
+        model.addAttribute("usernameError", usernameError);
         return "admin/users";
     }
 
@@ -85,6 +111,8 @@ public class AdminController {
         }
         model.addAttribute("userInfo", userDTO);
         model.addAttribute("user", user);
+        model.addAttribute("usernameError",usernameError);
+        usernameError = null;
         return "admin/user-info";
     }
 
@@ -102,6 +130,7 @@ public class AdminController {
         if (user!=null&&!thisUser.getId().equals(user.getId())) {
             model.addAttribute("usernameError", "This username already exists");
             model.addAttribute("userId", thisUser.getId());
+            usernameError = "User name is not uniq";
             return "redirect:/updateUser";
         }
 
@@ -122,12 +151,47 @@ public class AdminController {
         //  userService.saveUser(user,request);
 
 
+        usernameError = null;
         return "redirect:/users";
     }
+
+    @RequestMapping("/registration")
+    public String addUser(Model model, HttpServletRequest request) throws DataBaseException, ServerException {
+//crutch
+//        String username = userService.loadUserByUsername(userForm.getUsername()).getUsername();
+//        userService.deleteUser(((User)userService.loadUserByUsername(userForm.getUsername())).getId());
+
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String passwordConfirm = request.getParameter("passwordConfirm");
+        User user = new User();
+        user.setGoogleUsername(email);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setPasswordConfirm(passwordConfirm);
+
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
+            model.addAttribute("passwordError", "Passwords don't match");
+            usernameError = null;
+            return "redirect:/users";
+        }
+
+        if (!userService.saveUser(user, request)) {
+            model.addAttribute("usernameError", "User name is not uniq");
+            usernameError = "User name is not uniq";
+            return "redirect:/users";
+        }
+
+        usernameError = null;
+        return "redirect:/users";
+    }
+
 
     @RequestMapping(value = "/deleteUser")
     public String deleteUser(@RequestParam("userId") Long userId) throws DataBaseException, ServerException {
         userService.deleteUser(userId);
+        usernameError = null;
         return "redirect:/users";
     }
 

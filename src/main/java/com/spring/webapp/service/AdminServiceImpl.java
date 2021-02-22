@@ -8,8 +8,10 @@ import com.spring.webapp.dto.AdminDTOImpl;
 import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.entity.Admin;
 import com.spring.webapp.entity.Doctor;
-import org.apache.log4j.Logger;
+
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class AdminServiceImpl extends AbstractUserService<AdminDTOImpl>{
-    private static final Logger logger = Logger.getLogger(AdminServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
+
+    private AdminDAOImpl adminDAO;
 
     @Autowired
-    private AdminDAOImpl adminDAO;
+    public void setAdminDAO(AdminDAOImpl adminDAO) {
+        this.adminDAO = adminDAO;
+    }
 
     @Transactional
     public List<AdminDTOImpl> getAll() throws DataBaseException {

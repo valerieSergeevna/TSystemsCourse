@@ -6,41 +6,52 @@ import com.spring.jms.JmsMessageTreatmentEvent;
 import com.spring.jms.JmsProducer;
 import com.spring.utils.TimeParser;
 import com.spring.webapp.EventStatus;
-import com.spring.webapp.dao.*;
-import com.spring.webapp.dto.DoctorDTOImpl;
+import com.spring.webapp.dao.TreatmentEventDAOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
-import com.spring.webapp.dto.TreatmentDTOImpl;
 import com.spring.webapp.dto.TreatmentEventDTOImpl;
-import com.spring.webapp.entity.*;
-import org.apache.log4j.Logger;
+import com.spring.webapp.entity.TreatmentEvent;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class TreatmentEventServiceImpl {
 
-    private static final Logger logger = Logger.getLogger(TreatmentEventServiceImpl.class);
-
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(TreatmentEventServiceImpl.class);
     private TreatmentEventDAOImpl treatmentEventDAO;
 
-
-    @Autowired
     private PatientServiceImpl patientService;
 
-    @Autowired
+
     private JmsProducer producer;
+
+    @Autowired
+    public void setTreatmentEventDAO(TreatmentEventDAOImpl treatmentEventDAO) {
+        this.treatmentEventDAO = treatmentEventDAO;
+    }
+
+    @Autowired
+    public void setPatientService(PatientServiceImpl patientService) {
+        this.patientService = patientService;
+    }
+
+    @Autowired
+    public void setProducer(JmsProducer producer) {
+        this.producer = producer;
+    }
 
     @Transactional
     public List<TreatmentEventDTOImpl> getAll() throws DataBaseException {

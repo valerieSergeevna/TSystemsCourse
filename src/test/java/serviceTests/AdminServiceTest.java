@@ -41,7 +41,6 @@ public class AdminServiceTest {
 
     @Test
     public void saveUserTest() throws DataBaseException {
-
         Mockito.when(adminDAO.save(Mockito.any(Admin.class))).thenReturn(admin);
         AdminDTOImpl adminDTO = adminService.toAdminDTO(admin);
         AdminDTOImpl gottenAdmin = adminService.save(adminDTO);

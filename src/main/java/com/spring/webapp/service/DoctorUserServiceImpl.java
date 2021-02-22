@@ -8,8 +8,10 @@ import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
-import org.apache.log4j.Logger;
+
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +22,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class DoctorUserServiceImpl extends AbstractUserService<DoctorDTOImpl> {
-    private static final Logger logger = Logger.getLogger(DoctorUserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DoctorUserServiceImpl.class);
 
-    @Autowired
     private DoctorDAOImpl doctorDAO;
 
     @Autowired
-    private PatientDAOImpl patientDAO;
-
-    @Autowired
-    private PatientServiceImpl patientService;
-
+    public void setDoctorDAO(DoctorDAOImpl doctorDAO) {
+        this.doctorDAO = doctorDAO;
+    }
 
     @Transactional
     public List<DoctorDTOImpl> getAll() throws DataBaseException {

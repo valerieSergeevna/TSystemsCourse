@@ -4,71 +4,89 @@ import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.webapp.dao.DoctorDAOImpl;
 import com.spring.webapp.dao.NurseDAOImpl;
-import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.securityDAO.RoleDAO;
 import com.spring.webapp.dao.securityDAO.UserDAO;
 import com.spring.webapp.dto.*;
-import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
 import com.spring.webapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
-//@ComponentScan(basePackages = "com.spring.webapp")
 public class UserService implements UserDetailsService {
-//    @PersistenceContext
-//    private EntityManager em;
-
-
-    @Autowired
     UserDAO userRepository;
-    @Autowired
+
     RoleDAO roleRepository;
-    @Autowired
+
     DoctorDAOImpl doctorDAO;
-    @Autowired
+
     DoctorUserServiceImpl doctorService;
 
-    @Autowired
     private MailService mailSender;
 
-    @Autowired
     NurseDAOImpl nurseDAO;
-    @Autowired
+
     NurseUserServiceImpl nurseService;
 
-    @Autowired
     PatientServiceImpl patientService;
 
-    @Autowired
     AdminServiceImpl adminService;
 
     @Autowired
     PasswordEncoder bCryptPasswordEncoder;
 
-  /*  @Autowired(required = true)
+    @Autowired
     public void setUserRepository(UserDAO userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Autowired(required = true)
+    @Autowired
     public void setRoleRepository(RoleDAO roleRepository) {
         this.roleRepository = roleRepository;
-    }*/
+    }
+
+    @Autowired
+    public void setDoctorDAO(DoctorDAOImpl doctorDAO) {
+        this.doctorDAO = doctorDAO;
+    }
+
+    @Autowired
+    public void setDoctorService(DoctorUserServiceImpl doctorService) {
+        this.doctorService = doctorService;
+    }
+
+    @Autowired
+    public void setMailSender(MailService mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    @Autowired
+    public void setNurseDAO(NurseDAOImpl nurseDAO) {
+        this.nurseDAO = nurseDAO;
+    }
+
+    @Autowired
+    public void setNurseService(NurseUserServiceImpl nurseService) {
+        this.nurseService = nurseService;
+    }
+
+    @Autowired
+    public void setPatientService(PatientServiceImpl patientService) {
+        this.patientService = patientService;
+    }
+
+    @Autowired
+    public void setAdminService(AdminServiceImpl adminService) {
+        this.adminService = adminService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

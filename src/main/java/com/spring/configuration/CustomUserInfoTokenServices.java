@@ -4,7 +4,9 @@ import com.spring.webapp.dao.securityDAO.UserDAO;
 import com.spring.webapp.entity.securityEntity.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.*;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +26,6 @@ import org.springframework.util.Assert;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 public class CustomUserInfoTokenServices implements ResourceServerTokenServices
 {
     protected final Log logger = LogFactory.getLog(this.getClass());
@@ -140,12 +141,7 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices
         return new OAuth2Authentication(request, token);
     }
 
-    /**
-     * Return the principal that should be used for the token. The default implementation
-     * delegates to the {@link PrincipalExtractor}.
-     * @param map the source map
-     * @return the principal or {@literal "unknown"}
-     */
+
     protected Object getPrincipal(Map<String, Object> map) {
         Object principal = this.principalExtractor.extractPrincipal(map);
         return (principal == null ? "unknown" : principal);

@@ -19,40 +19,40 @@
     <input type="button" class="btn btn-outline-secondary btn-sm" id="today" value="Show today's treatments"
            onclick="window.location.href = '/nurse/'"/>
     <br><br>
-    <form class="search-form search-surname" action="/nurse/findBySurname">
-        <div class="row mb-4">
-            <div class="col">
-                <div class="form-outline">
-                    <label class="form-label text-info" for="form3Example1">Find patient's treatment</label>
-                    <input onkeyup="filter()" id="form3Example1" class="form-control" name="patientSurname"/>
-                </div>
-            </div>
-            <div class="col">
-                <%--                <div class="form-outline">--%>
-                <%--                    <label class="form-label"></label>--%>
-                <%--                    <input type="submit" value="Find" style="float: left; margin-top:55px;"--%>
-                <%--                           class="btn btn-xs btn-outline-info "/>--%>
-                <%--                </div>--%>
-                <form class="search-form search-date" action="/nurse/findByDate">
-                    <div class="row mb-4">
-                        <div class="col">
-                            <div class="form-outline">
-                                <label class="form-label text-info" for="datepicker">Find by date</label>
-                                <input type="date" class="form-control datepicker" name="date"
-                                       id="datepicker" required>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-outline">
-                                <label class="form-label"></label>
-                                <input type="submit" value="Find" style="float: left; margin-top:30px;"
-                                       class="btn btn-xs btn-outline-info "/>
-                            </div>
-                        </div>
-                    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="form-outline">
+                <label class="form-label text-info" for="form3Example1">Find patient's treatment</label>
+                <input onkeyup="filter()" id="form3Example1" class="form-control" name="patientSurname"/>
             </div>
         </div>
-    </form>
+        <div class="col">
+            <%--                <div class="form-outline">--%>
+            <%--                    <label class="form-label"></label>--%>
+            <%--                    <input type="submit" value="Find" style="float: left; margin-top:55px;"--%>
+            <%--                           class="btn btn-xs btn-outline-info "/>--%>
+            <%--                </div>--%>
+            <form class="search-form search-date" action="/nurse/findByDate">
+                <div class="row mb-4">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label text-info" for="datepicker">Find by date</label>
+                            <input type="date" class="form-control datepicker" name="date"
+                                   id="datepicker" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label"></label>
+                            <input type="submit" value="Find" style="float: left; margin-top:30px;"
+                                   class="btn btn-xs btn-outline-info "/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
     </form>
@@ -71,9 +71,9 @@
             </div>
             <div class="col">
                 <div class="form-outline">
-<%--                    <label class="form-label"></label>--%>
-<%--                    <input type="submit" value="Find" style="float: left; margin-top:30px;"--%>
-<%--                           class="btn btn-xs btn-outline-info "/>--%>
+                    <%--                    <label class="form-label"></label>--%>
+                    <%--                    <input type="submit" value="Find" style="float: left; margin-top:30px;"--%>
+                    <%--                           class="btn btn-xs btn-outline-info "/>--%>
                 </div>
             </div>
         </div>

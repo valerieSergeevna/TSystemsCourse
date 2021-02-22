@@ -2,18 +2,17 @@ package com.spring.webapp.service;
 
 import com.spring.exception.DataBaseException;
 import com.spring.utils.TimeParser;
-import com.spring.webapp.dao.PatientDAOImpl;
 import com.spring.webapp.dao.ProcedureMedicineDAOImpl;
 import com.spring.webapp.dao.TreatmentDAOImpl;
 import com.spring.webapp.dao.TreatmentEventDAOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.dto.TreatmentDTOImpl;
-import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
 import com.spring.webapp.entity.TreatmentEvent;
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +24,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class TreatmentServiceImpl {
-    private static final Logger logger = Logger.getLogger(TreatmentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(TreatmentServiceImpl.class);
 
-    @Autowired
     private TreatmentDAOImpl treatmentDAO;
-    @Autowired
+
     private ProcedureMedicineDAOImpl procedureMedicineDAO;
-    @Autowired
+
     private TreatmentEventDAOImpl treatmentEventDAO;
 
+    @Autowired
+    public void setTreatmentDAO(TreatmentDAOImpl treatmentDAO) {
+        this.treatmentDAO = treatmentDAO;
+    }
+
+    @Autowired
+    public void setProcedureMedicineDAO(ProcedureMedicineDAOImpl procedureMedicineDAO) {
+        this.procedureMedicineDAO = procedureMedicineDAO;
+    }
+
+    @Autowired
+    public void setTreatmentEventDAO(TreatmentEventDAOImpl treatmentEventDAO) {
+        this.treatmentEventDAO = treatmentEventDAO;
+    }
 
     @Transactional
     public List<TreatmentDTOImpl> getAll() throws DataBaseException {

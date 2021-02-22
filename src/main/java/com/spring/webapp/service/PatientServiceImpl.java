@@ -16,8 +16,9 @@ import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
 import com.spring.webapp.entity.ProcedureMedicine;
 import com.spring.webapp.entity.Treatment;
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -34,35 +35,69 @@ import java.util.stream.Collectors;
 public class
 PatientServiceImpl {
 
-    private static final Logger logger = Logger.getLogger(PatientServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(PatientServiceImpl.class);
 
-    @Autowired
     private PatientDAOImpl patientDAO;
 
-    @Autowired
     private TreatmentDAOImpl treatmentDAO;
 
-    @Autowired
     private ProcedureMedicineDAOImpl procedureMedicineDAO;
 
-    @Autowired
     private DoctorDAOImpl doctorDAO;
 
-    @Autowired
     private TreatmentEventDAOImpl treatmentEventDAO;
 
-    @Autowired
     private TreatmentServiceImpl treatmentService;
 
-    @Autowired
     private DoctorUserServiceImpl doctorService;
 
-    @Autowired
     private TreatmentEventServiceImpl treatmentEventService;
 
-    @Autowired
     private JmsProducer producer;
 
+    @Autowired
+    public void setPatientDAO(PatientDAOImpl patientDAO) {
+        this.patientDAO = patientDAO;
+    }
+
+    @Autowired
+    public void setTreatmentDAO(TreatmentDAOImpl treatmentDAO) {
+        this.treatmentDAO = treatmentDAO;
+    }
+
+    @Autowired
+    public void setProcedureMedicineDAO(ProcedureMedicineDAOImpl procedureMedicineDAO) {
+        this.procedureMedicineDAO = procedureMedicineDAO;
+    }
+
+    @Autowired
+    public void setDoctorDAO(DoctorDAOImpl doctorDAO) {
+        this.doctorDAO = doctorDAO;
+    }
+
+    @Autowired
+    public void setTreatmentEventDAO(TreatmentEventDAOImpl treatmentEventDAO) {
+        this.treatmentEventDAO = treatmentEventDAO;
+    }
+
+    @Autowired
+    public void setTreatmentService(TreatmentServiceImpl treatmentService) {
+        this.treatmentService = treatmentService;
+    }
+
+    @Autowired
+    public void setDoctorService(DoctorUserServiceImpl doctorService) {
+        this.doctorService = doctorService;
+    }
+
+    public void setTreatmentEventService(TreatmentEventServiceImpl treatmentEventService) {
+        this.treatmentEventService = treatmentEventService;
+    }
+
+    @Autowired
+    public void setProducer(JmsProducer producer) {
+        this.producer = producer;
+    }
 
     @Transactional
     public List<PatientDTOImpl> getAll() throws DataBaseException {

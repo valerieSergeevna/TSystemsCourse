@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -28,16 +29,20 @@ import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import  com.spring.configuration.AuthProvider;
+import com.spring.configuration.AuthProvider;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 @ComponentScan(basePackages = "com.spring")
@@ -56,10 +61,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthProvider authProvider;
 
-//    @Autowired
+    //    @Autowired
 //    @Lazy
     @Autowired
-   private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -72,7 +77,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 //        this.passwordEncoder = passwordEncoder;
 //   }
 
-   // @Qualifier("oauth2ClientContext")
+    // @Qualifier("oauth2ClientContext")
     @Autowired
     private OAuth2ClientContext oAuth2ClientContext;
 
@@ -99,7 +104,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-   // @ConfigurationProperties("google.client")
+    // @ConfigurationProperties("google.client")
     public AuthorizationCodeResourceDetails google() {
         AuthorizationCodeResourceDetails authorizationCodeResourceDetails = new AuthorizationCodeResourceDetails();
         authorizationCodeResourceDetails.setClientId(clientId);
@@ -124,10 +129,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Primary
-  //  @ConfigurationProperties("google.resource")
+    //  @ConfigurationProperties("google.resource")
     public ResourceServerProperties googleResource() {
         ResourceServerProperties resourceServerProperties = new ResourceServerProperties();
-     //   resourceServerProperties.setTokenInfoUri(userInfoUri);
+        //   resourceServerProperties.setTokenInfoUri(userInfoUri);
         resourceServerProperties.setPreferTokenInfo(preferTokenInfo);
         resourceServerProperties.setUserInfoUri(userInfoUri);
         return resourceServerProperties;
@@ -143,24 +148,28 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Bean
-    public FilterRegistrationBean oAuth2ClientFilterRegistration(OAuth2ClientContextFilter oAuth2ClientContextFilter)
-    {
+    public FilterRegistrationBean oAuth2ClientFilterRegistration(OAuth2ClientContextFilter oAuth2ClientContextFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(oAuth2ClientContextFilter);
         registration.setOrder(-100);
         return registration;
     }
 
-    private Filter ssoFilter()
-    {
+    private Filter ssoFilter() {
         OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
         OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(), oAuth2ClientContext);
         googleFilter.setRestTemplate(googleTemplate);
         CustomUserInfoTokenServices tokenServices = new CustomUserInfoTokenServices(googleResource().getUserInfoUri(), google().getClientId());
         tokenServices.setRestTemplate(googleTemplate);
-        googleFilter.setTokenServices(tokenServices);
         tokenServices.setUserRepo(userDAO);
-      //  tokenServices.setPasswordEncoder(passwordEncoder());
+        googleFilter.setTokenServices(tokenServices);
+        googleFilter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler() {
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                this.setDefaultTargetUrl("http://localhost:8080/greet");
+                super.onAuthenticationSuccess(request, response, authentication);
+            }
+        });
+        //  tokenServices.setPasswordEncoder(passwordEncoder());
         return googleFilter;
     }
 
@@ -179,25 +188,25 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/registration","/users", "/updateUser").hasRole("ADMIN")
-                    //.antMatchers("/").permitAll()
-                    .antMatchers("/","/viewPatient","/patients").hasAnyRole("DOCTOR", "NURSE","ADMIN")
-                    .antMatchers("/doctor/updateTreatmentInfo").hasAnyRole("DOCTOR","ADMIN")
-                    .antMatchers("/nurse/showAllTreatments","nurse/cancelStatus",
-                            "/nurse/showNearestHourTreatments","/nurse/").hasAnyRole("NURSE","ADMIN")
+                .antMatchers("/registration", "/users", "/updateUser").hasRole("ADMIN")
+                //.antMatchers("/").permitAll()
+                .antMatchers("/", "/viewPatient", "/patients").hasAnyRole("DOCTOR", "NURSE", "ADMIN")
+                .antMatchers("/doctor/updateTreatmentInfo").hasAnyRole("DOCTOR", "ADMIN")
+                .antMatchers("/nurse/showAllTreatments", "nurse/cancelStatus",
+                        "/nurse/showNearestHourTreatments", "/nurse/").hasAnyRole("NURSE", "ADMIN")
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
                 .and()
-                    .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .and()
-                    .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
-                    .exceptionHandling().accessDeniedPage("/403")
+                .exceptionHandling().accessDeniedPage("/403")
                 .and()
-                    .addFilterBefore(ssoFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(ssoFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 //    @Autowired

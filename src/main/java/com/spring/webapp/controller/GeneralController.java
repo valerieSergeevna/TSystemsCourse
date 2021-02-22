@@ -1,59 +1,65 @@
 package com.spring.webapp.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.SpringBootRehaApplication;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.jms.JmsMessageTreatmentEvent;
 import com.spring.jms.JmsProducer;
-import com.spring.webapp.TreatmentType;
-import com.spring.webapp.dto.*;
+import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.entity.securityEntity.Role;
-import com.spring.webapp.service.*;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.spring.webapp.service.PatientServiceImpl;
+import com.spring.webapp.service.ProcedureMedicineServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
-import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class GeneralController {
-    @Autowired
     JmsProducer jmsProducer;
 
-    @Autowired
     private PatientServiceImpl patientService;
 
-    @Autowired
     private ProcedureMedicineServiceImpl procedureMedicineService;
 
     boolean wakeUpFlag = false;
 
+    @Autowired
+    public void setJmsProducer(JmsProducer jmsProducer) {
+        this.jmsProducer = jmsProducer;
+    }
 
-    private static final Logger logger = Logger.getLogger(GeneralController.class);
+    @Autowired
+    public void setPatientService(PatientServiceImpl patientService) {
+        this.patientService = patientService;
+    }
+
+    @Autowired
+    public void setProcedureMedicineService(ProcedureMedicineServiceImpl procedureMedicineService) {
+        this.procedureMedicineService = procedureMedicineService;
+    }
+
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(SpringBootRehaApplication.class);
 
     @Autowired
     TokenStore tokenStore;
@@ -69,6 +75,7 @@ public class GeneralController {
         }
     }
 
+
     @RequestMapping("/")
     public String greet(Model model, Authentication authentication, Principal principal) {
         String name = principal.getName();
@@ -76,8 +83,8 @@ public class GeneralController {
         String role;
         for (int i = 0; i < roles.size(); i++) {
             role = ((Role) roles.toArray()[i]).getAuthority() + "";
-            logger.info("role verified" + i + " is -> " + role);
-            logger.info("name verified" + i + " is -> " + authentication.getName());
+            log.info("role verified" + i + " is -> " + role);
+            log.info("name verified" + i + " is -> " + authentication.getName());
             switch (role) {
                 case "ROLE_DOCTOR":
                     model.addAttribute("role", "Doctor");
@@ -93,10 +100,10 @@ public class GeneralController {
         return "greeting";
     }
 
-    @RequestMapping("/greet")
-    public String greetFromOauth(Model model, Authentication authentication, Principal principal) {
-        return "redirect:/";
-    }
+//    @RequestMapping("/greet")
+//    public String greetFromOauth(Model model, Authentication authentication, Principal principal) {
+//        return "redirect:/";
+//    }
 
     @RequestMapping("/patients")
     public String showAllPatients(Model model, Authentication authentication) throws DataBaseException, ServerException {

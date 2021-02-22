@@ -22,12 +22,21 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class DoctorController {
 
-    @Autowired
+
     private PatientServiceImpl patientService;
 
-    @Autowired
+
     private TreatmentServiceImpl treatmentService;
 
+    @Autowired
+    public void setPatientService(PatientServiceImpl patientService) {
+        this.patientService = patientService;
+    }
+
+    @Autowired
+    public void setTreatmentService(TreatmentServiceImpl treatmentService) {
+        this.treatmentService = treatmentService;
+    }
 
     @RequestMapping("/deletePatient")
     public String deletePatient(@RequestParam("patientId") int id) throws DataBaseException {

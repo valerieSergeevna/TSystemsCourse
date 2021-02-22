@@ -6,9 +6,10 @@ import com.spring.webapp.dao.TreatmentDAOImpl;
 import com.spring.webapp.dto.ProcedureMedicineDTOImpl;
 import com.spring.webapp.dto.TreatmentEventDTOImpl;
 import com.spring.webapp.entity.ProcedureMedicine;
-import com.spring.webapp.entity.TreatmentEvent;
-import org.apache.log4j.Logger;
+
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,14 @@ import org.hibernate.query.Query;
 
 @Service
 public class ProcedureMedicineServiceImpl {
-    private static final Logger logger = Logger.getLogger(ProcedureMedicineServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProcedureMedicineServiceImpl.class);
+
+    private ProcedureMedicineDAOImpl procedureMedicineDAO;
 
     @Autowired
-    private ProcedureMedicineDAOImpl procedureMedicineDAO;
+    public void setProcedureMedicineDAO(ProcedureMedicineDAOImpl procedureMedicineDAO) {
+        this.procedureMedicineDAO = procedureMedicineDAO;
+    }
 
     @Transactional
     public List<ProcedureMedicineDTOImpl> getAll() throws DataBaseException {

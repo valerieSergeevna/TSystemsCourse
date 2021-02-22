@@ -4,10 +4,10 @@ import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
 import com.spring.webapp.dao.NurseDAOImpl;
 import com.spring.webapp.dto.NurseDTOImpl;
-import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Nurse;
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class NurseUserServiceImpl extends AbstractUserService<NurseDTOImpl> {
-    private static final Logger logger = Logger.getLogger(NurseUserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(NurseUserServiceImpl.class);
+
+    private NurseDAOImpl nurseDAO;
 
     @Autowired
-    private NurseDAOImpl nurseDAO;
+    public void setNurseDAO(NurseDAOImpl nurseDAO) {
+        this.nurseDAO = nurseDAO;
+    }
 
     @Transactional
     public List<NurseDTOImpl> getAll() throws DataBaseException {

@@ -20,8 +20,13 @@ import java.util.List;
 
 @Controller
 public class NurseController {
-    @Autowired
+
     private TreatmentEventServiceImpl treatmentEventService;
+
+    @Autowired
+    public void setTreatmentEventService(TreatmentEventServiceImpl treatmentEventService) {
+        this.treatmentEventService = treatmentEventService;
+    }
 
     @RequestMapping("/nurse/showAllTreatments")
     public String showAllEvents(Model model) throws DataBaseException {
@@ -95,25 +100,6 @@ public class NurseController {
         return objectMapper.writeValueAsString(treatmentEventService.getAllForTodayRest());
     }
 
-    //rest
 
-
-//
-//    @RequestMapping("nurse/updateAjaxStatus")
-//    @ResponseBody
-//    public List<TreatmentEventDTOImpl> updateAjaxStatus(@RequestParam("eventId") int id,
-//                               @RequestParam("eventStatus") String status) throws DataBaseException {
-//        List<TreatmentEventDTOImpl> treatmentEventDTOList;
-//        treatmentEventService.updateStatus(id, status);
-//        treatmentEventDTOList = treatmentEventService.getAll();
-//        return treatmentEventDTOList;
-//
-//    }
-//
-//    @RequestMapping("nurse/updateAjaxStatus")
-//    @ResponseBody
-//    public List<TreatmentEventDTOImpl> ajaxToday() throws DataBaseException {
-//        return treatmentEventService.showTodayTreatments();
-//    }
 
 }

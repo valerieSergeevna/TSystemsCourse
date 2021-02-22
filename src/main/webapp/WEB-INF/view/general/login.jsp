@@ -10,7 +10,6 @@
 </head>
 <body>
 <div class="overlay"></div>
-<%--<div class="slideshow-container">--%>
     <div class="air-slider">
         <div class="slide">
             <img src="/resources/img/backgr1.jpg" height="100%"/>
@@ -23,20 +22,6 @@
         </div>
     </div>
 
-
-<%--    <div class="mySlides fade">--%>
-<%--        <img src="/resources/img/backgr1.jpg" style="width:100%">--%>
-<%--    </div>--%>
-
-<%--    <div class="mySlides fade">--%>
-<%--        <img src="/resources/img/backgr2.jpg" style="width:100%">--%>
-<%--    </div>--%>
-
-<%--    <div class="mySlides fade">--%>
-<%--        <img src="/resources/img/bckgr3.jpg" style="width:100%">--%>
-<%--    </div>--%>
-
-<%--</div>--%>
 
         <c:url  value="/login" var="loginUrl"/>
         <div class="login container">

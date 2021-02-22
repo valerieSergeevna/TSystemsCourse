@@ -10,15 +10,49 @@
 <body>
 <div class="container">
     <h2 class="text-info">Users list</h2>
-    <table class="table table-light table-hover">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="form-outline">
+                <label class="form-label text-info" for="userNameInputId">Find by username</label>
+                <input onkeyup="filterUsers('userNameInputId',1)" id="userNameInputId" class="form-control" name="userName"/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-outline">
+                <label class="form-label text-info" for="surnameInputId">Find by surname</label>
+                <input onkeyup="filterUsers('surnameInputId',4)" id="surnameInputId" class="form-control" name="Surname"/>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col">
+            <div class="form-outline">
+                <label class="form-label text-info" for="roleInputId">Find by role</label>
+                <select onchange="filterUsers('roleInputId',2)" class="form-control" id="roleInputId"
+                        name="treatmentType">
+                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                    <option value="ROLE_NURSE">ROLE_NURSE</option>
+                    <option value="ROLE_DOCTOR">ROLE_DOCTOR</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-outline">
+                <%--                    <label class="form-label"></label>--%>
+                <%--                    <input type="submit" value="Find" style="float: left; margin-top:30px;"--%>
+                <%--                           class="btn btn-xs btn-outline-info "/>--%>
+            </div>
+        </div>
+    </div>
+    <table id = "myTable" class="table table-light table-hover">
         <thead style="background-color:skyblue">
         <tr class="text-white">
-            <th>ID</th>
-            <th>UserName</th>
-            <th>Roles</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Position</th>
+            <th onclick="sortTable(0)">ID</th>
+            <th onclick="sortTable(1)">UserName</th>
+            <th onclick="sortTable(2)">Roles</th>
+            <th onclick="sortTable(3)">Name</th>
+            <th onclick="sortTable(4)">Surname</th>
+            <th onclick="sortTable(5)">Position</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -28,7 +62,7 @@
                 <td>${user.key.id}</td>
                 <td>${user.key.username}</td>
                 <td>
-                    <c:forEach items="${user.key.roles}" var="role">${role.name}; </c:forEach>
+                    <c:forEach items="${user.key.roles}" var="role">${role.name}</c:forEach>
                 </td>
                 <td>${user.value.name}</td>
                 <td>${user.value.surname}</td>
@@ -57,6 +91,13 @@
             </tbody>
         </c:forEach>
     </table>
+
+    <c:if test="${usernameError!=null}">
+        <div class="text-danger">
+                ${usernameError}
+        </div>
+
+    </c:if>
 
     <button class="btn btn-outline-info" id="registrationButton">New user registration</button>
     <div id="registration" class="registration container" style="display: none;">
@@ -90,10 +131,24 @@
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="userNameId">Username</label>
-                    <input type="text"
-                           name="username" class="form-control" id="userNameId" placeholder="Username" value=""
-                           required >
-                    ${usernameError}
+
+                    <c:choose>
+                        <c:when test="${usernameError==null}">
+                            <input type="text"
+                                   name="username" class="form-control" id="userNameId" minlength="2"  placeholder="Username" value=""
+                                   required >
+                        </c:when>
+                        <c:otherwise>
+                            <input type="text"
+                                   name="username" class="form-control is-invalid" id="userNameId" minlength="2" placeholder="Username" value=""
+                                   required >
+                        </c:otherwise>
+                    </c:choose>
+                    <c:if test="${usernameError!=null}">
+                        <div class="invalid-feedback">
+                                ${usernameError}
+                        </div>
+                    </c:if>
 
                     <%--                    <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"--%>
                     <%--                               ></form:input>--%>
@@ -112,14 +167,14 @@
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordId">Password</label>
                     <input type="password"
-                           name="password" class="form-control" id="passwordId" placeholder="Password" value=""
+                           name="password" class="form-control" minlength="2"  id="passwordId" placeholder="Password" value=""
                            required>
                     <%--                    <form:input type="password"  class="form-control" id="passwordId" path="password" placeholder="Password"></form:input>--%>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordConfirmId">Password confirm</label>
                     <input type="password"
-                           name="passwordConfirm" class="form-control" id="passwordConfirmId"
+                           name="passwordConfirm" class="form-control" minlength="2"  id="passwordConfirmId"
                            placeholder="Password confirm" value="" required>
 
                     <%--                    <form:input class="form-control" type="password" id="passwordConfirmId" path="passwordConfirm"--%>

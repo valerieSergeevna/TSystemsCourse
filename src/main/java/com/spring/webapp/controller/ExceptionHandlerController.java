@@ -6,8 +6,9 @@ import com.spring.exception.MyException;
 import com.spring.exception.ResourceNotFoundException;
 import com.spring.webapp.service.PatientServiceImpl;
 import com.spring.webapp.service.TreatmentEventServiceImpl;
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,7 +25,7 @@ import java.util.Arrays;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
-    private static final Logger logger = Logger.getLogger(ExceptionHandlerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerController.class);
 
     @ExceptionHandler(DataBaseException.class)
     public String handleHibernateException(DataBaseException ex) {

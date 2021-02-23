@@ -387,8 +387,9 @@ PatientServiceImpl {
             if (patientDTO.getDoctor() == null) {
                 if (request.getParameter("doctorId").length() != 0) {
                     patientDTO.setDoctor(doctorService.toDoctor(doctorService.get(Integer.parseInt(request.getParameter("doctorId")))));
-                }else  patientDTO.setDoctor(doctorService.toDoctor( doctorService.getByUserName(authentication.getName())));
-            //    update(patientDTO);
+                } else
+                    patientDTO.setDoctor(doctorService.toDoctor(doctorService.getByUserName(authentication.getName())));
+                //    update(patientDTO);
             }
             if (patientDTO.getStatus().equals(PatientStatus.DISCHARGED.toString())) {
                 update(patientDTO);
@@ -400,8 +401,8 @@ PatientServiceImpl {
                 if (patientDTO.getId() > 0) {
                     updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,
                             treatmentService.toTreatmentDTOList(patientDAO.get(patientDTO.getId()).getTreatments()));
-//                    patientDAO.getTreatments(patientDTO.getId()));
                     if (updateTreatmentList == null || updateTreatmentList.size() == 0) {
+                        update(patientDTO);
                         return;
                     }
                 } else {

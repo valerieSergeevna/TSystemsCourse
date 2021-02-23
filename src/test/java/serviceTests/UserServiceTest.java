@@ -111,14 +111,14 @@ public class UserServiceTest {
 
 
     @Test
-    public void saveUserTestWithFail() throws DataBaseException {
+    public void saveUserTestWithFail() throws DataBaseException, ServerException {
         Mockito.when(userDAO.findByUsername("doc")).thenReturn(user);
         boolean isUserCreated = userService.saveUser(user, request);
         Assert.assertFalse(isUserCreated);
     }
 
     @Test
-    public void updateUserTest() throws DataBaseException {
+    public void updateUserTest() throws DataBaseException, ServerException {
         User updateUser  = new User();
         user.setUsername("doc");
         user.setGoogleName("some@some.com");
@@ -141,7 +141,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveUserTestWithMessage() throws DataBaseException {
+    public void saveUserTestWithMessage() throws DataBaseException, ServerException {
         User updateUser  = new User();
         user.setUsername("doc");
         user.setGoogleUsername("some@some.com");
@@ -163,7 +163,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveNotUniqUserTest() throws DataBaseException {
+    public void saveNotUniqUserTest() throws DataBaseException, ServerException {
         User oldUser  = new User();
         oldUser.setUsername("doc");
         user.setUsername("doc");

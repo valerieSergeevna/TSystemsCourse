@@ -137,17 +137,31 @@ public class AdminController {
 
         userService.updateUser(thisUser, request);
 
-        String roles = ((Role) (userService.loadUserByUsername(userForm.getUsername()).getAuthorities().toArray()[0])).getAuthority();
-        if ("ROLE_DOCTOR".equals(roles)) {
-            doctorService.update(new DoctorDTOImpl(userForm.getId(), userForm.getName(),
-                    userForm.getSurname(), userForm.getPosition(), userForm.getUsername()));
-        } else if ("ROLE_NURSE".equals(roles)) {
-            nurseService.update(new NurseDTOImpl(userForm.getId(), userForm.getName(),
-                    userForm.getSurname(), userForm.getPosition(), userForm.getUsername()));
-        } else {
-            adminService.update(new AdminDTOImpl(userForm.getId(), userForm.getName(),
-                    userForm.getSurname(), userForm.getPosition(), userForm.getUsername()));
-        }
+//        String roles = ((Role) (userService.loadUserByUsername(userForm.getUsername()).getAuthorities().toArray()[0])).getAuthority();
+//        if ("ROLE_DOCTOR".equals(roles)) {
+//            DoctorDTOImpl doctorDTO = doctorService.get(userForm.getId());
+//            doctorDTO.setUsername(userForm.getUsername());
+//            doctorDTO.setPosition(userForm.getPosition());
+//            doctorDTO.setName(userForm.getName());
+//            doctorDTO.setSurname(userForm.getSurname());
+//            doctorService.update(doctorDTO);
+//        } else if ("ROLE_NURSE".equals(roles)) {
+//            NurseDTOImpl nurseDTO = nurseService.get(userForm.getId());
+//            nurseDTO.setUsername(userForm.getUsername());
+//            nurseDTO.setPosition(userForm.getPosition());
+//            nurseDTO.setName(userForm.getName());
+//            nurseDTO.setSurname(userForm.getSurname());
+//
+//            nurseService.update(nurseDTO);
+//        } else {
+//            AdminDTOImpl adminDTO = adminService.get(userForm.getId());
+//            adminDTO.setUsername(userForm.getUsername());
+//            adminDTO.setPosition(userForm.getPosition());
+//            adminDTO.setName(userForm.getName());
+//            adminDTO.setSurname(userForm.getSurname());
+//
+//            adminService.update(adminDTO);
+//        }
         //  userService.saveUser(user,request);
 
 
@@ -195,22 +209,5 @@ public class AdminController {
         return "redirect:/users";
     }
 
-
-//
-//    @PostMapping("/users")
-//    public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Long userId,
-//                              @RequestParam(required = true, defaultValue = "" ) String action,
-//                              Model model) {
-//        if (action.equals("delete")){
-//            userService.deleteUser(userId);
-//        }
-//        return "redirect:/admin";
-//    }
-
-//    @GetMapping("/admin/gt/{userId}")
-//    public String  gtUser(@PathVariable("userId") Long userId, Model model) {
-//        model.addAttribute("allUsers", userService.usergtList(userId));
-//        return "admin";
-//    }
 
 }

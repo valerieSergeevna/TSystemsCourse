@@ -10,18 +10,21 @@ import com.spring.webapp.TreatmentType;
 import com.spring.webapp.dao.*;
 import com.spring.webapp.dto.*;
 import com.spring.webapp.entity.*;
+import com.spring.webapp.entity.securityEntity.Role;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -216,7 +219,12 @@ PatientServiceImpl {
         try {
             List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
             for (Treatment treatment : treatmentList) {
-                binTreatmentsDAO.save(treatmentService.toBinTreatment( treatment));
+                Treatment binTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(),
+                        treatment.getDose(), treatment.getStartDate(), treatment.getEndDate());
+                //     binTreatment.setTreatmentId(treatment.getTreatmentId());
+                binTreatment.setProcedureMedicine(treatment.getProcedureMedicine());
+                binTreatment.setPatient(treatment.getPatient());
+                binTreatmentsDAO.save(treatmentService.toBinTreatment(binTreatment));
                 treatmentDAO.delete(treatment.getTreatmentId());
             }
         } catch (HibernateException ex) {
@@ -328,7 +336,25 @@ PatientServiceImpl {
         String[] startDate = request.getParameterValues("startDate");
         String[] endDate = request.getParameterValues("endDate");
 
+
         try {
+            Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
+            String role = "";
+            for (int i = 0; i < roles.size(); i++) {
+                role = ((Role) roles.toArray()[i]).getAuthority() + "";
+                break;
+            }
+            if (role.equals("ROLE_ADMIN")) {
+                if (request.getParameter("doctorId") == null || request.getParameter("doctorId").length() == 0) {
+                    throw new IllegalArgumentException();
+                }
+
+                DoctorDTOImpl checkDoc = doctorService.get(Integer.parseInt(request.getParameter("doctorId")));
+                if (checkDoc == null) {
+                    throw new IllegalArgumentException();
+                }
+            }
+
             int treatmentIdCount = 0;
             if (itemValues != null) {
                 for (int i = 0; i < itemValues.length; i++) {
@@ -361,13 +387,17 @@ PatientServiceImpl {
 
             List<TreatmentDTOImpl> updateTreatmentList;
             if (patientDTO.getId() > 0) {
-               updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,
-                       treatmentService.toTreatmentDTOList(patientDAO.get(patientDTO.getId()).getTreatments()));
+                updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,
+                        treatmentService.toTreatmentDTOList(patientDAO.get(patientDTO.getId()).getTreatments()));
 //                    patientDAO.getTreatments(patientDTO.getId()));
+                if (patientDTO.getDoctor() == null) {
+                    patientDTO.setDoctor(doctorService.toDoctor(doctorService.get(Integer.parseInt(request.getParameter("doctorId")))));
+                    update(patientDTO);
+                }
                 if (updateTreatmentList == null || updateTreatmentList.size() == 0) {
                     return;
                 }
-            }else {
+            } else {
                 updateTreatmentList = treatmentDTOList;
             }
 
@@ -378,6 +408,11 @@ PatientServiceImpl {
                 }
             } else {
                 String doctorName = authentication.getName();
+
+                if (role.equals("ROLE_ADMIN")) {
+                    doctorName = doctorService.get(Integer.parseInt(request.getParameter("doctorId"))).getUsername();
+                }
+
                 patientDTO.setStatus(PatientStatus.IN_PROCESS.toString());
                 saveOrUpdateTreatments(updateTreatmentList, patientDTO, doctorService.getByUserName(doctorName));
             }
@@ -386,6 +421,10 @@ PatientServiceImpl {
 
         } catch (NumberFormatException ex) {
             throw new ClientException("incorrect input, please, double check your inputs");
+        } catch (IllegalArgumentException e) {
+            throw new ClientException("doctor id must be not null, please, fix it");
+        } catch (DataBaseException e) {
+            throw new ClientException("doctor with this id doesn't exist, please, double check it");
         }
     }
 
@@ -421,8 +460,25 @@ PatientServiceImpl {
         for (TreatmentEventDTOImpl treatmentEventDTO : treatmentEventDTOList) {
             treatmentEventService.delete(treatmentEventDTO.getId());
         }
-        deleteTreatments(id);
+        deleteTreatmentsWithPatient(id);
         delete(id);
+    }
+
+    public void deleteTreatmentsWithPatient(int id) throws DataBaseException {
+        try {
+            List<Treatment> treatmentList = patientDAO.get(id).getTreatments();
+            List<BinTreatment> binTreatmentList = binTreatmentsDAO.getByPatientId(id);
+            for (BinTreatment binTreatment : binTreatmentList) {
+                binTreatmentsDAO.delete(binTreatment.getTreatmentId());
+            }
+            for (Treatment treatment : treatmentList) {
+                treatmentDAO.delete(treatment.getTreatmentId());
+            }
+        } catch (HibernateException ex) {
+            logger.error("[!PatientServiceImpl 'deleteTreatments' method:" + ex.getMessage() + "!]");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
+        }
     }
 
 

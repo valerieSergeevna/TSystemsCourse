@@ -53,7 +53,7 @@ public class BinTreatmentsDAOImpl{
 
     public void deleteWithPatientId(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Treatment> query = session.createQuery("delete from BinTreatment " + "where patient.id =:patientID");
+        Query<BinTreatment> query = session.createQuery("delete from BinTreatment " + "where patient.id =:patientID");
         query.setParameter("patientID", id);
         query.executeUpdate();
     }
@@ -67,7 +67,7 @@ public class BinTreatmentsDAOImpl{
 
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Query<Treatment> query = session.createQuery("delete from BinTreatment " + "where id =:ID");
+        Query<BinTreatment> query = session.createQuery("delete from BinTreatment " + "where id =:ID");
         query.setParameter("ID", id);
         query.executeUpdate();
     }

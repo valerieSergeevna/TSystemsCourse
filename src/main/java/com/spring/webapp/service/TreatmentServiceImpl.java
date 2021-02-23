@@ -102,7 +102,14 @@ public class TreatmentServiceImpl {
             for (TreatmentEvent treatmentEvent : treatmentEventList) {
                 treatmentEventDAO.delete(treatmentEvent.getId());
             }
-            binTreatmentsDAO.save(toBinTreatment(treatmentDAO.get(id)));
+            Treatment treatment = treatmentDAO.get(id);
+            Treatment binTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(),
+                    treatment.getDose(), treatment.getStartDate(), treatment.getEndDate());
+       //     binTreatment.setTreatmentId(treatment.getTreatmentId());
+            binTreatment.setProcedureMedicine(treatment.getProcedureMedicine());
+            binTreatment.setPatient(treatment.getPatient());
+
+            binTreatmentsDAO.save(toBinTreatment(binTreatment));
             treatmentDAO.delete(id);
         } catch (HibernateException ex) {
             logger.error("[!TreatmentServiceImpl 'delete' method:" + ex.getMessage() + "!]");
@@ -177,6 +184,7 @@ public class TreatmentServiceImpl {
                 treatment.getDose());
         treatmentDTO.setStartDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getStartDate()));
         treatmentDTO.setEndDate(TimeParser.fromLocalDateTimeToLocalDate(treatment.getEndDate()));
+        treatmentDTO.setTypeName(treatment.getProcedureMedicine().getName());
         return treatmentDTO;
     }
 

@@ -1,4 +1,3 @@
-
 function addForm() {
     let container = document.getElementById("container");
 
@@ -37,11 +36,13 @@ function addForm() {
     inputType.name = "treatmentType";
 // inputType.type = "text";
     inputType.id = "type";
-    inputType.onchange = function (){
+    inputType.onchange = function () {
         if (document.getElementById('type').value === "procedure") {
             document.getElementById('dose').hidden = true;
-        }else{
+            document.getElementById('dose').required = false;
+        } else {
             document.getElementById('dose').hidden = false;
+            document.getElementById('dose').required = true;
         }
     }
 
@@ -111,11 +112,27 @@ function removeForm() {
     document.getElementById('removeTreatmentButton').hidden = true;
 }
 
+function showOrHideBinForm(flag) {
+
+    let element = document.getElementById("binListId");
+    if (flag){
+        element.hidden = false;
+    }else {
+        element.hidden = true;
+    }
+    document.getElementById('showBinButton').hidden = flag;
+    document.getElementById('hideBinButton').hidden = !flag;
+
+}
+
+
 function typeSelected(id) {
-    if (document.getElementById('type'+id).value === "procedure") {
-        document.getElementById('dose'+id).hidden = true;
-    }else{
-        document.getElementById('dose'+id).hidden = false;
+    if (document.getElementById('type' + id).value === "procedure") {
+        document.getElementById('dose' + id).hidden = true;
+        document.getElementById('dose' + id).required = false;
+    } else {
+        document.getElementById('dose' + id).hidden = false;
+        document.getElementById('dose' + id).required = true;
     }
 }
 
@@ -124,8 +141,9 @@ $('#registrationButton').click(function (e) {
     $('#registration').slideToggle(300);
 });
 
-$(document).ready(function(){
-    $('treatmentType').click(function(){
+
+$(document).ready(function () {
+    $('treatmentType').click(function () {
         var clickId = $(this).prop('id');
         let id = parseInt(clickId.match(/\d+/));
         typeSelected(id);
@@ -157,93 +175,30 @@ var logout = function () {
     })
     return true;
 }
-
-// $.ajaxSetup({
-//     beforeSend: function (xhr, settings) {
-//         if (settings.type == 'POST' || settings.type == 'PUT'
-//             || settings.type == 'DELETE') {
-//             if (!(/^http:.*/.test(settings.url) || /^https:.*/
-//                 .test(settings.url))) {
-//                 // Only send the token to relative URLs i.e. locally.
-//                 xhr.setRequestHeader("X-XSRF-TOKEN",
-//                     Cookies.get('XSRF-TOKEN'));
-//             }
-//         }
-//     }
-// });
-
-// function update() {
+//
+// function showToday() {
+//     debugger;
 //     $.ajax({
+//         type: "GET",
+//         url: "nurse/updateAjaxStatus",
+//         data: { userId: Id },
+//         contentType: "application/json;charset=utf-8",
 //         dataType: "json",
-//         url: 'nurse/updateAjaxStatus',
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         type: 'POST',
-//         data: $('#formSearch').serialize(),
-//         success: function (response) {
+//             success: function (data) {
+//                 $.each(data, function (index) {
+//                     $('#myTable').append("<tr><td>" + data[index].id + "</td><td>" + data[index].name + "</td></tr>");
+//                 });
 //
-//             $.each(response, function (key, card) {
-//                 var htmlrow = "<tr><td>" + card.name + "</td></tr>";
-//                 $('#table_grid').append(htmlrow);
-//             }
-//         },
-//         error: function () {
-//             alert("error");
+//             },
+//
+//         error: function (xhr, ajaxOptions, thrownError) {
+//
+//             alert('Failed to retrieve books.');
+//
 //         }
 //     });
-// }
 //
-// function refreshTable(){
-//     var myObjects = [];
-//     $('tr').each(function(index, item) {
-//         var $item = $(item);
-//         myObjects.push({
-//             name: $item.find("td[name='name']").val(),
-//             series: $item.find("td[name='series']").val(),
-//             value: $item.find("td[name='value']").val(),
-//         });
-//     });
-//     $.ajax({
-//         url: '/series',
-//         method: 'POST',
-//         contentType : 'application/json; charset=utf-8',
-//         data: JSON.stringify(myObjects)
-//     })
-//         .done(function(myObjects) {
-//             // handle success
-//         })
-//         .fail(function() {
-//             // handle fail
-//         });
-// });
-
-
-
-function showToday() {
-    debugger;
-    $.ajax({
-        type: "GET",
-        url: "nurse/updateAjaxStatus",
-        data: { userId: Id },
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-            success: function (data) {
-                $.each(data, function (index) {
-                    $('#myTable').append("<tr><td>" + data[index].id + "</td><td>" + data[index].name + "</td></tr>");
-                });
-
-            },
-
-        error: function (xhr, ajaxOptions, thrownError) {
-
-            alert('Failed to retrieve books.');
-
-        }
-    });
-
-}
+// }
 
 function filter() {
     var input, filter, table, tr, td, i;
@@ -303,7 +258,6 @@ function typeFilter() {
 }
 
 
-
 function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("myTable");
@@ -333,7 +287,7 @@ function sortTable(n) {
         if (shouldSwitch) {
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
-            switchcount ++;
+            switchcount++;
         } else {
             if (switchcount == 0 && dir == "asc") {
                 dir = "desc";
@@ -351,10 +305,10 @@ class airSlider {
         //Slider Length
         this.length = document.querySelectorAll('.slide').length;
         //Sizes
-        if(e.width == undefined){
+        if (e.width == undefined) {
             e.width = '100%';
         }
-        if(e.height == undefined){
+        if (e.height == undefined) {
             e.height = '1000px';
         }
         this.slider.style.maxWidth = e.width;
@@ -365,43 +319,47 @@ class airSlider {
         controls.innerHTML = '<button id="prev"><</button><button id="next">></button>';
         this.slider.appendChild(controls);
         //Controls Listeners
-        document.querySelector('#prev').addEventListener('click', function(){
+        document.querySelector('#prev').addEventListener('click', function () {
             slider.prev();
         });
-        document.querySelector('#next').addEventListener('click', function(){
+        document.querySelector('#next').addEventListener('click', function () {
             slider.next();
         });
         //AutoPlay
-        if(e.autoPlay == true){
+        if (e.autoPlay == true) {
             this.autoPlayTime = e.autoPlayTime;
-            if(this.autoPlayTime == undefined){
+            if (this.autoPlayTime == undefined) {
                 this.autoPlayTime = 5000;
             }
             setInterval(this.autoPlay, this.autoPlayTime);
         }
     }
+
     prev() {
         var currentSlide = document.querySelector('.active-slide');
         var prevSlide = document.querySelector('.active-slide').previousElementSibling;
-        if(prevSlide == undefined){
+        if (prevSlide == undefined) {
             prevSlide = this.slider.children[this.length - 1];
         }
         currentSlide.className = 'slide';
         prevSlide.classList = 'slide active-slide'
     }
+
     next() {
         var currentSlide = document.querySelector('.active-slide');
         var nextSlide = document.querySelector('.active-slide').nextElementSibling;
-        if(nextSlide.className == 'controls'){
+        if (nextSlide.className == 'controls') {
             nextSlide = this.slider.children[0];
         }
         currentSlide.className = 'slide';
         nextSlide.classList = 'slide active-slide fadeIn'
     }
-    autoPlay(){
+
+    autoPlay() {
         slider.next();
     }
 }
+
 var slider = new airSlider({
     autoPlay: true,
     width: '100%',

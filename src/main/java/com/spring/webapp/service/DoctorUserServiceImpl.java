@@ -86,6 +86,10 @@ public class DoctorUserServiceImpl extends AbstractUserService<DoctorDTOImpl> {
             logger.error("[!DoctorServiceImpl 'get' method:" + ex.getMessage() + "!]");
             logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
             throw new DataBaseException(ex.getMessage());
+        }catch (NullPointerException ex){
+            logger.error("[!DoctorServiceImpl 'get' method:" + ex.getMessage() + "!] - doctor doesn't exist");
+            logger.error("STACK TRACE: " + Arrays.toString(ex.getStackTrace()));
+            throw new DataBaseException(ex.getMessage());
         }
     }
 

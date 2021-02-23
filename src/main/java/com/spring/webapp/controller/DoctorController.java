@@ -3,6 +3,7 @@ package com.spring.webapp.controller;
 import com.spring.exception.ClientException;
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
+import com.spring.jms.JmsProducer;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.service.PatientServiceImpl;
 import com.spring.webapp.service.TreatmentServiceImpl;
@@ -27,6 +28,13 @@ public class DoctorController {
 
 
     private TreatmentServiceImpl treatmentService;
+
+    JmsProducer jmsProducer;
+
+    @Autowired
+    public void setJmsProducer(JmsProducer jmsProducer) {
+        this.jmsProducer = jmsProducer;
+    }
 
     @Autowired
     public void setPatientService(PatientServiceImpl patientService) {
@@ -68,6 +76,7 @@ public class DoctorController {
                                   Model model) throws DataBaseException {
         PatientDTOImpl patientDTO = treatmentService.getPatient(id);
         treatmentService.delete(id);
+        jmsProducer.send("UPDATE");
         model.addAttribute("patientId", patientDTO.getId());
         return "redirect:doctor/updateTreatmentInfo";
     }

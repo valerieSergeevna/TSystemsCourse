@@ -31,6 +31,14 @@
 <%--                <form:errors path="doctor.id"></form:errors>--%>
             </div>
         </security:authorize>
+
+        <security:authorize access="hasAnyRole('DOCTOR')">
+            <div class="form-outline mb-4">
+                <input hidden name="doctorId" value="${patient.doctor.id}" class="form-control">
+                    <%--                <form:input class="form-control" id="docId" path="doctor.id"/>--%>
+                    <%--                <form:errors path="doctor.id"></form:errors>--%>
+            </div>
+        </security:authorize>
         <div class="row mb-4">
             <div class="col">
                 <div class="form-outline">

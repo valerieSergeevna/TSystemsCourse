@@ -384,29 +384,28 @@ PatientServiceImpl {
                     }
                 }
             }
-
-            List<TreatmentDTOImpl> updateTreatmentList;
-            if (patientDTO.getId() > 0) {
-                updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,
-                        treatmentService.toTreatmentDTOList(patientDAO.get(patientDTO.getId()).getTreatments()));
-//                    patientDAO.getTreatments(patientDTO.getId()));
-                if (patientDTO.getDoctor() == null) {
-                    patientDTO.setDoctor(doctorService.toDoctor(doctorService.get(Integer.parseInt(request.getParameter("doctorId")))));
-                    update(patientDTO);
-                }
-                if (updateTreatmentList == null || updateTreatmentList.size() == 0) {
-                    return;
-                }
-            } else {
-                updateTreatmentList = treatmentDTOList;
+            if (patientDTO.getDoctor() == null) {
+                patientDTO.setDoctor(doctorService.toDoctor(doctorService.get(Integer.parseInt(request.getParameter("doctorId")))));
+                update(patientDTO);
             }
-
             if (patientDTO.getStatus().equals(PatientStatus.DISCHARGED.toString())) {
                 update(patientDTO);
-                for (TreatmentDTOImpl treatmentDTO : updateTreatmentList) {
+                for (TreatmentDTOImpl treatmentDTO : treatmentDTOList) {
                     treatmentService.delete(treatmentDTO.getTreatmentId());
                 }
             } else {
+                List<TreatmentDTOImpl> updateTreatmentList;
+                if (patientDTO.getId() > 0) {
+                    updateTreatmentList = geTreatmentsToUpdateOrAdd(treatmentDTOList,
+                            treatmentService.toTreatmentDTOList(patientDAO.get(patientDTO.getId()).getTreatments()));
+//                    patientDAO.getTreatments(patientDTO.getId()));
+                    if (updateTreatmentList == null || updateTreatmentList.size() == 0) {
+                        return;
+                    }
+                } else {
+                    updateTreatmentList = treatmentDTOList;
+                }
+
                 String doctorName = authentication.getName();
 
                 if (role.equals("ROLE_ADMIN")) {

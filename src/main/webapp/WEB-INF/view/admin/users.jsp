@@ -59,7 +59,7 @@
         <c:forEach items="${allUsers}" var="user">
             <tbody>
             <tr class="text-info">
-                <td>${user.key.id}</td>
+                <td><input hidden value="${user.key.id}"> ${user.value.id}</td>
                 <td>${user.key.username}</td>
                 <td>
                     <c:forEach items="${user.key.roles}" var="role">${role.name}</c:forEach>

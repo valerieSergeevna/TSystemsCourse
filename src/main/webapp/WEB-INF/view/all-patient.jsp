@@ -6,10 +6,10 @@
 <html>
 <body>
 <div class="container">
-    <h2 class = "text-info">Patients list</h2>
+    <h2 class="text-info">Patients list</h2>
     <table class="table table-light table-hover">
         <thead style="background-color:skyblue">
-        <tr class = "text-white">
+        <tr class="text-white">
             <th style="width: 10%">Name</th>
             <th style="width: 20%">Surname</th>
             <th style="width: 30%">Disease</th>
@@ -18,7 +18,7 @@
         </thead>
         <c:forEach var="patient" items="${allPatient}">
             <tbody>
-            <tr class = "text-info">
+            <tr class="text-info">
                 <c:url var="updateButton" value="/doctor/updateTreatmentInfo">
                     <c:param name="patientId" value="${patient.id}"></c:param>
                 </c:url>
@@ -34,12 +34,14 @@
                 <td>
                     <security:authorize access="hasAnyRole('DOCTOR','ADMIN')">
                     <input type="button" value="Update" class="btn  btn-outline-info"
-                                                        onclick="window.location.href ='${updateButton}'"/>
-                 <input type="button" value="Delete" class="btn btn-outline-danger"
-                                                        onclick="window.location.href ='${deleteButton}'"/>
-                </security:authorize>
-                <input type="button" value="View" class="btn btn-outline-dark"
-                       onclick="window.location.href ='${viewButton}'"/></td>
+                           onclick="window.location.href ='${updateButton}'"/>
+                    </security:authorize>
+                    <security:authorize access="hasAnyRole('ADMIN')">
+                        <input type="button" value="Delete" class="btn btn-outline-danger"
+                               onclick="window.location.href ='${deleteButton}'"/>
+                    </security:authorize>
+                    <input type="button" value="View" class="btn btn-outline-dark"
+                           onclick="window.location.href ='${viewButton}'"/></td>
             </tr>
             </tbody>
         </c:forEach>
@@ -47,7 +49,8 @@
     </table>
 
     <security:authorize access="hasAnyRole('DOCTOR','ADMIN')">
-    <input type="button" value="Add" class="btn btn-outline-success" onclick="window.location.href = '/addNewPatient'"/>
+        <input type="button" value="Add" class="btn btn-outline-success"
+               onclick="window.location.href = '/addNewPatient'"/>
     </security:authorize>
 
 </div>

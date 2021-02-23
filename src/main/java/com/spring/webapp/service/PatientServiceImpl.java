@@ -385,8 +385,10 @@ PatientServiceImpl {
                 }
             }
             if (patientDTO.getDoctor() == null) {
-                patientDTO.setDoctor(doctorService.toDoctor(doctorService.get(Integer.parseInt(request.getParameter("doctorId")))));
-                update(patientDTO);
+                if (request.getParameter("doctorId").length() != 0) {
+                    patientDTO.setDoctor(doctorService.toDoctor(doctorService.get(Integer.parseInt(request.getParameter("doctorId")))));
+                }else  patientDTO.setDoctor(doctorService.toDoctor( doctorService.getByUserName(authentication.getName())));
+            //    update(patientDTO);
             }
             if (patientDTO.getStatus().equals(PatientStatus.DISCHARGED.toString())) {
                 update(patientDTO);
@@ -419,10 +421,13 @@ PatientServiceImpl {
             producer.send("UPDATE");
 
         } catch (NumberFormatException ex) {
+            logger.error(ex.getMessage());
             throw new ClientException("incorrect input, please, double check your inputs");
         } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
             throw new ClientException("doctor id must be not null, please, fix it");
         } catch (DataBaseException e) {
+            logger.error(e.getMessage());
             throw new ClientException("doctor with this id doesn't exist, please, double check it");
         }
     }

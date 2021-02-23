@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -38,43 +39,35 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 //@SpringBootTest(classes = {PatientServiceImpl.class})
 public class PatientServiceTest {
-    @TestConfiguration
-    static class PatientUtilityServiceTestConfiguration {
 
-        @Bean
-        public PatientServiceImpl patientService() {
-            return new PatientServiceImpl();
-        }
-    }
-
-    @Autowired
+    @InjectMocks
     private PatientServiceImpl patientService;
 
-    @MockBean
+    @Mock
     private PatientDAOImpl patientDAO;
 
-    @MockBean
+    @Mock
     private TreatmentDAOImpl treatmentDAO;
 
-    @MockBean
+    @Mock
     private ProcedureMedicineDAOImpl procedureMedicineDAO;
 
-    @MockBean
+    @Mock
     private DoctorDAOImpl doctorDAO;
 
-    @MockBean
+    @Mock
     private TreatmentEventDAOImpl treatmentEventDAO;
 
-    @MockBean
+    @Mock
     private TreatmentServiceImpl treatmentService;
 
-    @MockBean
+    @Mock
     private DoctorUserServiceImpl doctorService;
 
-    @MockBean
+    @Mock
     private TreatmentEventServiceImpl treatmentEventService;
 
     @MockBean

@@ -17,13 +17,17 @@ import com.spring.webapp.service.*;
 import com.spring.webapp.service.securityService.UserService;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
+import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -37,26 +41,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 //@SpringBootTest(classes = {PatientServiceImpl.class})
 public class UserServiceTest {
-//    @TestConfiguration
-//    static class UserUtilityServiceTestConfiguration {
-//
-//        @Bean
-//        public UserService patientService() {
-//            return new UserService();
-//        }
-//    }
-//
-//    @TestConfiguration
-//    static class UserUtilityServiceTestConfiguration {
-//
-//        @Bean
-//        public UserService userService() {
-//            return new UserService();
-//        }
-//    }
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
 
     @InjectMocks
     private UserService userService;

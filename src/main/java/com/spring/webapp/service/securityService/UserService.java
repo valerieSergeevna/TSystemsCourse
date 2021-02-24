@@ -272,6 +272,9 @@ public class UserService implements UserDetailsService {
         return roleId;
     }
 
+    /*
+        if we have user with same username, we inform user about this
+    */
     public boolean saveUser(User user, HttpServletRequest request) throws DataBaseException, ServerException {
         User userFromDB = userRepository.findByUsername(user.getUsername());
         String role = request.getParameter("role");
@@ -319,11 +322,6 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
-
-//    public List<User> usergtList(Long idMin) {
-//        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-//                .setParameter("paramId", idMin).getResultList();
-//    }
 
     private String getRole(Set<Role> roles) {
         for (Role role : roles) {

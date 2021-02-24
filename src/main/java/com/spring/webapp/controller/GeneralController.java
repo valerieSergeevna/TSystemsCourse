@@ -61,20 +61,6 @@ public class GeneralController {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(SpringBootRehaApplication.class);
 
-//    @Autowired
-//    TokenStore tokenStore;
-//
-//    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-//    @ResponseStatus(HttpStatus.OK)
-//    public void logout(HttpServletRequest request) {
-//        String authHeader = request.getHeader("Authorization");
-//        if (authHeader != null) {
-//            String tokenValue = authHeader.replace("Bearer", "").trim();
-//            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
-//            tokenStore.removeAccessToken(accessToken);
-//        }
-//    }
-
 
     @RequestMapping("/")
     public String greet(Model model, Authentication authentication, Principal principal) {
@@ -99,11 +85,6 @@ public class GeneralController {
         }
         return "greeting";
     }
-
-//    @RequestMapping("/greet")
-//    public String greetFromOauth(Model model, Authentication authentication, Principal principal) {
-//        return "redirect:/";
-//    }
 
     @RequestMapping("/patients")
     public String showAllPatients(Model model, Authentication authentication) throws DataBaseException, ServerException {

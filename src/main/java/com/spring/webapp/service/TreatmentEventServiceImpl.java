@@ -69,7 +69,6 @@ public class TreatmentEventServiceImpl {
     public TreatmentEventDTOImpl save(TreatmentEventDTOImpl treatmentEventDTO) throws DataBaseException {
         TreatmentEvent treatmentEvent = new TreatmentEvent();
         try {
-            // BeanUtils.copyProperties(treatmentEventDTO, treatmentEvent);
             treatmentEvent = toTreatmentEvent(treatmentEventDTO);
             return toTreatmentEventDTO(treatmentEventDAO.save(treatmentEvent));
         } catch (

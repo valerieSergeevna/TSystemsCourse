@@ -29,35 +29,18 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(DataBaseException.class)
     public String handleHibernateException(DataBaseException ex) {
-        //Do something additional if required
-      /*  ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("error");
-        modelAndView.addObject("message", ex.getMessage());
-        return modelAndView;*/
         return "/errors/server-error";
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public String handleAllException(Exception ex) {
-//        //Do something additional if required
-//      /*  ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("error");
-//        modelAndView.addObject("message", ex.getMessage());
-//        return modelAndView;*/
-//        logger.error(ex.getMessage());
-//        return "/errors/server-error";
-//    }
 
     @ExceptionHandler(ClientException.class)
     public String handleNumberFormatException(ClientException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
+        logger.error(ex.getMessage());
         return "/errors/client-error";
     }
 
 
-
-
-  //  @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handleResourceNotFoundException() {
@@ -65,12 +48,6 @@ public class ExceptionHandlerController {
     }
 
 
-
-   /* @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(Exception.class)
-    public String showCustomMessage(){
-        return "/errors/400";
-    }*/
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)

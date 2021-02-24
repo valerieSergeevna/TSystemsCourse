@@ -8,6 +8,7 @@ import com.spring.webapp.dao.*;
 import com.spring.webapp.dao.securityDAO.RoleDAO;
 import com.spring.webapp.dao.securityDAO.UserDAO;
 import com.spring.webapp.dto.AllDTOUser;
+import com.spring.webapp.dto.DoctorDTOImpl;
 import com.spring.webapp.dto.PatientDTOImpl;
 import com.spring.webapp.entity.Doctor;
 import com.spring.webapp.entity.Patient;
@@ -54,6 +55,7 @@ public class UserServiceTest {
     @Mock
     private UserDAO userDAO;
 
+
     @Mock
     HttpServletRequest request;
 
@@ -81,6 +83,7 @@ public class UserServiceTest {
     @Mock
     PasswordEncoder bCryptPasswordEncoder;
 
+
     private List<User> usersList = new ArrayList<>();
     private List<Patient> patientList;
 
@@ -107,6 +110,9 @@ public class UserServiceTest {
         patient2.setDoctor(doctor);
         patientList.add(patient2);
 
+        doctor = new Doctor();
+        doctor.setUserName("doc");
+
     }
 
 
@@ -122,22 +128,27 @@ public class UserServiceTest {
         User updateUser  = new User();
         user.setUsername("doc");
         user.setGoogleName("some@some.com");
+        updateUser.setUsername("doc");
+        updateUser.setGoogleName("some@some1.com");
         Mockito.when(request.getParameter("email")).thenReturn("some@some.com");
         Mockito.when(request.getParameter("name")).thenReturn("some@some.com");
         Mockito.when(request.getParameter("surname")).thenReturn("some@some.com");
+        Mockito.when(request.getParameter("username")).thenReturn("doc");
         Mockito.when(request.getParameter("role")).thenReturn("doctor");
 
-//
-//        Mockito.doNothing()
-//                .when(mailSender).send(Mockito.any(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
+        DoctorDTOImpl doctorDTO = new DoctorDTOImpl();
+        doctorDTO.setUsername("doc");
+
+
+        Mockito.when(doctorService.getByUserName("doc")).thenReturn(doctorDTO);
+        Mockito.when(doctorService.update(Mockito.any(DoctorDTOImpl.class))).thenReturn(doctorDTO);
 
         Mockito.when(userDAO.findByUsername("doc")).thenReturn(user);
-        boolean isUserCreated = userService.saveUser(updateUser, request);
+        Mockito.when(userDAO.save(user)).thenReturn(user);
+
+        boolean isUserCreated = userService.updateUser(updateUser, request);
 
         Assert.assertTrue(isUserCreated);
-//        Mockito.verify(mailSender,Mockito.times(1))
-//               .send(user.getGoogleUsername(), "RehaApp password and username", Mockito.anyString());
-
     }
 
     @Test
@@ -152,6 +163,13 @@ public class UserServiceTest {
         Mockito.when(request.getParameter("role")).thenReturn("doctor");
 
         Mockito.when(userDAO.findByUsername("doc")).thenReturn(null);
+        Mockito.when(doctorDAO.save(Mockito.any(Doctor.class))).thenReturn(doctor);
+      //  Mockito.when(doctorDAO.getByUserName("doc")).thenThrow(new NullPointerException());
+        Mockito.doThrow(new NullPointerException()).when(doctorService).getByUserName("doc");
+        Mockito.when(userDAO.findByUsername(user.getUsername())).thenReturn(null);
+        Mockito.when(userDAO.save(user)).thenReturn(null);
+        Mockito.when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn(null);
+
         boolean isUserCreated = userService.saveUser(user, request);
 
         Assert.assertTrue(isUserCreated);

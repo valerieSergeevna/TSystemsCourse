@@ -19,6 +19,10 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+/*
+* Service for doctor entity and doctorDTO
+*
+* */
 
 @Service
 public class DoctorUserServiceImpl extends AbstractUserService<DoctorDTOImpl> {

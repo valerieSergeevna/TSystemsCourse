@@ -105,7 +105,6 @@ public class TreatmentServiceImpl {
             Treatment treatment = treatmentDAO.get(id);
             Treatment binTreatment = new Treatment(treatment.getType(), treatment.getTimePattern(),
                     treatment.getDose(), treatment.getStartDate(), treatment.getEndDate());
-       //     binTreatment.setTreatmentId(treatment.getTreatmentId());
             binTreatment.setProcedureMedicine(treatment.getProcedureMedicine());
             binTreatment.setPatient(treatment.getPatient());
 

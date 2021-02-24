@@ -87,7 +87,7 @@ public class ProcedureMedicineServiceImpl {
         }
     }
 
-    //
+    //covert
     public ProcedureMedicineDTOImpl toProcedureMedicineDTO(ProcedureMedicine procedureMedicine) {
         return new ProcedureMedicineDTOImpl(procedureMedicine.getId(),
                 procedureMedicine.getName(),procedureMedicine.getType());

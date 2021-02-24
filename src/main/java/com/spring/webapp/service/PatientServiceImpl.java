@@ -27,7 +27,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/*
+* Service for patient
+*
+* */
 @Service
 public class
 PatientServiceImpl {
@@ -250,7 +253,9 @@ PatientServiceImpl {
         }
     }
 
-
+/*
+* this method helps update events,if it needs
+* */
     public void saveOrUpdateTreatments(List<TreatmentDTOImpl> treatments, PatientDTOImpl patientDTO, DoctorDTOImpl doctor) throws DataBaseException {
 
         try {
@@ -323,7 +328,10 @@ PatientServiceImpl {
         patientDTO.setTreatments(treatmentDTO);
         return patientDTO;
     }
-
+/*
+this method updates treatment or saves it and generate events
+or also updates them
+ */
     @Transactional
     public void saveTreatmentInfo(PatientDTOImpl patientDTO, HttpServletRequest request, Authentication authentication)
             throws DataBaseException, ClientException, ServerException {
@@ -433,7 +441,9 @@ PatientServiceImpl {
         }
     }
 
-
+    /*
+        checks, if a new treatment needs to be added
+    */
     private List<TreatmentDTOImpl> geTreatmentsToUpdateOrAdd(List<TreatmentDTOImpl> treatmentDTOList, List<TreatmentDTOImpl> treatments) {
         if (treatments == null) return treatmentDTOList;
         if (treatmentDTOList == null) return null;

@@ -2,21 +2,23 @@ package com.spring.webapp.controller;
 
 import com.spring.exception.DataBaseException;
 import com.spring.exception.ServerException;
-import com.spring.webapp.dto.AdminDTOImpl;
 import com.spring.webapp.dto.AllDTOUser;
 import com.spring.webapp.dto.DoctorDTOImpl;
-import com.spring.webapp.dto.NurseDTOImpl;
 import com.spring.webapp.entity.securityEntity.Role;
 import com.spring.webapp.entity.securityEntity.User;
-import com.spring.webapp.service.*;
+import com.spring.webapp.service.AdminServiceImpl;
+import com.spring.webapp.service.DoctorUserServiceImpl;
+import com.spring.webapp.service.NurseUserServiceImpl;
 import com.spring.webapp.service.securityService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,7 +57,6 @@ public class AdminController {
     private String usernameError;
 
 
-
     @RequestMapping("/addNewDoctor")
     public String addNewDoctor(Model model) {
         DoctorDTOImpl doctor = new DoctorDTOImpl();
@@ -90,14 +91,13 @@ public class AdminController {
     @GetMapping("/users")
     public String userList(Model model) throws ServerException, DataBaseException {
         model.addAttribute("allUsers", userService.allUsersWithInfo());
-       // model.addAttribute("userForm", new User());
+        // model.addAttribute("userForm", new User());
         model.addAttribute("usernameError", usernameError);
         return "admin/users";
     }
 
     @RequestMapping("/updateUser")
     public String updateUserInfo(@RequestParam("userId") Long userId, Model model) throws DataBaseException, ServerException {
-
         User user = userService.findUserById(userId);
 
         AllDTOUser userDTO;
@@ -111,7 +111,7 @@ public class AdminController {
         }
         model.addAttribute("userInfo", userDTO);
         model.addAttribute("user", user);
-        model.addAttribute("usernameError",usernameError);
+        model.addAttribute("usernameError", usernameError);
         usernameError = null;
         return "admin/user-info";
     }
@@ -124,46 +124,17 @@ public class AdminController {
             model.addAttribute("userForm", userForm);
             return "admin/user-info";
         }
-        User user =userService.findByUsername(request.getParameter("username"));
+        User user = userService.findByUsername(request.getParameter("username"));
         User thisUser = (User) userService.loadUserByUsername(request.getParameter("hiddenUsername"));
 
-        if (user!=null&&!thisUser.getId().equals(user.getId())) {
+        if (user != null && !thisUser.getId().equals(user.getId())) {
             model.addAttribute("usernameError", "This username already exists");
             model.addAttribute("userId", thisUser.getId());
             usernameError = "User name is not uniq";
             return "redirect:/updateUser";
         }
 
-
         userService.updateUser(thisUser, request);
-
-//        String roles = ((Role) (userService.loadUserByUsername(userForm.getUsername()).getAuthorities().toArray()[0])).getAuthority();
-//        if ("ROLE_DOCTOR".equals(roles)) {
-//            DoctorDTOImpl doctorDTO = doctorService.get(userForm.getId());
-//            doctorDTO.setUsername(userForm.getUsername());
-//            doctorDTO.setPosition(userForm.getPosition());
-//            doctorDTO.setName(userForm.getName());
-//            doctorDTO.setSurname(userForm.getSurname());
-//            doctorService.update(doctorDTO);
-//        } else if ("ROLE_NURSE".equals(roles)) {
-//            NurseDTOImpl nurseDTO = nurseService.get(userForm.getId());
-//            nurseDTO.setUsername(userForm.getUsername());
-//            nurseDTO.setPosition(userForm.getPosition());
-//            nurseDTO.setName(userForm.getName());
-//            nurseDTO.setSurname(userForm.getSurname());
-//
-//            nurseService.update(nurseDTO);
-//        } else {
-//            AdminDTOImpl adminDTO = adminService.get(userForm.getId());
-//            adminDTO.setUsername(userForm.getUsername());
-//            adminDTO.setPosition(userForm.getPosition());
-//            adminDTO.setName(userForm.getName());
-//            adminDTO.setSurname(userForm.getSurname());
-//
-//            adminService.update(adminDTO);
-//        }
-        //  userService.saveUser(user,request);
-
 
         usernameError = null;
         return "redirect:/users";
@@ -171,10 +142,6 @@ public class AdminController {
 
     @RequestMapping("/registration")
     public String addUser(Model model, HttpServletRequest request) throws DataBaseException, ServerException {
-//crutch
-//        String username = userService.loadUserByUsername(userForm.getUsername()).getUsername();
-//        userService.deleteUser(((User)userService.loadUserByUsername(userForm.getUsername())).getId());
-
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");

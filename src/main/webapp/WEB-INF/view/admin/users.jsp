@@ -98,17 +98,23 @@
         </div>
 
     </c:if>
+    <c:if test="${passwordError!=null}">
+        <div class="text-danger">
+                ${passwordError}
+        </div>
+
+    </c:if>
 
     <button class="btn btn-outline-info" id="registrationButton">New user registration</button>
     <div id="registration" class="registration container" style="display: none;">
+
         <div>
-            <%--       <form:form action = "/registration" method="POST" modelAttribute="userForm">--%>
-            <form action="/registration">
+            <form:form action = "/registration" modelAttribute="userForm">
                 <h2 class="text-info">Registration</h2>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="nameId">Name</label>
                     <input type="text"
-                           name="name" class="form-control" id="nameId" value="" required>
+                           name="name" class="form-control" id = "nameId" value="" required>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="SurnameId">Surname</label>
@@ -131,60 +137,118 @@
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="userNameId">Username</label>
-
-                    <c:choose>
-                        <c:when test="${usernameError==null}">
-                            <input type="text"
-                                   name="username" class="form-control" id="userNameId" minlength="2"  placeholder="Username" value=""
-                                   required >
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text"
-                                   name="username" class="form-control is-invalid" id="userNameId" minlength="2" placeholder="Username" value=""
-                                   required >
-                        </c:otherwise>
-                    </c:choose>
-                    <c:if test="${usernameError!=null}">
-                        <div class="invalid-feedback">
-                                ${usernameError}
-                        </div>
-                    </c:if>
-
-                    <%--                    <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"--%>
-                    <%--                               ></form:input>--%>
-                    <%--                    <form:errors class="form-control" path="username"></form:errors>--%>
-                    <%--                        ${usernameError}--%>
+                    <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"
+                    ></form:input>
+                    <form:errors class="form-control" path="username"></form:errors>
+                    <div class="text-danger"> ${usernameError}</div>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="emailId">Email</label>
-                    <input type="text"
-                           name="email" class="form-control" id="emailId" placeholder="some@some.com" value="">
-                    <%--                    <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"--%>
-                    <%--                                ></form:input>--%>
-                    <%--                    <form:errors class="form-control" path="googleUsername"></form:errors>--%>
-                    <%--                        ${googleUsernameError}--%>
+                    <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"
+                    ></form:input>
+                    <form:errors class="form-control" path="googleUsername"></form:errors>
+                    <div class="text-danger"> ${googleUsernameError}</div>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordId">Password</label>
-                    <input type="password"
-                           name="password" class="form-control" minlength="2"  id="passwordId" placeholder="Password" value=""
-                           required>
-                    <%--                    <form:input type="password"  class="form-control" id="passwordId" path="password" placeholder="Password"></form:input>--%>
+                    <form:input type="password"  class="form-control" id="passwordId" path="password" placeholder="Password"></form:input>
                 </div>
                 <div class="form-outline mb-4">
                     <label class="form-label" for="passwordConfirmId">Password confirm</label>
-                    <input type="password"
-                           name="passwordConfirm" class="form-control" minlength="2"  id="passwordConfirmId"
-                           placeholder="Password confirm" value="" required>
-
-                    <%--                    <form:input class="form-control" type="password" id="passwordConfirmId" path="passwordConfirm"--%>
-                    <%--                                placeholder="Confirm your password"></form:input>--%>
-                    <%--                    <form:errors class="form-control" path="password"></form:errors>--%>
-                    <%--                        ${passwordError}--%>
+                    <form:input class="form-control" type="password" id="passwordConfirmId" path="passwordConfirm"
+                                placeholder="Confirm your password"></form:input>
+                    <form:errors class="form-control" path="password"></form:errors>
+                    <div class="text-danger">   ${passwordError}</div>
                 </div>
-                <button class="btn btn-outline-success" type="submit">Registration</button>
-            </form>
+                <button class="btn btn-outline-success" type="submit" >Registration</button>
+            </form:form>
         </div>
+
+
+<%--        <div>--%>
+<%--            &lt;%&ndash;       <form:form action = "/registration" method="POST" modelAttribute="userForm">&ndash;%&gt;--%>
+<%--            <form action="/registration">--%>
+<%--                <h2 class="text-info">Registration</h2>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="nameId">Name</label>--%>
+<%--                    <input type="text"--%>
+<%--                           name="name" class="form-control" id="nameId" value="" required>--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="SurnameId">Surname</label>--%>
+<%--                    <input type="text"--%>
+<%--                           name="surname" class="form-control" id="SurnameId" value="" required>--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="PositionId">Position</label>--%>
+<%--                    <input type="text"--%>
+<%--                           name="position" class="form-control" id="PositionId" value="" required>--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="RoleId">Role</label>--%>
+<%--                    <select type="text" class="form-control"--%>
+<%--                            name="role" id="RoleId" value="" required>--%>
+<%--                        <option value="doctor">doctor</option>--%>
+<%--                        <option value="nurse">nurse</option>--%>
+<%--                        <option value="admin">admin</option>--%>
+<%--                    </select>--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="userNameId">Username</label>--%>
+
+<%--                    <c:choose>--%>
+<%--                        <c:when test="${usernameError==null}">--%>
+<%--                            <input type="text"--%>
+<%--                                   name="username" class="form-control" id="userNameId" minlength="2"  placeholder="Username" value=""--%>
+<%--                                   required >--%>
+<%--                        </c:when>--%>
+<%--                        <c:otherwise>--%>
+<%--                            <input type="text"--%>
+<%--                                   name="username" class="form-control is-invalid" id="userNameId" minlength="2" placeholder="Username" value=""--%>
+<%--                                   required >--%>
+<%--                        </c:otherwise>--%>
+<%--                    </c:choose>--%>
+<%--                    <c:if test="${usernameError!=null}">--%>
+<%--                        <div class="invalid-feedback">--%>
+<%--                                ${usernameError}--%>
+<%--                        </div>--%>
+<%--                    </c:if>--%>
+
+<%--                    &lt;%&ndash;                    <form:input type="text" id="userNameId" class="form-control" path="username" placeholder="Username"&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                               ></form:input>&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                    <form:errors class="form-control" path="username"></form:errors>&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                        ${usernameError}&ndash;%&gt;--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="emailId">Email</label>--%>
+<%--                    <input type="text"--%>
+<%--                           name="email" class="form-control" id="emailId" placeholder="some@some.com" value="">--%>
+<%--                    &lt;%&ndash;                    <form:input type="text" id="emailId" class="form-control" path="googleUsername" placeholder="Email"&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                                ></form:input>&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                    <form:errors class="form-control" path="googleUsername"></form:errors>&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                        ${googleUsernameError}&ndash;%&gt;--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="passwordId">Password</label>--%>
+<%--                    <input type="password"--%>
+<%--                           name="password" class="form-control" minlength="2"  id="passwordId" placeholder="Password" value=""--%>
+<%--                           required>--%>
+<%--                    &lt;%&ndash;                    <form:input type="password"  class="form-control" id="passwordId" path="password" placeholder="Password"></form:input>&ndash;%&gt;--%>
+<%--                </div>--%>
+<%--                <div class="form-outline mb-4">--%>
+<%--                    <label class="form-label" for="passwordConfirmId">Password confirm</label>--%>
+<%--                    <input type="password"--%>
+<%--                           name="passwordConfirm" class="form-control" minlength="2"  id="passwordConfirmId"--%>
+<%--                           placeholder="Password confirm" value="" required>--%>
+
+<%--                    &lt;%&ndash;                    <form:input class="form-control" type="password" id="passwordConfirmId" path="passwordConfirm"&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                                placeholder="Confirm your password"></form:input>&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                    <form:errors class="form-control" path="password"></form:errors>&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                        ${passwordError}&ndash;%&gt;--%>
+<%--                </div>--%>
+<%--                <button class="btn btn-outline-success" type="submit">Registration</button>--%>
+<%--            </form>--%>
+<%--        </div>--%>
     </div>
 </div>
 <script type="text/javascript">
